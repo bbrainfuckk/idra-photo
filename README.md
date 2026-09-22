@@ -8,11 +8,11 @@ Drag a photo into Codex, type one prompt, say how many images you want. Codex ma
 - Everything Idra stores stays on your computer.
 - Idra itself never generates images and never makes network requests. Codex still uses its own image service and your own Codex plan.
 
-> Status: v0.1. The local MCP server, queue, recovery, and install are tested. A full real-image run in Codex has **not** been tested yet; see [Compatibility](docs/compatibility.md).
+> Status: v0.1. Tested end to end in the Codex desktop app on Windows with real image generation: a 3-image same-style batch and a 4-character counterpart batch, each finished in one Codex turn. The macOS/Linux launcher has not been run on those systems yet. Evidence: [Compatibility](docs/compatibility.md).
 
 ## Install (about a minute)
 
-1. Get the folder: `git clone` this repository, or download the ZIP and unzip it anywhere.
+1. Get the folder: `git clone https://github.com/bbrainfuckk/idra-photo.git`, or download the ZIP and unzip it anywhere.
 2. **Windows:** double-click `install.cmd`. **macOS/Linux:** run `sh install.sh` in the folder.
 3. Restart Codex.
 
