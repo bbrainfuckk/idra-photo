@@ -21,6 +21,7 @@ export function buildManifest(ctx: Ctx, batchId: string): Record<string, unknown
       created_at: b.created_at,
       request: b.request_text,
       planning_mode: b.planning_mode,
+      variety: b.variety,
       base_prompt: b.base_prompt,
       target_aspect: b.target_aspect,
       constraints: JSON.parse(b.constraints_json),
@@ -32,6 +33,7 @@ export function buildManifest(ctx: Ctx, batchId: string): Record<string, unknown
     references: refs.map((r) => ({
       label: r.label,
       role: r.role,
+      for_job: r.job_id ? (jobs.find((j) => j.id === r.job_id)?.seq ?? null) : 'all',
       original_path: r.original_path,
       workspace_copy: path.relative(ctx.rootReal, r.stored_path),
       sha256: r.sha256,

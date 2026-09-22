@@ -4,7 +4,7 @@ import { nowIso } from '../core/ids.js';
 export type BatchStatus = 'active' | 'cancelled';
 export type JobState = 'pending' | 'claimed' | 'completed' | 'failed' | 'uncertain' | 'cancelled';
 export type AttemptState = 'claimed' | 'completed' | 'failed' | 'uncertain' | 'superseded';
-export type ReferenceRole = 'product' | 'person' | 'composition' | 'style' | 'edit_target';
+export type ReferenceRole = 'product' | 'person' | 'composition' | 'style' | 'edit_target' | 'design';
 
 export interface BatchRow {
   id: string;
@@ -24,11 +24,14 @@ export interface BatchRow {
   output_dir: string;
   max_retries: number;
   simulated: number;
+  variety: 'subtle' | 'balanced' | 'bold';
 }
 
 export interface ReferenceRow {
   id: string;
   batch_id: string;
+  /** null = applies to every job in the batch; set = this job only. */
+  job_id: string | null;
   role: ReferenceRole;
   label: string;
   original_path: string;
@@ -111,8 +114,8 @@ export class Repo {
   insertBatch(b: BatchRow): void {
     this.db.run(
       `INSERT INTO batches (id, slug, idempotency_key, created_at, updated_at, request_text, planning_mode, base_prompt, requested_count,
-        constraints_json, target_aspect, status, paused, pause_reason, output_dir, max_retries, simulated)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        constraints_json, target_aspect, status, paused, pause_reason, output_dir, max_retries, simulated, variety)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         b.id,
         b.slug,
@@ -131,6 +134,7 @@ export class Repo {
         b.output_dir,
         b.max_retries,
         b.simulated,
+        b.variety,
       ],
     );
   }
@@ -167,14 +171,26 @@ export class Repo {
   // ---- references ----
   insertReference(r: ReferenceRow): void {
     this.db.run(
-      `INSERT INTO batch_references (id, batch_id, role, label, original_path, stored_path, sha256, bytes, width, height, format, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [r.id, r.batch_id, r.role, r.label, r.original_path, r.stored_path, r.sha256, r.bytes, r.width, r.height, r.format, r.created_at],
+      `INSERT INTO batch_references (id, batch_id, job_id, role, label, original_path, stored_path, sha256, bytes, width, height, format, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [r.id, r.batch_id, r.job_id, r.role, r.label, r.original_path, r.stored_path, r.sha256, r.bytes, r.width, r.height, r.format, r.created_at],
     );
   }
 
   listReferences(batchId: string): ReferenceRow[] {
     return this.db.all<ReferenceRow>('SELECT * FROM batch_references WHERE batch_id = ? ORDER BY created_at, id', [batchId]);
+  }
+
+  /** Batch-wide references first, then the ones for this job only. */
+  refsForJob(batchId: string, jobId: string): ReferenceRow[] {
+    return this.db.all<ReferenceRow>(
+      'SELECT * FROM batch_references WHERE batch_id = ? AND (job_id IS NULL OR job_id = ?) ORDER BY job_id IS NOT NULL, created_at, id',
+      [batchId, jobId],
+    );
+  }
+
+  batchWideRefs(batchId: string): ReferenceRow[] {
+    return this.db.all<ReferenceRow>('SELECT * FROM batch_references WHERE batch_id = ? AND job_id IS NULL ORDER BY created_at, id', [batchId]);
   }
 
   // ---- jobs ----

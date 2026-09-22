@@ -9,6 +9,17 @@ const id = z.string().min(3).max(64).regex(/^[A-Za-z0-9_-]+$/);
 const key = z.string().min(1).max(128);
 const filePath = z.string().min(1).max(1024);
 const shortText = z.string().max(2000);
+const refSchema = z
+  .object({
+    path: filePath,
+    role: z.enum(['style', 'product', 'person', 'composition', 'edit_target', 'design']).default('style'),
+    label: z.string().max(80).optional(),
+  })
+  .strict();
+const conceptsSchema = z
+  .array(z.union([shortText, z.object({ text: shortText.min(1), references: z.array(refSchema).max(4).optional() }).strict()]))
+  .max(500)
+  .optional();
 
 function reply(fn: () => unknown) {
   try {
@@ -33,12 +44,12 @@ export function registerTools(server: McpServer, ctx: Ctx): void {
         count: z.number().int().min(1).max(500),
         planning_mode: z.enum(['variations', 'diversified', 'explicit']).default('variations'),
         base_prompt: shortText.optional().describe('Required for variations: the prompt every image follows'),
-        concepts: z.array(shortText).max(500).optional().describe('diversified/explicit: exactly count entries. variations: optional per-image hints'),
-        references: z
-          .array(z.object({ path: filePath, role: z.enum(['style', 'product', 'person', 'composition', 'edit_target']).default('style'), label: z.string().max(80).optional() }).strict())
-          .max(8)
-          .optional(),
-        constraints: constraintsSchema.optional().describe('Levels off/high/strict for product, identity, text, composition, style'),
+        concepts: conceptsSchema.describe(
+          'diversified/explicit: exactly count entries. variations: one short hint per image that YOU brainstorm (pose, framing, angle, moment, background) inside the brief; Idra fills any you skip. An entry may be {text, references} to give that image its own reference, e.g. one source character each',
+        ),
+        variety: z.enum(['subtle', 'balanced', 'bold']).optional().describe('variations only: subtle = near-identical, balanced = default, bold = also light and setting. Strict constraints stay locked'),
+        references: z.array(refSchema).max(8).optional().describe('Shared by every image'),
+        constraints: constraintsSchema.optional().describe('Levels off/high/strict for product, identity, text, composition, style. style_details describes the look only (palette, light, texture), never objects or scenery'),
         target_aspect: z.string().max(7).optional().describe('e.g. 4:5'),
         name: z.string().max(60).optional().describe('Short folder name'),
         max_retries: z.number().int().min(0).max(5).optional(),
@@ -128,7 +139,7 @@ export function registerTools(server: McpServer, ctx: Ctx): void {
         batch_id: id,
         idempotency_key: key,
         count: z.number().int().min(1).max(500),
-        concepts: z.array(shortText).max(500).optional().describe('diversified/explicit batches: exactly count new concepts'),
+        concepts: conceptsSchema.describe('diversified/explicit: exactly count new concepts. variations: optional hints you brainstorm; Idra fills the rest. Entries may be {text, references}'),
       },
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },

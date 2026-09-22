@@ -8,6 +8,8 @@ import { closeWorkspace } from '../../src/core/workspace.js';
 import { buildManifest } from '../../src/core/manifest.js';
 import { makeJpegContainer, makePng } from '../../src/sim/fixtures.js';
 import { sha256Hex } from '../../src/core/ids.js';
+import { DatabaseSync } from 'node:sqlite';
+import { MIGRATIONS } from '../../src/storage/migrations.js';
 import { claim, complete, create, expectCode, gen, key, open, outputFiles, refPng, tmpWorkspace } from '../helpers.js';
 
 function sumCounts(c: Record<string, number | undefined>): number {
@@ -469,12 +471,39 @@ test('manifest records counts, hashes, and requested vs actual aspect', () => {
 test('migrations apply once and state survives reopening', () => {
   const ws = tmpWorkspace();
   let ctx = open(ws);
-  assert.equal(ctx.db.schemaVersion(), 1);
+  assert.equal(ctx.db.schemaVersion(), 2);
   const id = create(ctx, 2);
   closeWorkspace(ctx);
   ctx = open(ws);
-  assert.equal(ctx.db.schemaVersion(), 1);
+  assert.equal(ctx.db.schemaVersion(), 2);
   assert.deepEqual(ctx.db.migrate().applied, []);
   assert.equal(ctx.repo.allJobs(id).length, 2);
+  closeWorkspace(ctx);
+});
+
+test('a v0.1 database (schema 1) upgrades in place and keeps its batches', () => {
+  const ws = tmpWorkspace();
+  fs.mkdirSync(path.join(ws, '.idra'), { recursive: true });
+  const raw = new DatabaseSync(path.join(ws, '.idra', 'state.sqlite'));
+  raw.exec(MIGRATIONS[0]!.sql);
+  raw.exec("INSERT INTO meta(key, value) VALUES ('schema_version', '1')");
+  const now = new Date().toISOString();
+  raw.prepare(`INSERT INTO batches (id, slug, idempotency_key, created_at, updated_at, request_text, planning_mode, base_prompt, requested_count, constraints_json, target_aspect, status, paused, pause_reason, output_dir, max_retries, simulated)
+    VALUES ('b_old', 'old', 'k-old', ?, ?, 'r', 'variations', 'p', 0, '{}', NULL, 'active', 0, NULL, ?, 2, 0)`).run(now, now, path.join(ws, 'outputs', 'old'));
+  raw.close();
+  const ctx = open(ws);
+  assert.equal(ctx.db.schemaVersion(), 2);
+  assert.equal(ctx.repo.getBatch('b_old')!.variety, 'balanced');
+  const id = create(ctx, 2, { variety: 'bold' });
+  assert.equal(ctx.repo.getBatch(id)!.variety, 'bold');
+  closeWorkspace(ctx);
+});
+
+test('variations without hints get distinct prompts; extensions keep varying', () => {
+  const ctx = open(tmpWorkspace());
+  const id = create(ctx, 4);
+  extendBatch(ctx, { batch_id: id, idempotency_key: key(), count: 4 });
+  const prompts = ctx.repo.allJobs(id).map((j) => j.prompt);
+  assert.equal(new Set(prompts).size, 8);
   closeWorkspace(ctx);
 });

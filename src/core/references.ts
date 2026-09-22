@@ -17,7 +17,7 @@ export interface ReferenceInput {
  * Validate a reference image and copy it into the workspace. The original is never modified.
  * Only the workspace and explicitly authorized import folders are readable.
  */
-export function importReference(ctx: Ctx, batchId: string, ref: ReferenceInput, index: number): ReferenceRow {
+export function importReference(ctx: Ctx, batchId: string, ref: ReferenceInput, index: number, subdir?: string): ReferenceRow {
   let real: string;
   try {
     real = resolveWithin([ctx.rootReal, ...ctx.allowImportsReal], ref.path);
@@ -40,7 +40,7 @@ export function importReference(ctx: Ctx, batchId: string, ref: ReferenceInput, 
     });
   }
   const label = (ref.label && ref.label.trim()) || path.basename(real, path.extname(real));
-  const dir = path.join(ctx.referencesRoot, batchId);
+  const dir = subdir ? path.join(ctx.referencesRoot, batchId, subdir) : path.join(ctx.referencesRoot, batchId);
   ensureDir(dir);
   const stored = path.join(dir, `${String(index + 1).padStart(2, '0')}-${slugify(label, 32)}.${info.extension}`);
   fs.copyFileSync(real, stored);
@@ -50,6 +50,7 @@ export function importReference(ctx: Ctx, batchId: string, ref: ReferenceInput, 
   return {
     id: newId('ref'),
     batch_id: batchId,
+    job_id: null,
     role: ref.role,
     label: label.slice(0, 80),
     original_path: real,

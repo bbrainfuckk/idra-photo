@@ -224,6 +224,34 @@ CREATE TABLE IF NOT EXISTS events (
 );
 CREATE INDEX IF NOT EXISTS events_batch ON events(batch_id, id);
 `
+      },
+      {
+        version: 2,
+        name: "002_variety_and_job_references",
+        // Adds batch variety, the "design" reference role, and per-job references (job_id NULL = whole batch).
+        // SQLite cannot alter a CHECK constraint, so batch_references is rebuilt with its rows copied.
+        sql: `ALTER TABLE batches ADD COLUMN variety TEXT NOT NULL DEFAULT 'balanced' CHECK (variety IN ('subtle','balanced','bold'));
+CREATE TABLE batch_references_v2 (
+  id TEXT PRIMARY KEY,
+  batch_id TEXT NOT NULL REFERENCES batches(id),
+  job_id TEXT REFERENCES jobs(id),
+  role TEXT NOT NULL CHECK (role IN ('product','person','composition','style','edit_target','design')),
+  label TEXT NOT NULL,
+  original_path TEXT NOT NULL,
+  stored_path TEXT NOT NULL,
+  sha256 TEXT NOT NULL,
+  bytes INTEGER NOT NULL,
+  width INTEGER NOT NULL,
+  height INTEGER NOT NULL,
+  format TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+INSERT INTO batch_references_v2 (id, batch_id, job_id, role, label, original_path, stored_path, sha256, bytes, width, height, format, created_at)
+  SELECT id, batch_id, NULL, role, label, original_path, stored_path, sha256, bytes, width, height, format, created_at FROM batch_references;
+DROP TABLE batch_references;
+ALTER TABLE batch_references_v2 RENAME TO batch_references;
+CREATE INDEX IF NOT EXISTS batch_references_batch ON batch_references(batch_id);
+CREATE INDEX IF NOT EXISTS batch_references_job ON batch_references(job_id);`
       }
     ];
   }
@@ -350,8 +378,8 @@ var init_repo = __esm({
       insertBatch(b) {
         this.db.run(
           `INSERT INTO batches (id, slug, idempotency_key, created_at, updated_at, request_text, planning_mode, base_prompt, requested_count,
-        constraints_json, target_aspect, status, paused, pause_reason, output_dir, max_retries, simulated)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        constraints_json, target_aspect, status, paused, pause_reason, output_dir, max_retries, simulated, variety)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             b.id,
             b.slug,
@@ -369,7 +397,8 @@ var init_repo = __esm({
             b.pause_reason,
             b.output_dir,
             b.max_retries,
-            b.simulated
+            b.simulated,
+            b.variety
           ]
         );
       }
@@ -400,13 +429,23 @@ var init_repo = __esm({
       // ---- references ----
       insertReference(r) {
         this.db.run(
-          `INSERT INTO batch_references (id, batch_id, role, label, original_path, stored_path, sha256, bytes, width, height, format, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [r.id, r.batch_id, r.role, r.label, r.original_path, r.stored_path, r.sha256, r.bytes, r.width, r.height, r.format, r.created_at]
+          `INSERT INTO batch_references (id, batch_id, job_id, role, label, original_path, stored_path, sha256, bytes, width, height, format, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [r.id, r.batch_id, r.job_id, r.role, r.label, r.original_path, r.stored_path, r.sha256, r.bytes, r.width, r.height, r.format, r.created_at]
         );
       }
       listReferences(batchId) {
         return this.db.all("SELECT * FROM batch_references WHERE batch_id = ? ORDER BY created_at, id", [batchId]);
+      }
+      /** Batch-wide references first, then the ones for this job only. */
+      refsForJob(batchId, jobId) {
+        return this.db.all(
+          "SELECT * FROM batch_references WHERE batch_id = ? AND (job_id IS NULL OR job_id = ?) ORDER BY job_id IS NOT NULL, created_at, id",
+          [batchId, jobId]
+        );
+      }
+      batchWideRefs(batchId) {
+        return this.db.all("SELECT * FROM batch_references WHERE batch_id = ? AND job_id IS NULL ORDER BY created_at, id", [batchId]);
       }
       // ---- jobs ----
       insertJob(j) {
@@ -966,6 +1005,7 @@ function buildManifest(ctx, batchId) {
       created_at: b.created_at,
       request: b.request_text,
       planning_mode: b.planning_mode,
+      variety: b.variety,
       base_prompt: b.base_prompt,
       target_aspect: b.target_aspect,
       constraints: JSON.parse(b.constraints_json),
@@ -977,6 +1017,7 @@ function buildManifest(ctx, batchId) {
     references: refs.map((r) => ({
       label: r.label,
       role: r.role,
+      for_job: r.job_id ? jobs.find((j) => j.id === r.job_id)?.seq ?? null : "all",
       original_path: r.original_path,
       workspace_copy: path3.relative(ctx.rootReal, r.stored_path),
       sha256: r.sha256,
@@ -16974,12 +17015,12 @@ function finalize(ctx, schema) {
     if (ref) {
       flattenRef(ref);
       const refSeen = ctx.seen.get(ref);
-      const refSchema = refSeen.schema;
-      if (refSchema.$ref && (ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0")) {
+      const refSchema2 = refSeen.schema;
+      if (refSchema2.$ref && (ctx.target === "draft-07" || ctx.target === "draft-04" || ctx.target === "openapi-3.0")) {
         schema2.allOf = schema2.allOf ?? [];
-        schema2.allOf.push(refSchema);
+        schema2.allOf.push(refSchema2);
       } else {
-        assignProps(schema2, refSchema);
+        assignProps(schema2, refSchema2);
       }
       assignProps(schema2, _cached);
       const isParentRef = zodSchema._zod.parent === ref;
@@ -16992,7 +17033,7 @@ function finalize(ctx, schema) {
           }
         }
       }
-      if (refSchema.$ref && refSeen.def) {
+      if (refSchema2.$ref && refSeen.def) {
         for (const key2 in schema2) {
           if (key2 === "$ref" || key2 === "allOf")
             continue;
@@ -17197,8 +17238,8 @@ var init_to_json_schema = __esm({
 function aggregateChecks(schema) {
   const agg = {};
   const def = schema._zod.def;
-  const list = schema._zod.traits.has("$ZodCheck") ? [schema, ...def.checks ?? []] : def.checks ?? [];
-  for (const ch of list)
+  const list2 = schema._zod.traits.has("$ZodCheck") ? [schema, ...def.checks ?? []] : def.checks ?? [];
+  for (const ch of list2)
     contributors[ch._zod.def.check]?.(agg, ch._zod.def);
   const bag = schema._zod.bag;
   if (bag.minimum !== void 0)
@@ -21544,13 +21585,16 @@ function constraintLines(c, referenceLabels) {
     const refNote = styleRefs.length > 0 ? ` of reference "${styleRefs.join('", "')}"` : "";
     const details = c.style_details ? ` ${c.style_details}.` : "";
     lines.push(
-      c.style === "strict" ? `STYLE (strict): match the visual style${refNote} exactly: color grading, lighting quality, lens and camera look, texture, mood, and finish. Only the content described above changes.${details}` : `STYLE (high): follow the visual style${refNote} closely: palette, lighting, and mood.${details}`
+      c.style === "strict" ? `STYLE (strict): match the look${refNote} exactly: color palette and grading, lighting quality, texture and brushwork or grain, mood, and finish. Keep that look identical across the whole set; the subject, pose, and framing come from this prompt.${details}` : `STYLE (high): follow the look${refNote} closely: palette, lighting, and mood.${details}`
     );
   }
   if (c.avoid.length > 0) {
     lines.push(`AVOID: ${c.avoid.join("; ")}.`);
   }
   return lines;
+}
+function varietyLocks(c) {
+  return { framing: c.composition !== "off", light: c.style === "strict" };
 }
 function constraintWarnings(c, planningMode) {
   const warnings = [];
@@ -21562,6 +21606,9 @@ function constraintWarnings(c, planningMode) {
   }
   if (c.text === "strict" && c.text_content.length === 0) {
     warnings.push({ code: "text_strict_without_content", message: 'text=strict but no text_content supplied; the requirement is limited to "no other text".' });
+  }
+  if (c.composition !== "off") {
+    warnings.push({ code: "composition_locks_framing", message: "composition is locked, so automatic variety will not change framing or camera angle." });
   }
   if (c.identity !== "off" && c.product === "strict") {
     warnings.push({ code: "identity_and_product", message: "identity and strict product constraints are both active; review both in every output." });
@@ -21593,6 +21640,21 @@ var init_constraints = __esm({
 });
 
 // src/core/planning.ts
+function isAutoConcept(concept) {
+  return concept === GENERIC_VARIATION || concept.startsWith(AUTO_PREFIX);
+}
+function autoVariation(seq, variety, locks) {
+  const i = seq - 1;
+  const at = (arr, offset = 0) => arr[(i + offset) % arr.length];
+  const parts = [];
+  if (variety !== "subtle" && !locks.framing) parts.push(at(FRAMING));
+  if (!locks.framing) parts.push(at(ANGLE));
+  parts.push(`any person: ${at(MOMENT, 2)}`);
+  if (variety !== "subtle") parts.push(at(BACKGROUND, 1));
+  if (variety === "bold" && !locks.light) parts.push(at(LIGHT));
+  if (variety === "bold" && !locks.framing) parts.push(at(SETTING));
+  return `${AUTO_PREFIX} ${seq}: ${parts.join("; ")}.`;
+}
 function normalizeConcept(text) {
   return text.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
 }
@@ -21609,6 +21671,7 @@ function planJobs(input2) {
       throw new IdraError("PLAN_INVALID", `concept ${i + 1} exceeds ${MAX_CONCEPT_CHARS} characters`, { index: i });
     }
   }
+  const startSeq = input2.startSeq ?? 1;
   let concepts;
   if (mode === "diversified" || mode === "explicit") {
     if (input2.concepts.length !== count) {
@@ -21625,13 +21688,14 @@ function planJobs(input2) {
     if (input2.concepts.length > count) {
       throw new IdraError("PLAN_INVALID", "variations mode accepts at most count variation hints", { count, received: input2.concepts.length });
     }
+    const variety = input2.variety ?? "balanced";
+    const locks = input2.locks ?? { framing: false, light: false };
     concepts = [];
     for (let i = 0; i < count; i++) {
       const hint = input2.concepts[i];
-      concepts.push(hint && hint.trim().length > 0 ? hint.trim() : GENERIC_VARIATION);
+      concepts.push(hint && hint.trim().length > 0 ? hint.trim() : autoVariation(startSeq + i, variety, locks));
     }
   }
-  const startSeq = input2.startSeq ?? 1;
   const seen = /* @__PURE__ */ new Map();
   for (const e of input2.existing ?? []) {
     if (!seen.has(e.normalized)) seen.set(e.normalized, e.seq);
@@ -21641,7 +21705,7 @@ function planJobs(input2) {
     const seq = startSeq + i;
     const normalized = normalizeConcept(concept);
     let duplicateOfSeq = null;
-    if (mode !== "variations") {
+    if (!isAutoConcept(concept)) {
       const prior = seen.get(normalized);
       if (prior !== void 0) duplicateOfSeq = prior;
       else seen.set(normalized, seq);
@@ -21650,14 +21714,28 @@ function planJobs(input2) {
   });
   return jobs;
 }
-var MAX_BATCH_COUNT, GENERIC_VARIATION, MAX_CONCEPT_CHARS;
+var MAX_BATCH_COUNT, MAX_CONCEPT_CHARS, GENERIC_VARIATION, AUTO_PREFIX, FRAMING, ANGLE, MOMENT, BACKGROUND, LIGHT, SETTING;
 var init_planning = __esm({
   "src/core/planning.ts"() {
     "use strict";
     init_errors();
     MAX_BATCH_COUNT = 500;
-    GENERIC_VARIATION = "Keep this exact concept; allow only natural variation in pose, angle, and small details.";
     MAX_CONCEPT_CHARS = 2e3;
+    GENERIC_VARIATION = "Keep this exact concept; allow only natural variation in pose, angle, and small details.";
+    AUTO_PREFIX = "Auto variation";
+    FRAMING = ["close-up framing", "medium framing from the waist up", "wider framing that shows more of the setting", "off-center framing with open space on one side"];
+    ANGLE = ["eye-level view", "slightly low camera angle", "three-quarter view turned to the left", "slightly high camera angle", "three-quarter view turned to the right", "near-profile view"];
+    MOMENT = [
+      "looking toward the viewer",
+      "glancing away, lost in thought",
+      "a soft, subtle smile",
+      "a natural, candid mid-gesture moment",
+      "head tilted slightly",
+      "eyes lowered toward what they are holding"
+    ];
+    BACKGROUND = ["rearrange the background details", "show a different part of the setting", "add depth with a softly blurred foreground element", "a simpler, calmer background"];
+    LIGHT = ["soft morning light", "warm late-afternoon light", "cool overcast light", "dramatic side light", "gentle backlight"];
+    SETTING = ["a different location that still fits the brief", "an indoor take on the scene", "an outdoor take on the scene"];
   }
 });
 
@@ -21666,48 +21744,63 @@ function assemblePrompt(input2) {
   const parts = [];
   if (input2.mode === "variations" && input2.basePrompt) {
     parts.push(input2.basePrompt.trim());
-    parts.push(input2.concept.trim());
+    parts.push(`Variation for this image: ${variationText(input2.concept)}`);
   } else {
     parts.push(input2.concept.trim());
   }
   const lines = constraintLines(input2.constraints, input2.references);
   if (lines.length > 0) parts.push(lines.join("\n"));
-  if (input2.references.length > 0) {
-    const refs = input2.references.map((r) => `"${r.label}" (${roleWord(r.role)})`).join(", ");
-    parts.push(`Reference images supplied: ${refs}.`);
-  }
-  if (input2.targetAspect) {
-    parts.push(`Target aspect ratio ${input2.targetAspect}.`);
-  }
+  const refs = referenceLines(input2.references);
+  if (refs.length > 0) parts.push(refs.join("\n"));
+  if (input2.targetAspect) parts.push(`Target aspect ratio ${input2.targetAspect}.`);
   return parts.join("\n\n");
 }
-function roleWord(role) {
-  switch (role) {
-    case "product":
-      return "product to preserve";
-    case "person":
-      return "person whose identity to preserve";
-    case "composition":
-      return "composition/framing reference";
-    case "style":
-      return "style reference only";
-    case "edit_target":
-      return "image to edit";
-    default:
-      return role;
-  }
+function variationText(concept) {
+  return concept.startsWith(AUTO_PREFIX) ? concept.replace(/^Auto variation \d+:\s*/, "") : concept.trim();
+}
+function list(items) {
+  if (items.length <= 1) return items.join("");
+  return `${items.slice(0, -1).join(", ")}, or ${items[items.length - 1]}`;
+}
+function referenceLines(refs) {
+  const hasPerson = refs.some((r) => r.role === "person");
+  const hasProduct = refs.some((r) => r.role === "product");
+  const hasComposition = refs.some((r) => r.role === "composition");
+  return refs.map((r) => {
+    switch (r.role) {
+      case "style": {
+        const avoid = [hasPerson ? null : "people or faces", "pose", hasProduct ? null : "objects", hasComposition ? null : "composition or layout"].filter(
+          (x) => x !== null
+        );
+        return `Reference "${r.label}": use it only for its look (palette, lighting, texture, mood, finish). Do not copy its ${list(avoid)}.`;
+      }
+      case "product":
+        return `Reference "${r.label}": the exact product to show.`;
+      case "person":
+        return `Reference "${r.label}": the person to feature.`;
+      case "composition":
+        return `Reference "${r.label}": follow only its placement and framing, not its subject or style.`;
+      case "edit_target":
+        return `Reference "${r.label}": the image to edit; keep everything not mentioned unchanged.`;
+      case "design":
+        return `Reference "${r.label}": the design to adapt. Keep its theme, costume, colors, motifs, and background color so the two read as a matching pair; change only what this prompt asks.`;
+      default:
+        return `Reference "${r.label}" (${r.role}).`;
+    }
+  });
 }
 var init_prompt = __esm({
   "src/core/prompt.ts"() {
     "use strict";
     init_constraints();
+    init_planning();
   }
 });
 
 // src/core/references.ts
 import fs5 from "node:fs";
 import path5 from "node:path";
-function importReference(ctx, batchId, ref, index) {
+function importReference(ctx, batchId, ref, index, subdir) {
   let real;
   try {
     real = resolveWithin([ctx.rootReal, ...ctx.allowImportsReal], ref.path);
@@ -21730,7 +21823,7 @@ function importReference(ctx, batchId, ref, index) {
     });
   }
   const label = ref.label && ref.label.trim() || path5.basename(real, path5.extname(real));
-  const dir = path5.join(ctx.referencesRoot, batchId);
+  const dir = subdir ? path5.join(ctx.referencesRoot, batchId, subdir) : path5.join(ctx.referencesRoot, batchId);
   ensureDir(dir);
   const stored = path5.join(dir, `${String(index + 1).padStart(2, "0")}-${slugify(label, 32)}.${info.extension}`);
   fs5.copyFileSync(real, stored);
@@ -21740,6 +21833,7 @@ function importReference(ctx, batchId, ref, index) {
   return {
     id: newId("ref"),
     batch_id: batchId,
+    job_id: null,
     role: ref.role,
     label: label.slice(0, 80),
     original_path: real,
@@ -21834,6 +21928,26 @@ var init_staging = __esm({
 // src/core/queue.ts
 import fs7 from "node:fs";
 import path7 from "node:path";
+function splitConcepts(items) {
+  const texts = [];
+  const perJob = [];
+  for (const it of items ?? []) {
+    if (typeof it === "string") {
+      texts.push(it);
+      perJob.push([]);
+    } else {
+      texts.push(it.text);
+      perJob.push(it.references ?? []);
+    }
+  }
+  if (perJob.some((r) => r.length > MAX_REFS_PER_JOB)) throw new IdraError("INVALID_INPUT", `at most ${MAX_REFS_PER_JOB} references per image`);
+  return { texts, perJob };
+}
+function importJobRefs(ctx, batchId, perJob, seqs, jobIds) {
+  return perJob.map(
+    (list2, i) => list2.map((r, k) => ({ ...importReference(ctx, batchId, r, k, `j${String(seqs[i]).padStart(3, "0")}`), job_id: jobIds[i] }))
+  );
+}
 function mustBatch(ctx, id2) {
   const b = ctx.repo.getBatch(id2);
   if (!b) throw new IdraError("BATCH_NOT_FOUND", `no batch ${id2}`, { batch_id: id2 });
@@ -21892,15 +22006,20 @@ function createBatch(ctx, input2) {
   const refsIn = input2.references ?? [];
   if (refsIn.length > ctx.limits.maxReferences) throw new IdraError("INVALID_INPUT", `at most ${ctx.limits.maxReferences} references`);
   const basePrompt = input2.base_prompt?.trim() || null;
-  const plan = planJobs({ mode, count: input2.count, concepts: input2.concepts ?? [], basePrompt });
+  const variety = input2.variety ?? "balanced";
+  const { texts, perJob } = splitConcepts(input2.concepts);
+  const plan = planJobs({ mode, count: input2.count, concepts: texts, basePrompt, variety, locks: varietyLocks(constraints) });
   const maxRetries = Math.min(Math.max(input2.max_retries ?? ctx.limits.maxRetries, 0), 5);
-  if (constraints.style !== "off" && !refsIn.some((r) => r.role === "style") && constraints.style_details === void 0) {
+  if (constraints.style !== "off" && ![...refsIn, ...perJob.flat()].some((r) => r.role === "style") && constraints.style_details === void 0) {
     throw new IdraError("CONSTRAINT_CONFLICT", 'style constraint needs a reference with role "style" or style_details');
   }
   const batchId = newId("b");
   const refs = [];
+  const jobIds = plan.map(() => newId("j"));
+  let jobRefs = [];
   try {
     refsIn.forEach((r, i) => refs.push(importReference(ctx, batchId, r, i)));
+    jobRefs = importJobRefs(ctx, batchId, perJob, plan.map((p) => p.seq), jobIds);
   } catch (err) {
     fs7.rmSync(path7.join(ctx.referencesRoot, batchId), { recursive: true, force: true });
     throw err;
@@ -21932,17 +22051,19 @@ function createBatch(ctx, input2) {
         pause_reason: null,
         output_dir: outputDir,
         max_retries: maxRetries,
-        simulated: ctx.simulation ? 1 : 0
+        simulated: ctx.simulation ? 1 : 0,
+        variety
       });
       for (const r of refs) ctx.repo.insertReference(r);
-      for (const p of plan) {
+      plan.forEach((p, i) => {
+        const own2 = (jobRefs[i] ?? []).map((r) => ({ label: r.label, role: r.role }));
         ctx.repo.insertJob({
-          id: newId("j"),
+          id: jobIds[i],
           batch_id: batchId,
           seq: p.seq,
           concept: p.concept,
           normalized_concept: p.normalized,
-          prompt: assemblePrompt({ mode, concept: p.concept, basePrompt, constraints, references: refLabels, targetAspect: input2.target_aspect ?? null }),
+          prompt: assemblePrompt({ mode, concept: p.concept, basePrompt, constraints, references: [...refLabels, ...own2], targetAspect: input2.target_aspect ?? null }),
           state: "pending",
           attempts_count: 0,
           retries_used: 0,
@@ -21953,8 +22074,10 @@ function createBatch(ctx, input2) {
           created_at: now,
           updated_at: now
         });
-      }
-      ctx.repo.event("batch_created", { batchId }, { count: plan.length, mode, references: refs.length });
+        for (const r of jobRefs[i] ?? []) ctx.repo.insertReference(r);
+      });
+      const perImage = jobRefs.reduce((n, l) => n + l.length, 0);
+      ctx.repo.event("batch_created", { batchId }, { count: plan.length, mode, variety, references: refs.length, per_image_references: perImage });
       const dupes = plan.filter((p) => p.duplicateOfSeq !== null).map((p) => p.seq);
       const res = {
         batch_id: batchId,
@@ -21962,7 +22085,10 @@ function createBatch(ctx, input2) {
         slug,
         output_dir: outputDir,
         count: plan.length,
+        mode,
+        ...mode === "variations" ? { variety, auto_variations: plan.filter((p) => isAutoConcept(p.concept)).length } : {},
         references: refs.map((r) => `${r.label} (${r.role})`),
+        ...perImage ? { per_image_references: perImage } : {},
         ...warnings.length ? { warnings: warnings.map((w) => w.message) } : {},
         ...dupes.length ? { duplicate_concepts: dupes } : {},
         next: "Call idra_step with batch_id to get job 1."
@@ -22004,7 +22130,7 @@ function claimNextLocked(ctx, batchId) {
     }
     return { ...head, status: "done", output_dir: b.output_dir, next: "All images are saved. Show the user the output folder." };
   }
-  const refs = ctx.repo.listReferences(b.id);
+  const refs = ctx.repo.refsForJob(b.id, job.id);
   const missing = refs.filter((r) => !referenceAvailable(r));
   if (missing.length > 0) {
     ctx.repo.updateBatch(b.id, { paused: 1, pause_reason: "reference_missing" });
@@ -22114,7 +22240,7 @@ function prepareArtifact(ctx, batch, job, attempt, artifactPath, acceptDuplicate
     });
   }
   fault(ctx, "before_finalize");
-  const nameSource = job.concept === GENERIC_VARIATION ? batch.base_prompt ?? batch.slug : job.concept;
+  const nameSource = isAutoConcept(job.concept) ? batch.base_prompt ?? batch.slug : job.concept;
   const finalPath = finalArtifactPath(batch.output_dir, job.seq, nameSource, info.extension);
   const orphanOk = !ctx.db.get("SELECT 1 AS x FROM artifacts WHERE final_path = ?", [finalPath]);
   finalizeArtifact(stagingPath, finalPath, info.sha256, orphanOk ? path7.join(ctx.idraDir, "orphans") : null);
@@ -22358,27 +22484,34 @@ function extendBatch(ctx, input2) {
   const reqHash = stableHash(input2);
   const replay = checkOp(ctx, opKey, reqHash);
   if (replay) return replay;
+  const pre = mustBatch(ctx, input2.batch_id);
+  if (pre.status === "cancelled") throw new IdraError("BATCH_CANCELLED", "a cancelled batch cannot be extended");
+  const { texts, perJob } = splitConcepts(input2.concepts);
+  const constraints = JSON.parse(pre.constraints_json);
+  const startSeq = ctx.repo.maxSeq(pre.id) + 1;
+  const existing = ctx.repo.allJobs(pre.id).map((j) => ({ seq: j.seq, normalized: j.normalized_concept }));
+  const plan = planJobs({ mode: pre.planning_mode, count: input2.count, concepts: texts, basePrompt: pre.base_prompt, startSeq, existing, variety: pre.variety, locks: varietyLocks(constraints) });
+  const jobIds = plan.map(() => newId("j"));
+  const jobRefs = importJobRefs(ctx, pre.id, perJob, plan.map((p) => p.seq), jobIds);
   const res = ctx.db.transaction(() => {
     const again = checkOp(ctx, opKey, reqHash);
     if (again) return again;
     const b = mustBatch(ctx, input2.batch_id);
     if (b.status === "cancelled") throw new IdraError("BATCH_CANCELLED", "a cancelled batch cannot be extended");
+    if (ctx.repo.maxSeq(b.id) + 1 !== startSeq) throw new IdraError("IDEMPOTENCY_CONFLICT", "the batch was extended concurrently; retry with a new idempotency_key");
     const total = b.requested_count + input2.count;
     if (total > MAX_BATCH_COUNT) throw new IdraError("PLAN_INVALID", `a batch holds at most ${MAX_BATCH_COUNT} jobs`);
-    const existing = ctx.repo.allJobs(b.id).map((j) => ({ seq: j.seq, normalized: j.normalized_concept }));
-    const startSeq = ctx.repo.maxSeq(b.id) + 1;
-    const plan = planJobs({ mode: b.planning_mode, count: input2.count, concepts: input2.concepts ?? [], basePrompt: b.base_prompt, startSeq, existing });
-    const constraints = JSON.parse(b.constraints_json);
-    const refs = ctx.repo.listReferences(b.id).map((r) => ({ label: r.label, role: r.role }));
+    const refs = ctx.repo.batchWideRefs(b.id).map((r) => ({ label: r.label, role: r.role }));
     const now = nowIso();
-    for (const p of plan) {
+    plan.forEach((p, i) => {
+      const own2 = (jobRefs[i] ?? []).map((r) => ({ label: r.label, role: r.role }));
       ctx.repo.insertJob({
-        id: newId("j"),
+        id: jobIds[i],
         batch_id: b.id,
         seq: p.seq,
         concept: p.concept,
         normalized_concept: p.normalized,
-        prompt: assemblePrompt({ mode: b.planning_mode, concept: p.concept, basePrompt: b.base_prompt, constraints, references: refs, targetAspect: b.target_aspect }),
+        prompt: assemblePrompt({ mode: b.planning_mode, concept: p.concept, basePrompt: b.base_prompt, constraints, references: [...refs, ...own2], targetAspect: b.target_aspect }),
         state: "pending",
         attempts_count: 0,
         retries_used: 0,
@@ -22389,7 +22522,8 @@ function extendBatch(ctx, input2) {
         created_at: now,
         updated_at: now
       });
-    }
+      for (const r of jobRefs[i] ?? []) ctx.repo.insertReference(r);
+    });
     ctx.repo.updateBatch(b.id, { requested_count: total });
     ctx.repo.event("extended", { batchId: b.id }, { added: plan.length, from_seq: startSeq });
     const out = { ...base(ctx, mustBatch(ctx, b.id)), added: plan.length, seqs: `${startSeq}-${startSeq + plan.length - 1}`, next: "Call idra_step to continue." };
@@ -22481,11 +22615,11 @@ function batchState(ctx, b) {
 }
 function status(ctx, input2) {
   if (!input2.batch_id) {
-    const list = ctx.repo.listBatches(20).map((b2) => {
+    const list2 = ctx.repo.listBatches(20).map((b2) => {
       const c2 = ctx.repo.counts(b2.id, nowIso());
       return { batch_id: b2.id, slug: b2.slug, progress: `${c2.completed}/${c2.requested}`, state: batchState(ctx, b2), created_at: b2.created_at };
     });
-    return { batches: list };
+    return { batches: list2 };
   }
   const b = mustBatch(ctx, input2.batch_id);
   const c = ctx.repo.counts(b.id, nowIso());
@@ -22532,12 +22666,14 @@ function status(ctx, input2) {
 }
 function resumeCard(b, c, refs, state) {
   const brief = (b.base_prompt ?? b.request_text).replace(/\s+/g, " ");
-  const refText = refs.length ? refs.map((r) => `${r.label} (${r.role})`).join(", ") : "none";
+  const shared = refs.filter((r) => r.job_id === null);
+  const perImage = refs.length - shared.length;
+  const refText = `${shared.length ? shared.map((r) => `${r.label} (${r.role})`).join(", ") : "none"}${perImage ? ` + ${perImage} per-image` : ""}`;
   const nextHint = state === "done" ? "nothing left" : state.startsWith("paused") ? "wait for the user to resume" : state === "needs_reconcile" || state === "in_progress" ? "reconcile the open job" : "call idra_step";
   const card = `${b.slug}: ${c.completed}/${c.requested} saved, ${state}. Mode ${b.planning_mode}. Brief: ${brief.slice(0, 220)}${brief.length > 220 ? "..." : ""} Refs: ${refText}. Aspect: ${b.target_aspect ?? "any"}. Next: ${nextHint}.`;
   return card.slice(0, 600);
 }
-var ASPECT_RE;
+var MAX_REFS_PER_JOB, ASPECT_RE;
 var init_queue = __esm({
   "src/core/queue.ts"() {
     "use strict";
@@ -22551,6 +22687,7 @@ var init_queue = __esm({
     init_validate();
     init_paths();
     init_staging();
+    MAX_REFS_PER_JOB = 4;
     ASPECT_RE = /^\d{1,2}:\d{1,2}$/;
   }
 });
@@ -38086,8 +38223,8 @@ var require_dist = __commonJS({
         return ajv;
       }
       const [formats, exportName] = opts2.mode === "fast" ? [formats_1.fastFormats, fastName] : [formats_1.fullFormats, fullName];
-      const list = opts2.formats || formats_1.formatNames;
-      addFormats(ajv, list, formats, exportName);
+      const list2 = opts2.formats || formats_1.formatNames;
+      addFormats(ajv, list2, formats, exportName);
       if (opts2.keywords)
         (0, limit_1.default)(ajv);
       return ajv;
@@ -38099,11 +38236,11 @@ var require_dist = __commonJS({
         throw new Error(`Unknown format "${name}"`);
       return f;
     };
-    function addFormats(ajv, list, fs10, exportName) {
+    function addFormats(ajv, list2, fs10, exportName) {
       var _a3;
       var _b;
       (_a3 = (_b = ajv.opts.code).formats) !== null && _a3 !== void 0 ? _a3 : _b.formats = (0, codegen_1._)`require("ajv-formats/dist/formats").${exportName}`;
-      for (const f of list)
+      for (const f of list2)
         ajv.addFormat(f, fs10[f]);
     }
     module.exports = exports = formatsPlugin;
@@ -39860,9 +39997,9 @@ var SERVER_INSTRUCTIONS;
 var init_instructions = __esm({
   "src/instructions.ts"() {
     "use strict";
-    SERVER_INSTRUCTIONS = `Idra Photo tracks a finite image batch; you make each image with your native image tool (image_gen). Loop: idra_create_batch once, then idra_step. Per job: view_image its reference files if not visible, call image_gen with job.prompt, then idra_step with completed={job_id, attempt_token, artifact_path: the generated file path} (or copy the image to job.save_to and omit artifact_path). That saves it and returns the next job. Continue until status is not "job".
+    SERVER_INSTRUCTIONS = `Idra Photo tracks a finite image batch; you make each image with your native image tool (image_gen). Loop: idra_create_batch once, then idra_step. Per job: call image_gen with job.prompt and job.references paths as its reference images, then idra_step with completed={job_id, attempt_token, artifact_path: the generated file path} (or copy the image to job.save_to and omit artifact_path). That saves it and returns the next job. Continue until status is not "job".
 
-Planning: one prompt + "N photos in the same style" => planning_mode "variations", base_prompt = the user's prompt, references role "style", constraints.style "strict". Use "diversified" only when the user wants different concepts; you then write exactly N concepts. Use "explicit" for a list of exact prompts. Dragged-in images: pass their file path as a reference.
+Planning: one prompt + "N photos in the same style" => planning_mode "variations", base_prompt = the user's prompt, the dragged-in image path as a reference with role "style", constraints.style "strict". Brainstorm the variety yourself so the user never has to: pass concepts with one short, different hint per image (pose, framing, angle, moment, background) that stays inside the brief; Idra fills any you skip. variety: "subtle" (almost identical), "balanced" (default), "bold" (user wants more variety). A style reference lends only its look; to keep the same person or product too, add that image again with role "person" or "product" and set identity/product. Use "diversified" when the user wants different concepts (write exactly N). Use "explicit" for exact prompts. One source image per result (e.g. a counterpart for each character): diversified, each concept {text, references:[{path, role:"design"}]}; "design" keeps that image's costume, colors, and motifs and changes only what the text asks.
 Rules: never generate the same job twice and never reuse an old image. Do not add commentary between images. If image_gen fails or refuses, call idra_report_problem with an honest classification (unknown if unsure); never reword a refused prompt. On paused/blocked, tell the user and stop. After an interruption call idra_status, then idra_reconcile for any open job. Resume only when the user asks.`;
   }
 });
@@ -39887,9 +40024,12 @@ function registerTools(server, ctx) {
         count: external_exports.number().int().min(1).max(500),
         planning_mode: external_exports.enum(["variations", "diversified", "explicit"]).default("variations"),
         base_prompt: shortText2.optional().describe("Required for variations: the prompt every image follows"),
-        concepts: external_exports.array(shortText2).max(500).optional().describe("diversified/explicit: exactly count entries. variations: optional per-image hints"),
-        references: external_exports.array(external_exports.object({ path: filePath, role: external_exports.enum(["style", "product", "person", "composition", "edit_target"]).default("style"), label: external_exports.string().max(80).optional() }).strict()).max(8).optional(),
-        constraints: constraintsSchema.optional().describe("Levels off/high/strict for product, identity, text, composition, style"),
+        concepts: conceptsSchema.describe(
+          "diversified/explicit: exactly count entries. variations: one short hint per image that YOU brainstorm (pose, framing, angle, moment, background) inside the brief; Idra fills any you skip. An entry may be {text, references} to give that image its own reference, e.g. one source character each"
+        ),
+        variety: external_exports.enum(["subtle", "balanced", "bold"]).optional().describe("variations only: subtle = near-identical, balanced = default, bold = also light and setting. Strict constraints stay locked"),
+        references: external_exports.array(refSchema).max(8).optional().describe("Shared by every image"),
+        constraints: constraintsSchema.optional().describe("Levels off/high/strict for product, identity, text, composition, style. style_details describes the look only (palette, light, texture), never objects or scenery"),
         target_aspect: external_exports.string().max(7).optional().describe("e.g. 4:5"),
         name: external_exports.string().max(60).optional().describe("Short folder name"),
         max_retries: external_exports.number().int().min(0).max(5).optional()
@@ -39968,7 +40108,7 @@ function registerTools(server, ctx) {
         batch_id: id,
         idempotency_key: key,
         count: external_exports.number().int().min(1).max(500),
-        concepts: external_exports.array(shortText2).max(500).optional().describe("diversified/explicit batches: exactly count new concepts")
+        concepts: conceptsSchema.describe("diversified/explicit: exactly count new concepts. variations: optional hints you brainstorm; Idra fills the rest. Entries may be {text, references}")
       },
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false }
     },
@@ -39992,7 +40132,7 @@ function registerTools(server, ctx) {
     async (args) => reply(() => reconcile(ctx, args))
   );
 }
-var id, key, filePath, shortText2, TOOL_NAMES;
+var id, key, filePath, shortText2, refSchema, conceptsSchema, TOOL_NAMES;
 var init_tools = __esm({
   "src/tools/index.ts"() {
     "use strict";
@@ -40004,6 +40144,12 @@ var init_tools = __esm({
     key = external_exports.string().min(1).max(128);
     filePath = external_exports.string().min(1).max(1024);
     shortText2 = external_exports.string().max(2e3);
+    refSchema = external_exports.object({
+      path: filePath,
+      role: external_exports.enum(["style", "product", "person", "composition", "edit_target", "design"]).default("style"),
+      label: external_exports.string().max(80).optional()
+    }).strict();
+    conceptsSchema = external_exports.array(external_exports.union([shortText2, external_exports.object({ text: shortText2.min(1), references: external_exports.array(refSchema).max(4).optional() }).strict()])).max(500).optional();
     TOOL_NAMES = ["idra_create_batch", "idra_step", "idra_status", "idra_report_problem", "idra_control_batch", "idra_extend", "idra_reconcile"];
   }
 });

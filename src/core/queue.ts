@@ -4,8 +4,8 @@ import type { Ctx } from './context.js';
 import { fault } from './context.js';
 import { IdraError } from './errors.js';
 import { isoPlusSeconds, newId, newToken, nowIso, sha256Hex, slugify, stableHash } from './ids.js';
-import { constraintWarnings, normalizeConstraints, type Constraints } from './constraints.js';
-import { GENERIC_VARIATION, MAX_BATCH_COUNT, planJobs, type PlanningMode } from './planning.js';
+import { constraintWarnings, normalizeConstraints, varietyLocks, type Constraints } from './constraints.js';
+import { isAutoConcept, MAX_BATCH_COUNT, planJobs, type PlanningMode, type Variety } from './planning.js';
 import { assemblePrompt } from './prompt.js';
 import { importReference, referenceAvailable, type ReferenceInput } from './references.js';
 import type { AttemptRow, BatchRow, Counts, JobRow, ReferenceRow } from '../storage/repo.js';
@@ -43,18 +43,51 @@ export interface StepResult {
   replayed?: boolean;
 }
 
+/** A concept with its own reference images, e.g. one source character per result. */
+export interface ConceptItem {
+  text: string;
+  references?: ReferenceInput[] | undefined;
+}
+export type ConceptInput = string | ConceptItem;
+
+export const MAX_REFS_PER_JOB = 4;
+
+function splitConcepts(items: ConceptInput[] | undefined): { texts: string[]; perJob: ReferenceInput[][] } {
+  const texts: string[] = [];
+  const perJob: ReferenceInput[][] = [];
+  for (const it of items ?? []) {
+    if (typeof it === 'string') {
+      texts.push(it);
+      perJob.push([]);
+    } else {
+      texts.push(it.text);
+      perJob.push(it.references ?? []);
+    }
+  }
+  if (perJob.some((r) => r.length > MAX_REFS_PER_JOB)) throw new IdraError('INVALID_INPUT', `at most ${MAX_REFS_PER_JOB} references per image`);
+  return { texts, perJob };
+}
+
+/** Copy per-job reference files before the transaction; rows get their job ids attached. */
+function importJobRefs(ctx: Ctx, batchId: string, perJob: ReferenceInput[][], seqs: number[], jobIds: string[]): ReferenceRow[][] {
+  return perJob.map((list, i) =>
+    list.map((r, k) => ({ ...importReference(ctx, batchId, r, k, `j${String(seqs[i]).padStart(3, '0')}`), job_id: jobIds[i]! })),
+  );
+}
+
 export interface CreateBatchInput {
   idempotency_key: string;
   request: string;
   count: number;
   planning_mode?: PlanningMode | undefined;
   base_prompt?: string | undefined;
-  concepts?: string[] | undefined;
+  concepts?: ConceptInput[] | undefined;
   references?: ReferenceInput[] | undefined;
   constraints?: unknown;
   target_aspect?: string | undefined;
   name?: string | undefined;
   max_retries?: number | undefined;
+  variety?: Variety | undefined;
 }
 
 export interface Completion {
@@ -87,7 +120,7 @@ export interface ExtendInput {
   batch_id: string;
   idempotency_key: string;
   count: number;
-  concepts?: string[] | undefined;
+  concepts?: ConceptInput[] | undefined;
 }
 
 export type ReconcileAction = 'check' | 'adopt' | 'confirm_failed' | 'authorize_retry';
@@ -174,17 +207,22 @@ export function createBatch(ctx: Ctx, input: CreateBatchInput): Record<string, u
   const refsIn = input.references ?? [];
   if (refsIn.length > ctx.limits.maxReferences) throw new IdraError('INVALID_INPUT', `at most ${ctx.limits.maxReferences} references`);
   const basePrompt = input.base_prompt?.trim() || null;
-  const plan = planJobs({ mode, count: input.count, concepts: input.concepts ?? [], basePrompt });
+  const variety: Variety = input.variety ?? 'balanced';
+  const { texts, perJob } = splitConcepts(input.concepts);
+  const plan = planJobs({ mode, count: input.count, concepts: texts, basePrompt, variety, locks: varietyLocks(constraints) });
   const maxRetries = Math.min(Math.max(input.max_retries ?? ctx.limits.maxRetries, 0), 5);
 
-  if (constraints.style !== 'off' && !refsIn.some((r) => r.role === 'style') && constraints.style_details === undefined) {
+  if (constraints.style !== 'off' && ![...refsIn, ...perJob.flat()].some((r) => r.role === 'style') && constraints.style_details === undefined) {
     // Style matching with no style reference and no description would be an empty requirement.
     throw new IdraError('CONSTRAINT_CONFLICT', 'style constraint needs a reference with role "style" or style_details');
   }
   const batchId = newId('b');
   const refs: ReferenceRow[] = [];
+  const jobIds = plan.map(() => newId('j'));
+  let jobRefs: ReferenceRow[][] = [];
   try {
     refsIn.forEach((r, i) => refs.push(importReference(ctx, batchId, r, i)));
+    jobRefs = importJobRefs(ctx, batchId, perJob, plan.map((p) => p.seq), jobIds);
   } catch (err) {
     fs.rmSync(path.join(ctx.referencesRoot, batchId), { recursive: true, force: true });
     throw err;
@@ -218,16 +256,18 @@ export function createBatch(ctx: Ctx, input: CreateBatchInput): Record<string, u
         output_dir: outputDir,
         max_retries: maxRetries,
         simulated: ctx.simulation ? 1 : 0,
+        variety,
       });
       for (const r of refs) ctx.repo.insertReference(r);
-      for (const p of plan) {
+      plan.forEach((p, i) => {
+        const own = (jobRefs[i] ?? []).map((r) => ({ label: r.label, role: r.role }));
         ctx.repo.insertJob({
-          id: newId('j'),
+          id: jobIds[i]!,
           batch_id: batchId,
           seq: p.seq,
           concept: p.concept,
           normalized_concept: p.normalized,
-          prompt: assemblePrompt({ mode, concept: p.concept, basePrompt, constraints, references: refLabels, targetAspect: input.target_aspect ?? null }),
+          prompt: assemblePrompt({ mode, concept: p.concept, basePrompt, constraints, references: [...refLabels, ...own], targetAspect: input.target_aspect ?? null }),
           state: 'pending',
           attempts_count: 0,
           retries_used: 0,
@@ -238,8 +278,10 @@ export function createBatch(ctx: Ctx, input: CreateBatchInput): Record<string, u
           created_at: now,
           updated_at: now,
         });
-      }
-      ctx.repo.event('batch_created', { batchId }, { count: plan.length, mode, references: refs.length });
+        for (const r of jobRefs[i] ?? []) ctx.repo.insertReference(r);
+      });
+      const perImage = jobRefs.reduce((n, l) => n + l.length, 0);
+      ctx.repo.event('batch_created', { batchId }, { count: plan.length, mode, variety, references: refs.length, per_image_references: perImage });
       const dupes = plan.filter((p) => p.duplicateOfSeq !== null).map((p) => p.seq);
       const res: Record<string, unknown> = {
         batch_id: batchId,
@@ -247,7 +289,10 @@ export function createBatch(ctx: Ctx, input: CreateBatchInput): Record<string, u
         slug,
         output_dir: outputDir,
         count: plan.length,
+        mode,
+        ...(mode === 'variations' ? { variety, auto_variations: plan.filter((p) => isAutoConcept(p.concept)).length } : {}),
         references: refs.map((r) => `${r.label} (${r.role})`),
+        ...(perImage ? { per_image_references: perImage } : {}),
         ...(warnings.length ? { warnings: warnings.map((w) => w.message) } : {}),
         ...(dupes.length ? { duplicate_concepts: dupes } : {}),
         next: 'Call idra_step with batch_id to get job 1.',
@@ -297,7 +342,7 @@ function claimNextLocked(ctx: Ctx, batchId: string): StepResult {
     }
     return { ...head, status: 'done', output_dir: b.output_dir, next: 'All images are saved. Show the user the output folder.' };
   }
-  const refs = ctx.repo.listReferences(b.id);
+  const refs = ctx.repo.refsForJob(b.id, job.id);
   const missing = refs.filter((r) => !referenceAvailable(r));
   if (missing.length > 0) {
     ctx.repo.updateBatch(b.id, { paused: 1, pause_reason: 'reference_missing' });
@@ -422,7 +467,7 @@ function prepareArtifact(ctx: Ctx, batch: BatchRow, job: JobRow, attempt: Attemp
     });
   }
   fault(ctx, 'before_finalize');
-  const nameSource = job.concept === GENERIC_VARIATION ? (batch.base_prompt ?? batch.slug) : job.concept;
+  const nameSource = isAutoConcept(job.concept) ? (batch.base_prompt ?? batch.slug) : job.concept;
   const finalPath = finalArtifactPath(batch.output_dir, job.seq, nameSource, info.extension);
   const orphanOk = !ctx.db.get('SELECT 1 AS x FROM artifacts WHERE final_path = ?', [finalPath]);
   finalizeArtifact(stagingPath, finalPath, info.sha256, orphanOk ? path.join(ctx.idraDir, 'orphans') : null);
@@ -685,27 +730,35 @@ export function extendBatch(ctx: Ctx, input: ExtendInput): Record<string, unknow
   const reqHash = stableHash(input);
   const replay = checkOp(ctx, opKey, reqHash);
   if (replay) return replay as Record<string, unknown>;
+  const pre = mustBatch(ctx, input.batch_id);
+  if (pre.status === 'cancelled') throw new IdraError('BATCH_CANCELLED', 'a cancelled batch cannot be extended');
+  const { texts, perJob } = splitConcepts(input.concepts);
+  const constraints = JSON.parse(pre.constraints_json) as Constraints;
+  const startSeq = ctx.repo.maxSeq(pre.id) + 1;
+  const existing = ctx.repo.allJobs(pre.id).map((j) => ({ seq: j.seq, normalized: j.normalized_concept }));
+  const plan = planJobs({ mode: pre.planning_mode, count: input.count, concepts: texts, basePrompt: pre.base_prompt, startSeq, existing, variety: pre.variety, locks: varietyLocks(constraints) });
+  const jobIds = plan.map(() => newId('j'));
+  // Reference files are copied before the transaction; a concurrent extension is detected below.
+  const jobRefs = importJobRefs(ctx, pre.id, perJob, plan.map((p) => p.seq), jobIds);
   const res = ctx.db.transaction(() => {
     const again = checkOp(ctx, opKey, reqHash);
     if (again) return again as Record<string, unknown>;
     const b = mustBatch(ctx, input.batch_id);
     if (b.status === 'cancelled') throw new IdraError('BATCH_CANCELLED', 'a cancelled batch cannot be extended');
+    if (ctx.repo.maxSeq(b.id) + 1 !== startSeq) throw new IdraError('IDEMPOTENCY_CONFLICT', 'the batch was extended concurrently; retry with a new idempotency_key');
     const total = b.requested_count + input.count;
     if (total > MAX_BATCH_COUNT) throw new IdraError('PLAN_INVALID', `a batch holds at most ${MAX_BATCH_COUNT} jobs`);
-    const existing = ctx.repo.allJobs(b.id).map((j) => ({ seq: j.seq, normalized: j.normalized_concept }));
-    const startSeq = ctx.repo.maxSeq(b.id) + 1;
-    const plan = planJobs({ mode: b.planning_mode, count: input.count, concepts: input.concepts ?? [], basePrompt: b.base_prompt, startSeq, existing });
-    const constraints = JSON.parse(b.constraints_json) as Constraints;
-    const refs = ctx.repo.listReferences(b.id).map((r) => ({ label: r.label, role: r.role }));
+    const refs = ctx.repo.batchWideRefs(b.id).map((r) => ({ label: r.label, role: r.role }));
     const now = nowIso();
-    for (const p of plan) {
+    plan.forEach((p, i) => {
+      const own = (jobRefs[i] ?? []).map((r) => ({ label: r.label, role: r.role }));
       ctx.repo.insertJob({
-        id: newId('j'),
+        id: jobIds[i]!,
         batch_id: b.id,
         seq: p.seq,
         concept: p.concept,
         normalized_concept: p.normalized,
-        prompt: assemblePrompt({ mode: b.planning_mode, concept: p.concept, basePrompt: b.base_prompt, constraints, references: refs, targetAspect: b.target_aspect }),
+        prompt: assemblePrompt({ mode: b.planning_mode, concept: p.concept, basePrompt: b.base_prompt, constraints, references: [...refs, ...own], targetAspect: b.target_aspect }),
         state: 'pending',
         attempts_count: 0,
         retries_used: 0,
@@ -716,7 +769,8 @@ export function extendBatch(ctx: Ctx, input: ExtendInput): Record<string, unknow
         created_at: now,
         updated_at: now,
       });
-    }
+      for (const r of jobRefs[i] ?? []) ctx.repo.insertReference(r);
+    });
     ctx.repo.updateBatch(b.id, { requested_count: total });
     ctx.repo.event('extended', { batchId: b.id }, { added: plan.length, from_seq: startSeq });
     const out = { ...base(ctx, mustBatch(ctx, b.id)), added: plan.length, seqs: `${startSeq}-${startSeq + plan.length - 1}`, next: 'Call idra_step to continue.' };
@@ -879,7 +933,9 @@ export function status(ctx: Ctx, input: StatusInput): Record<string, unknown> {
 /** A size-bounded orientation card for a host that lost its context. Not a substitute for job prompts. */
 function resumeCard(b: BatchRow, c: Counts, refs: ReferenceRow[], state: string): string {
   const brief = (b.base_prompt ?? b.request_text).replace(/\s+/g, ' ');
-  const refText = refs.length ? refs.map((r) => `${r.label} (${r.role})`).join(', ') : 'none';
+  const shared = refs.filter((r) => r.job_id === null);
+  const perImage = refs.length - shared.length;
+  const refText = `${shared.length ? shared.map((r) => `${r.label} (${r.role})`).join(', ') : 'none'}${perImage ? ` + ${perImage} per-image` : ''}`;
   const nextHint =
     state === 'done'
       ? 'nothing left'

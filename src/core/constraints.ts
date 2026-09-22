@@ -94,14 +94,19 @@ export function constraintLines(c: Constraints, referenceLabels: { role: string;
     const details = c.style_details ? ` ${c.style_details}.` : '';
     lines.push(
       c.style === 'strict'
-        ? `STYLE (strict): match the visual style${refNote} exactly: color grading, lighting quality, lens and camera look, texture, mood, and finish. Only the content described above changes.${details}`
-        : `STYLE (high): follow the visual style${refNote} closely: palette, lighting, and mood.${details}`,
+        ? `STYLE (strict): match the look${refNote} exactly: color palette and grading, lighting quality, texture and brushwork or grain, mood, and finish. Keep that look identical across the whole set; the subject, pose, and framing come from this prompt.${details}`
+        : `STYLE (high): follow the look${refNote} closely: palette, lighting, and mood.${details}`,
     );
   }
   if (c.avoid.length > 0) {
     lines.push(`AVOID: ${c.avoid.join('; ')}.`);
   }
   return lines;
+}
+
+/** Which variety axes the constraints lock. Style locks lighting; composition locks framing and angle. */
+export function varietyLocks(c: Constraints): { framing: boolean; light: boolean } {
+  return { framing: c.composition !== 'off', light: c.style === 'strict' };
 }
 
 export interface ConstraintWarning {
@@ -124,6 +129,9 @@ export function constraintWarnings(c: Constraints, planningMode: string): Constr
   }
   if (c.text === 'strict' && c.text_content.length === 0) {
     warnings.push({ code: 'text_strict_without_content', message: 'text=strict but no text_content supplied; the requirement is limited to "no other text".' });
+  }
+  if (c.composition !== 'off') {
+    warnings.push({ code: 'composition_locks_framing', message: 'composition is locked, so automatic variety will not change framing or camera angle.' });
   }
   if (c.identity !== 'off' && c.product === 'strict') {
     warnings.push({ code: 'identity_and_product', message: 'identity and strict product constraints are both active; review both in every output.' });

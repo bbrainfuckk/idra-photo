@@ -125,4 +125,32 @@ CREATE TABLE IF NOT EXISTS events (
 CREATE INDEX IF NOT EXISTS events_batch ON events(batch_id, id);
 `,
   },
+  {
+    version: 2,
+    name: '002_variety_and_job_references',
+    // Adds batch variety, the "design" reference role, and per-job references (job_id NULL = whole batch).
+    // SQLite cannot alter a CHECK constraint, so batch_references is rebuilt with its rows copied.
+    sql: `ALTER TABLE batches ADD COLUMN variety TEXT NOT NULL DEFAULT 'balanced' CHECK (variety IN ('subtle','balanced','bold'));
+CREATE TABLE batch_references_v2 (
+  id TEXT PRIMARY KEY,
+  batch_id TEXT NOT NULL REFERENCES batches(id),
+  job_id TEXT REFERENCES jobs(id),
+  role TEXT NOT NULL CHECK (role IN ('product','person','composition','style','edit_target','design')),
+  label TEXT NOT NULL,
+  original_path TEXT NOT NULL,
+  stored_path TEXT NOT NULL,
+  sha256 TEXT NOT NULL,
+  bytes INTEGER NOT NULL,
+  width INTEGER NOT NULL,
+  height INTEGER NOT NULL,
+  format TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+INSERT INTO batch_references_v2 (id, batch_id, job_id, role, label, original_path, stored_path, sha256, bytes, width, height, format, created_at)
+  SELECT id, batch_id, NULL, role, label, original_path, stored_path, sha256, bytes, width, height, format, created_at FROM batch_references;
+DROP TABLE batch_references;
+ALTER TABLE batch_references_v2 RENAME TO batch_references;
+CREATE INDEX IF NOT EXISTS batch_references_batch ON batch_references(batch_id);
+CREATE INDEX IF NOT EXISTS batch_references_job ON batch_references(job_id);`,
+  },
 ];

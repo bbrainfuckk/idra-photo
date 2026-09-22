@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { planJobs, normalizeConcept, GENERIC_VARIATION } from '../../src/core/planning.js';
-import { assemblePrompt } from '../../src/core/prompt.js';
-import { constraintWarnings, normalizeConstraints } from '../../src/core/constraints.js';
+import { planJobs, normalizeConcept, GENERIC_VARIATION, autoVariation, isAutoConcept } from '../../src/core/planning.js';
+import { assemblePrompt, referenceLines } from '../../src/core/prompt.js';
+import { constraintWarnings, normalizeConstraints, varietyLocks } from '../../src/core/constraints.js';
 import { slugify } from '../../src/core/ids.js';
 
 const codeOf = (fn: () => unknown) => {
@@ -21,7 +21,8 @@ test('variations keep the base prompt and need no per-image concepts', () => {
     jobs.map((j) => j.seq),
     [1, 2, 3],
   );
-  assert.ok(jobs.every((j) => j.concept === GENERIC_VARIATION && j.duplicateOfSeq === null));
+  assert.ok(jobs.every((j) => isAutoConcept(j.concept) && j.duplicateOfSeq === null));
+  assert.equal(new Set(jobs.map((j) => j.concept)).size, 3, 'every image gets its own variation');
   assert.equal(codeOf(() => planJobs({ mode: 'variations', count: 2, concepts: [], basePrompt: null })), 'PLAN_INVALID');
 });
 
@@ -73,4 +74,49 @@ test('slugs are safe and bounded', () => {
   assert.equal(slugify('CON'), 'con');
   assert.equal(slugify('!!!'), 'item');
   assert.ok(slugify('x'.repeat(200)).length <= 40);
+});
+
+test('automatic variety differs per image and host hints win', () => {
+  const jobs = planJobs({ mode: 'variations', count: 12, concepts: ['seated by a window, holding the bottle up'], basePrompt: 'Serum portrait' });
+  assert.equal(jobs[0]!.concept, 'seated by a window, holding the bottle up');
+  const auto = jobs.slice(1).map((j) => j.concept);
+  assert.equal(new Set(auto).size, auto.length, 'no two automatic variations repeat within 12');
+  for (let i = 1; i < jobs.length; i++) assert.notEqual(jobs[i]!.concept, jobs[i - 1]!.concept);
+  const more = planJobs({ mode: 'variations', count: 2, concepts: [], basePrompt: 'Serum portrait', startSeq: 13 });
+  assert.match(more[0]!.concept, /^Auto variation 13:/);
+});
+
+test('variety levels, and strict constraints lock their axes', () => {
+  const open = { framing: false, light: false };
+  assert.doesNotMatch(autoVariation(1, 'subtle', open), /framing|background|\blight\b/);
+  assert.match(autoVariation(1, 'balanced', open), /framing/);
+  assert.match(autoVariation(1, 'bold', open), /light/);
+  const styleStrict = varietyLocks(normalizeConstraints({ style: 'strict', style_details: 'oil paint' }));
+  assert.deepEqual(styleStrict, { framing: false, light: true });
+  for (let n = 1; n <= 10; n++) assert.doesNotMatch(autoVariation(n, 'bold', styleStrict), /\blight\b|backlight/);
+  const compLocked = varietyLocks(normalizeConstraints({ composition: 'high' }));
+  for (let s = 1; s <= 8; s++) assert.doesNotMatch(autoVariation(s, 'bold', compLocked), /framing|camera angle|three-quarter view|profile view|eye-level view|location|take on the scene/);
+});
+
+test('a style reference lends its look only, unless the same person or product is requested too', () => {
+  const [style] = referenceLines([{ label: 'painting', role: 'style' }]);
+  assert.match(style!, /only for its look/);
+  assert.match(style!, /Do not copy its people or faces, pose, objects, or composition or layout/);
+  const withPerson = referenceLines([
+    { label: 'painting', role: 'style' },
+    { label: 'anna', role: 'person' },
+  ]);
+  assert.doesNotMatch(withPerson[0]!, /people or faces/);
+  assert.match(withPerson[1]!, /the person to feature/);
+  const p = assemblePrompt({
+    mode: 'variations',
+    concept: autoVariation(2, 'balanced', { framing: false, light: true }),
+    basePrompt: 'A young woman holding a serum bottle',
+    constraints: normalizeConstraints({ style: 'strict' }),
+    references: [{ label: 'painting', role: 'style' }],
+    targetAspect: '4:5',
+  });
+  assert.ok(p.startsWith('A young woman holding a serum bottle\n\nVariation for this image: '));
+  assert.doesNotMatch(p, /Auto variation/);
+  assert.match(p, /STYLE \(strict\).*the subject, pose, and framing come from this prompt/);
 });
