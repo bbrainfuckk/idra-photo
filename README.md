@@ -109,4 +109,4 @@ npm test
 - [Measured overhead](docs/overhead.md)
 - [Build status](BUILD_STATUS.md)
 
-MIT licensed. See [LICENSE](LICENSE).
+MIT licensed. See [LICENSE](LICENSE). Bundled open-source packages and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

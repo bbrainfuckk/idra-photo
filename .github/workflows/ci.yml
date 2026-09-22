@@ -20,5 +20,5 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - name: committed single-file build is up to date
-        run: git diff --exit-code -- idra-photo.mjs
+        run: git diff --exit-code -- idra-photo.mjs THIRD_PARTY_NOTICES.md
       - run: npm run pack:check
