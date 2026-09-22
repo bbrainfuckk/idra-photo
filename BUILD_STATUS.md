@@ -1,11 +1,11 @@
 # Build status
 
-Updated 2026-09-22. Three separate deliverables, three separate statuses:
+Updated 2026-09-22. Two separate deliverables, two separate statuses:
 
 | Deliverable | Status |
 |---|---|
 | Local MCP server, queue, recovery, install | **Working and tested** |
-| Native Codex image loop (real `image_gen`) | **Tested with 3 real images** (2026-09-22). One Codex turn, no "continue" needed, 3/3 saved and validated. Output variety is too low; see open items. |
+| Native Codex image loop (real `image_gen`) | **Tested with real images** (2026-09-22): a 3-image same-style batch and a 4-character counterpart batch, each in one Codex turn with no "continue" needed. |
 
 ## Milestones
 
@@ -13,11 +13,11 @@ Updated 2026-09-22. Three separate deliverables, three separate statuses:
 - [x] B. Persistent create, claim, combined complete-and-next step, status
 - [x] C. Recovery, idempotency, cancellation, bounded retries, extension
 - [x] D. References (roles, checksums, workspace copies), constraints including style, artifact validation, manifests
-- [x] F. Automated tests, 100-job simulation, interruption recovery, overhead measurement
-- [x] G. Packed-install test, Codex install verified on a throwaway config, smoke-test procedures written
-- [x] I. Clone-and-install: prebuilt `idra-photo.mjs`, `install.cmd`/`install.sh`, launchers that find Node at every start, `uninstall-codex`
-- [x] J. Installed into the owner's real Codex (2026-09-22); Codex started it through the launcher and called `idra_status`
-- [x] H. Real 3-image native smoke test: passed as a loop. Details in `docs/compatibility.md`.
+- [x] E. Automated tests, 100-job simulation, interruption recovery, overhead measurement
+- [x] F. Packed-install test, Codex install verified on a throwaway config, smoke-test procedures written
+- [x] G. Clone-and-install: prebuilt `idra-photo.mjs`, `install.cmd`/`install.sh`, launchers that find Node at every start, `uninstall-codex`
+- [x] H. Installed into the owner's real Codex (2026-09-22); Codex started it through the launcher and called `idra_status`
+- [x] I. Real 3-image native smoke test: passed as a loop. Details in `docs/compatibility.md`.
 
 ## Commands actually run (Windows 11, Node 24.21.0)
 
