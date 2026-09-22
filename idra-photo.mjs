@@ -905,7 +905,7 @@ function isInside(rootReal, candidateReal) {
   return b === a.slice(0, -1) || b.startsWith(a);
 }
 function assertNoControlChars(p) {
-  if (p.includes("\0") || /[ -]/.test(p)) {
+  if (p.includes("\0") || /[\u0000-\u001f]/.test(p)) {
     throw new IdraError("PATH_UNSAFE", "path contains control characters");
   }
   if (p.length > 2e3) throw new IdraError("PATH_UNSAFE", "path is too long");

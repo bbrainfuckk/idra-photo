@@ -379,7 +379,7 @@ test('path security: outside files, traversal, relative paths, other attempts, a
   expectCode(() => complete(ctx, id, j1, foreign), 'PATH_OUTSIDE_WORKSPACE');
   expectCode(() => complete(ctx, id, j1, path.join(ws, '..', path.basename(outside), 'x.png')), 'PATH_OUTSIDE_WORKSPACE');
   expectCode(() => complete(ctx, id, j1, 'relative/x.png'), 'PATH_UNSAFE');
-  expectCode(() => complete(ctx, id, j1, path.join(ws, 'ab.png')), 'PATH_UNSAFE');
+  expectCode(() => complete(ctx, id, j1, path.join(ws, 'a\u0001b.png')), 'PATH_UNSAFE');
   expectCode(() => createBatch(ctx, { idempotency_key: key(), request: 'r', count: 1, base_prompt: 'p', references: [{ path: foreign, role: 'style' }] }), 'REFERENCE_INVALID');
   const link = path.join(ws, 'link.png');
   let linked = false;
