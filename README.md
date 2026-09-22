@@ -8,9 +8,34 @@ Drag a photo into Codex, type one prompt, say how many images you want. Codex ma
 - Everything Idra stores stays on your computer.
 - Idra itself never generates images and never makes network requests. Codex still uses its own image service and your own Codex plan.
 
-> Status: v0.1. Tested end to end in the Codex desktop app on Windows with real image generation: a 3-image same-style batch and a 4-character counterpart batch, each finished in one Codex turn. The macOS/Linux launcher has not been run on those systems yet. Evidence: [Compatibility](docs/compatibility.md).
+> Status: v0.1. Tested end to end in the Codex desktop app on Windows with real image generation: a 3-image same-style batch and a 4-character counterpart batch, each finished in one Codex turn. The macOS/Linux launcher passes the automated tests on GitHub but has not been tried with Codex on a real Mac yet. Evidence: [Compatibility](docs/compatibility.md).
 
-## Install (about a minute)
+## Easiest: ask Codex to install it
+
+Paste this into Codex (the desktop app or CLI). Codex downloads Idra, connects it, and checks it.
+
+```text
+Install the Idra Photo MCP server for me.
+
+Source: https://github.com/bbrainfuckk/idra-photo (public, MIT license)
+
+1. Use a permanent folder: %USERPROFILE%\idra-photo on Windows, ~/idra-photo on macOS or Linux. Not a temp folder, because Codex runs Idra from there.
+2. Get the code: git clone https://github.com/bbrainfuckk/idra-photo.git into that folder. If git is not installed, download https://github.com/bbrainfuckk/idra-photo/archive/refs/heads/main.zip and unzip it there instead. Do not run npm install. The server is prebuilt in idra-photo.mjs.
+3. From inside that folder, register it with Codex:
+   Windows: .\idra-photo.cmd install-codex
+   macOS/Linux: sh ./idra-photo.sh install-codex
+   This adds one entry named idra_photo to my Codex config and creates an "Idra Photo" folder in my home folder. My other settings stay as they are. If you need permission to write outside the workspace, ask me.
+4. Check it:
+   Windows: .\idra-photo.cmd doctor
+   macOS/Linux: sh ./idra-photo.sh doctor
+   Every line should say ok or info. If it says Node is missing or too old, tell me to install Node.js 22.13 or newer from nodejs.org.
+5. Tell me the result and remind me to fully restart Codex.
+
+After the restart I will use it by dragging in a photo and saying:
+"Use Idra Photo: make 10 photos in the exact same style as this image, <my idea>"
+```
+
+## Or install it yourself (about a minute)
 
 1. Get the folder: `git clone https://github.com/bbrainfuckk/idra-photo.git`, or download the ZIP and unzip it anywhere.
 2. **Windows:** double-click `install.cmd`. **macOS/Linux:** run `sh install.sh` in the folder.
