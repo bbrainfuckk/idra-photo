@@ -1,0 +1,39 @@
+{
+  "measured_at": "2026-09-22T11:23:16.577Z",
+  "node": "24.21.0",
+  "platform": "win32-x64",
+  "workload": "100 simulated jobs, 1 style reference, variations mode, 64x80 fixture PNGs",
+  "results": [
+    {
+      "design": "idra combined step",
+      "images": 100,
+      "final_status": "done",
+      "tool_calls": 102,
+      "calls_per_image": 1.02,
+      "request_bytes": 12474,
+      "response_bytes": 119480,
+      "response_bytes_per_image": 1195,
+      "step_response_bytes_median": 1189,
+      "job_prompt_bytes_total": 56200,
+      "server_instructions_bytes_once": 1231
+    },
+    {
+      "design": "synthetic chatty baseline (combined step + full job list after every image)",
+      "images": 100,
+      "final_status": "done",
+      "tool_calls": 202,
+      "calls_per_image": 2.02,
+      "request_bytes": 17974,
+      "response_bytes": 1925420,
+      "response_bytes_per_image": 19254,
+      "step_response_bytes_median": 1189,
+      "job_prompt_bytes_total": 56200,
+      "server_instructions_bytes_once": 1231
+    }
+  ],
+  "limits": [
+    "Bytes of MCP tool JSON only. Token counts are unknown (no tokenizer or host usage data was available).",
+    "Excludes host planning/reasoning, native image generation, image inputs, retries, and review.",
+    "The chatty baseline is synthetic and defined by this script; it is not a measurement of another product."
+  ]
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.tgz
+.idra/
+outputs/
+references/
+examples/workspace/.idra/
+examples/workspace/outputs/
+examples/workspace/references/*
+!examples/workspace/references/.gitkeep
+*.log
+.env
+.env.*
+coverage/
+.tmp/

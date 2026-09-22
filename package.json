@@ -1,0 +1,44 @@
+{
+  "name": "idra-photo",
+  "version": "0.1.0",
+  "description": "Your AI generates. Idra manages the batch. Local stdio MCP server that hands a host agent one image job at a time and keeps durable, duplicate-resistant batch state.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "bin": {
+    "idra-photo": "dist/src/cli.js"
+  },
+  "files": [
+    "dist/src",
+    "migrations",
+    "docs/architecture.md",
+    "docs/compatibility.md",
+    "docs/overhead.md",
+    "docs/testing.md",
+    "examples/codex",
+    "examples/prompts.md",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test \"dist/tests/**/*.test.js\"",
+    "simulate": "node dist/src/cli.js simulate",
+    "overhead": "npm run build && node dist/tests/bench/overhead.js",
+    "pack:check": "npm run build && node dist/tests/bench/pack-install-check.js",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.6",
+    "typescript": "^5.9.3"
+  }
+}

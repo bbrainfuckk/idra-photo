@@ -1,0 +1,11 @@
+# Add to ~/.codex/config.toml (or run: node dist/src/cli.js install-codex).
+# Use absolute paths. Keep your existing [mcp_servers.*] entries.
+
+[mcp_servers.idra_photo]
+command = 'C:\Program Files\nodejs\node.exe'
+args = ['C:\Users\you\idra-photo\dist\src\cli.js', 'serve',
+        '--workspace', 'C:\Users\you\Pictures\Idra Photo',
+        '--allow-import', 'C:\Users\you\Downloads',
+        '--allow-import', 'C:\Users\you\Desktop',
+        '--allow-import', 'C:\Users\you\.codex\generated_images']
+startup_timeout_sec = 20
