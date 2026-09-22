@@ -23,8 +23,26 @@ Levels of evidence used below: **documented** (official or bundled docs), **host
 | Reference images | documented | Codex's bundled imagegen skill (`~/.codex/skills/.system/imagegen/SKILL.md`) says built-in edits use images visible in the conversation, and local files must first be loaded with `view_image`. Idra returns reference paths, and its instructions tell the agent to `view_image` them. |
 | Dragged-in images have a path | observed | Local Codex session logs show attached images as `<image name=[Image #1] path="C:\Users\...\Downloads\X.jpg">`. The agent can therefore pass that path to `idra_create_batch`. |
 | Where generated files go | documented + observed | The skill says outputs are saved under `$CODEX_HOME/generated_images/...` and says not to rely on a destination-path argument. Such files exist on this machine, e.g. `generated_images/<thread>/exec-<uuid>.png`. Idra accepts that folder through `--allow-import` and copies from it. It never searches it. |
-| Tool calls continue after a generation | documented, **not tested** | The skill says to produce many variants "by issuing one `image_gen` call per requested asset". Whether one Codex turn keeps looping through Idra for N images is unverified. |
-| Full native loop (generate, save, report, next) | **not tested** | This needs real image usage. It is ready to run as the 3-image smoke test in `docs/testing.md` once the owner authorizes it. |
+| Tool calls continue after a generation | **tested** | In the 3-image smoke test, one `codex exec` turn ran all three generations with no "continue" from the user. |
+| Full native loop (generate, save, report, next) | **tested, 3 images** | See "Smoke test, 2026-09-22" below. |
+| Image tool signature | host-reported | The session's tool schema showed `image_gen__imagegen({ prompt, referenced_image_paths?, num_last_images_to_include? })`. Codex passed Idra's workspace copy of the reference in `referenced_image_paths`, so no `view_image` step was needed. |
+
+## Smoke test, 2026-09-22 (real generation, authorized by the owner)
+
+Command: `codex exec -s workspace-write -C "<workspace>" -c model_reasoning_effort="medium" "<prompt>" -i <painting.jpg>`. The installed `idra_photo` entry was used unchanged. The prompt asked for 3 photos in the exact style of an attached public-domain painting (Leonardo, *Ginevra de' Benci*): "a young woman holding a small amber glass skincare serum bottle near her collarbone", 4:5.
+
+| Check | Result |
+|---|---|
+| Batch plan | `variations`, the user's prompt as `base_prompt`, the dragged-in image as a `style` reference, `style: strict` with details, `target_aspect: 4:5`. This matches the server instructions. |
+| Tool calls | 1 `idra_create_batch` and 4 `idra_step` (one claim, then three complete-and-next). There were no status, reconcile, or problem calls. |
+| Image tool input | Each of the 3 `image_gen` calls carried Idra's job prompt with the `STYLE (strict)` rule and the reference path. |
+| How files were reported | `artifact_path` = `~/.codex/generated_images/<thread>/exec-<uuid>.png`. Idra copied each file into staging, validated it, and finalized it. |
+| Outputs | 3 PNGs, 1122x1402 (4:5 within 1%), about 2.4 MB each, 3 distinct hashes, all first attempts, manifest 3/3 completed |
+| Extra user turns | None: one turn, 202 s wall time |
+| Host-reported tokens | 29,896 for the whole turn. This includes Codex reading its imagegen skill. Image-generation usage is billed separately by the host and was not reported. |
+| Visual review | Codex recorded its own review as passed for all three. An independent look found an excellent style match but very little variety: all three reproduce the reference painting's sitter, pose, and background, with the bottle added. |
+
+Finding: `variations` plus `style: strict` plus a reference passed straight to the image tool leads the model to near-copy the reference rather than make new images in its style. A style-only guard in the per-job prompt, or variation hints, is the next fix; see `BUILD_STATUS.md`.
 
 ## Not claimed
 

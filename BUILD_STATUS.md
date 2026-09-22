@@ -5,7 +5,7 @@ Updated 2026-09-22. Three separate deliverables, three separate statuses:
 | Deliverable | Status |
 |---|---|
 | Local MCP server, queue, recovery, install | **Working and tested** |
-| Native Codex image loop (real `image_gen`) | **Not tested.** Idra was loaded and called by real Codex, and `image_gen` was reported available. No real image has been generated through Idra yet. |
+| Native Codex image loop (real `image_gen`) | **Tested with 3 real images** (2026-09-22). One Codex turn, no "continue" needed, 3/3 saved and validated. Output variety is too low; see open items. |
 
 ## Milestones
 
@@ -17,7 +17,7 @@ Updated 2026-09-22. Three separate deliverables, three separate statuses:
 - [x] G. Packed-install test, Codex install verified on a throwaway config, smoke-test procedures written
 - [x] I. Clone-and-install: prebuilt `idra-photo.mjs`, `install.cmd`/`install.sh`, launchers that find Node at every start, `uninstall-codex`
 - [x] J. Installed into the owner's real Codex (2026-09-22); Codex started it through the launcher and called `idra_status`
-- [ ] H. Real 3-image native smoke test (needs owner authorization for image usage)
+- [x] H. Real 3-image native smoke test: passed as a loop. Details in `docs/compatibility.md`.
 
 ## Commands actually run (Windows 11, Node 24.21.0)
 
@@ -35,11 +35,12 @@ Lint: no separate linter is configured. Strict TypeScript is the static check.
 
 ## Open items
 
-1. **Real smoke test.** Run the 3-image procedure in `docs/testing.md` after the owner OKs the usage. The key unknown is whether Codex continues from image to image in one turn or needs "continue".
-2. Host the repo (for example a private GitHub repo) so teammates can clone it. Nothing has been pushed.
-3. Delete the duplicate staged copy of each image after it is recorded. This halves disk use; about 0.9 MB per 1024x1280 image is duplicated now.
-4. Run the macOS/Linux launcher on a real Mac (CI will cover it once hosted).
+1. **Variety.** In the smoke test, all 3 images near-copied the style reference's sitter, pose, and background. Add a style-only guard for `style` references ("take the look, not the person or layout") and make variations vary pose and setting, then re-run the 3-image test.
+2. Run the 10-image interruption procedure in `docs/testing.md` for real.
+3. Host the repo (for example a private GitHub repo) so teammates can clone it. Nothing has been pushed.
+4. Delete the duplicate staged copy of each image after it is recorded. Real images are about 2.4 MB, and each currently exists three times: Codex's copy, the staging copy, and the output.
+5. Run the macOS/Linux launcher on a real Mac (CI will cover it once hosted).
 
 ## Next action
 
-Owner runs, or authorizes running, the 3-image smoke test. Then record the results in `docs/compatibility.md` and this file.
+Fix variety (item 1), then re-run the 3-image smoke test with the same painting to compare.
