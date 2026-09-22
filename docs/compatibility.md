@@ -42,7 +42,20 @@ Command: `codex exec -s workspace-write -C "<workspace>" -c model_reasoning_effo
 | Host-reported tokens | 29,896 for the whole turn. This includes Codex reading its imagegen skill. Image-generation usage is billed separately by the host and was not reported. |
 | Visual review | Codex recorded its own review as passed for all three. An independent look found an excellent style match but very little variety: all three reproduce the reference painting's sitter, pose, and background, with the bottle added. |
 
-Finding: `variations` plus `style: strict` plus a reference passed straight to the image tool leads the model to near-copy the reference rather than make new images in its style. A style-only guard in the per-job prompt, or variation hints, is the next fix; see `BUILD_STATUS.md`.
+Finding: `variations` plus `style: strict` plus a reference passed straight to the image tool leads the model to near-copy the reference rather than make new images in its style. The fix is a look-only style reference line plus per-image variation hints, shipped in schema 2. That fix has not yet been re-run on the painting.
+
+## Counterpart test, 2026-09-22 (real generation, requested by the owner)
+
+The task: an opposite-gender counterpart for each of 4 Anichess character cards, cropped from a screenshot to about 157 px each. The target look was "Valorant-style digital painting, less low-poly". The 4 card files were attached and named in the prompt.
+
+| Check | Result |
+|---|---|
+| Batch plan | Codex chose `diversified`, with one concept per character, and gave each concept its own card as a `design` reference (the per-image feature). It set `composition: strict` (same bust framing), `style: high` with look-only details, `1:1`, and an avoid list that included "background color changes". |
+| Tool calls | 1 `idra_create_batch` and 5 `idra_step` |
+| Outputs | 4 PNGs, 1254x1254, 4 distinct hashes, all first attempts |
+| Extra user turns | None: one turn, 279 s |
+| Host-reported tokens | 30,458 for the whole turn |
+| Independent visual review | Each result keeps its own card's background color, palette, and costume motifs, and all four are clearly different from each other. The shading is softer and more painterly than the faceted cards. The gender swap reads clearly on the Banshee and the white-haired Wraith, and only subtly on the skeletal Lich and the faceless hooded Wraith. |
 
 ## Not claimed
 

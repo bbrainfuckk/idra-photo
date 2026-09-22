@@ -35,7 +35,7 @@ Lint: no separate linter is configured. Strict TypeScript is the static check.
 
 ## Open items
 
-1. **Variety.** In the smoke test, all 3 images near-copied the style reference's sitter, pose, and background. Add a style-only guard for `style` references ("take the look, not the person or layout") and make variations vary pose and setting, then re-run the 3-image test.
+1. **Variety.** Fixed in schema 2: look-only style references, variation hints plus an automatic variety deck, and per-image `design` references. The per-image feature was tested live with 4 Anichess counterparts, which came out distinct and matched to their sources. The look-only fix has not been re-run on the Renaissance painting.
 2. Run the 10-image interruption procedure in `docs/testing.md` for real.
 3. Host the repo (for example a private GitHub repo) so teammates can clone it. Nothing has been pushed.
 4. Delete the duplicate staged copy of each image after it is recorded. Real images are about 2.4 MB, and each currently exists three times: Codex's copy, the staging copy, and the output.
