@@ -1,9 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { DatabaseSync, type SQLInputValue, type StatementSync } from 'node:sqlite';
-import { IdraError } from '../core/errors.js';
 import { nowIso } from '../core/ids.js';
+import { MIGRATIONS } from './migrations.js';
 
 export type Row = Record<string, string | number | null | Uint8Array | bigint>;
 
@@ -23,34 +22,20 @@ export class Db {
     this.db.exec('PRAGMA busy_timeout = 8000');
   }
 
-  static migrationsDir(): string {
-    const here = path.dirname(fileURLToPath(import.meta.url));
-    const candidates = [path.resolve(here, '..', '..', '..', 'migrations'), path.resolve(here, '..', '..', 'migrations'), path.resolve(here, '..', 'migrations')];
-    for (const c of candidates) if (fs.existsSync(c)) return c;
-    throw new IdraError('INTERNAL', 'migrations directory not found', { candidates });
-  }
-
   migrate(): { applied: string[]; version: number } {
-    const dir = Db.migrationsDir();
-    const files = fs
-      .readdirSync(dir)
-      .filter((f) => /^\d{3}_.+\.sql$/.test(f))
-      .sort();
     this.db.exec('CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)');
     const applied: string[] = [];
     this.transaction(() => {
       const current = this.get<{ value: string }>('SELECT value FROM meta WHERE key = ?', ['schema_version']);
       let version = current ? Number(current.value) : 0;
-      for (const file of files) {
-        const n = Number(file.slice(0, 3));
-        if (n <= version) continue;
-        const sql = fs.readFileSync(path.join(dir, file), 'utf8');
-        this.db.exec(sql);
-        version = n;
-        applied.push(file);
+      for (const m of MIGRATIONS) {
+        if (m.version <= version) continue;
+        this.db.exec(m.sql);
+        version = m.version;
+        applied.push(m.name);
       }
       this.run('INSERT INTO meta(key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', ['schema_version', String(version)]);
-      this.run('INSERT INTO meta(key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', ['migrated_at', nowIso()]);
+      if (applied.length) this.run('INSERT INTO meta(key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', ['migrated_at', nowIso()]);
     });
     const v = this.get<{ value: string }>('SELECT value FROM meta WHERE key = ?', ['schema_version']);
     return { applied, version: v ? Number(v.value) : 0 };

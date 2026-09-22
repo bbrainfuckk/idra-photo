@@ -13,7 +13,6 @@
   },
   "files": [
     "dist/src",
-    "migrations",
     "docs/architecture.md",
     "docs/compatibility.md",
     "docs/overhead.md",
@@ -26,11 +25,13 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "bundle": "node scripts/bundle.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test \"dist/tests/**/*.test.js\"",
+    "test": "npm run build && npm run bundle && node --test \"dist/tests/**/*.test.js\"",
     "simulate": "node dist/src/cli.js simulate",
     "overhead": "npm run build && node dist/tests/bench/overhead.js",
     "pack:check": "npm run build && node dist/tests/bench/pack-install-check.js",
+    "clone:check": "npm run build && node dist/tests/bench/clone-check.js",
     "prepack": "npm run build"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.13.6",
+    "esbuild": "^0.28.2",
     "typescript": "^5.9.3"
   }
 }

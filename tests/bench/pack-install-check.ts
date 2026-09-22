@@ -24,7 +24,7 @@ type PackInfo = { filename: string; files: { path: string }[] };
 const info = (Array.isArray(parsed) ? parsed[0] : Object.values(parsed as Record<string, PackInfo>)[0]) as PackInfo;
 const tarball = path.join(tmp, info.filename);
 const packed = info.files.map((f) => f.path.replace(/\\/g, '/'));
-const required = ['dist/src/cli.js', 'dist/src/main.js', 'dist/src/server.js', 'migrations/001_init.sql', 'README.md', 'LICENSE'];
+const required = ['dist/src/cli.js', 'dist/src/main.js', 'dist/src/server.js', 'README.md', 'LICENSE'];
 const missing = required.filter((f) => !packed.includes(f));
 const leaked = packed.filter((f) => /^(dist\/tests|tests|src)\/|\.idra|outputs\/|\.sqlite$|\.env/.test(f));
 if (missing.length || leaked.length) {

@@ -1,4 +1,12 @@
--- Idra Photo schema v1. The database is the source of truth; manifests are exports.
+/**
+ * Schema migrations, embedded so a single-file build carries them. Append new entries; never edit
+ * an applied one. The database is the source of truth; manifests are rebuildable exports.
+ */
+export const MIGRATIONS: { version: number; name: string; sql: string }[] = [
+  {
+    version: 1,
+    name: '001_init',
+    sql: `-- Idra Photo schema v1. The database is the source of truth; manifests are exports.
 CREATE TABLE IF NOT EXISTS meta (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL
@@ -115,3 +123,6 @@ CREATE TABLE IF NOT EXISTS events (
   created_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS events_batch ON events(batch_id, id);
+`,
+  },
+];

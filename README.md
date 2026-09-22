@@ -10,68 +10,31 @@ Drag a photo into Codex, type one prompt, say how many images you want. Codex ma
 
 > Status: v0.1. The local MCP server, queue, recovery, and install are tested. A full real-image run in Codex has **not** been tested yet; see [Compatibility](docs/compatibility.md).
 
-## What you need
+## Install (about a minute)
 
-- Codex (desktop app or CLI) signed in with your own account.
-- Node.js 22.13 or newer. Check with `node --version`.
+1. Get the folder: `git clone` this repository, or download the ZIP and unzip it anywhere.
+2. **Windows:** double-click `install.cmd`. **macOS/Linux:** run `sh install.sh` in the folder.
+3. Restart Codex.
 
-## Install
+That is all. No `npm install`: the server ships prebuilt as one file, `idra-photo.mjs`.
 
-From this folder:
+What the installer does:
 
-```bash
-npm install
-```
+- Creates `Idra Photo` in your home folder. Your images go to `Idra Photo/outputs/`.
+- Registers `idra_photo` with Codex. Your other Codex settings are kept, and a backup is made if it has to edit `config.toml` itself.
+- Lets Idra read photos you drag in from Downloads, Desktop, Pictures, temp, and Codex's own generated-images folder.
 
-```bash
-npm run build
-```
+Idra needs Node.js 22.13 or newer. On Windows, if you do not have Node, Idra uses the Node that ships inside Codex. The launcher looks for Node every time Codex starts it, so Codex or Node updates do not break it.
 
-Then connect it to Codex. This creates your workspace folder (default `Pictures/Idra Photo`) and registers the server with Codex using absolute paths. Your other Codex settings are kept.
+Options: `install.cmd --workspace "D:\Shoots\Idra"` picks another folder. `--dry-run` only shows what would be written.
 
-```bash
-node dist/src/cli.js install-codex
-```
-
-Restart Codex afterwards. To pick a different folder:
+Remove it any time (your images stay):
 
 ```bash
-node dist/src/cli.js install-codex --workspace "D:\Shoots\Idra"
+idra-photo.cmd uninstall-codex
 ```
 
-If the Codex CLI is not found, the command prints a block to paste into `~/.codex/config.toml` instead. Use `--dry-run` to only print it.
-
-Check everything:
-
-```bash
-node dist/src/cli.js doctor --workspace "C:\Users\you\Pictures\Idra Photo"
-```
-
-<details>
-<summary>macOS / Linux manual config</summary>
-
-```toml
-[mcp_servers.idra_photo]
-command = "/usr/local/bin/node"
-args = ["/Users/you/idra-photo/dist/src/cli.js", "serve", "--workspace", "/Users/you/Pictures/Idra Photo",
-        "--allow-import", "/Users/you/Downloads", "--allow-import", "/Users/you/Desktop",
-        "--allow-import", "/Users/you/.codex/generated_images"]
-startup_timeout_sec = 20
-```
-</details>
-
-<details>
-<summary>Windows manual config</summary>
-
-```toml
-[mcp_servers.idra_photo]
-command = 'C:\Program Files\nodejs\node.exe'
-args = ['C:\Users\you\idra-photo\dist\src\cli.js', 'serve', '--workspace', 'C:\Users\you\Pictures\Idra Photo',
-        '--allow-import', 'C:\Users\you\Downloads', '--allow-import', 'C:\Users\you\Desktop',
-        '--allow-import', 'C:\Users\you\.codex\generated_images']
-startup_timeout_sec = 20
-```
-</details>
+On macOS/Linux use `sh idra-photo.sh uninstall-codex`. Check that everything is ready with `idra-photo.cmd doctor`.
 
 ## Use it
 
@@ -125,6 +88,18 @@ Each can be `off`, `high`, or `strict`. A valid image file is not proof the prod
 - It never reads Codex login files and never asks for passwords, tokens, or API keys.
 - No telemetry. Idra makes no network requests at runtime.
 - Idra does not make image generation free or unlimited. Every image uses your Codex plan.
+
+## For developers
+
+```bash
+npm install
+```
+
+```bash
+npm test
+```
+
+`npm run bundle` rebuilds `idra-photo.mjs` from `src/`. Commit it with your change; CI fails if it is stale.
 
 ## Learn more
 

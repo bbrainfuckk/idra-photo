@@ -31,10 +31,19 @@ export class FakeHost {
     private readonly transport: StdioClientTransport,
   ) {}
 
-  static async connect(opts: { cliPath: string; workspace: string; extraArgs?: string[]; nodeArgs?: string[]; env?: Record<string, string> }): Promise<FakeHost> {
+  static async connect(opts: {
+    cliPath: string;
+    workspace?: string;
+    extraArgs?: string[];
+    nodeArgs?: string[];
+    env?: Record<string, string>;
+    /** Start something other than `node <cliPath> serve`, e.g. the idra-photo.cmd launcher. */
+    command?: string;
+    args?: string[];
+  }): Promise<FakeHost> {
     const transport = new StdioClientTransport({
-      command: process.execPath,
-      args: [...(opts.nodeArgs ?? []), opts.cliPath, 'serve', '--workspace', opts.workspace, ...(opts.extraArgs ?? [])],
+      command: opts.command ?? process.execPath,
+      args: opts.args ?? [...(opts.nodeArgs ?? []), opts.cliPath, 'serve', ...(opts.workspace ? ['--workspace', opts.workspace] : []), ...(opts.extraArgs ?? [])],
       env: { ...(process.env as Record<string, string>), ...(opts.env ?? {}) },
       stderr: 'pipe',
     });
@@ -101,6 +110,8 @@ export interface SimOptions {
   idempotencyKey?: string;
   width?: number;
   height?: number;
+  /** Override how the server is started (launcher tests). */
+  launch?: { command: string; args: string[]; env?: Record<string, string> };
 }
 
 export interface SimResult {
@@ -114,7 +125,9 @@ export interface SimResult {
 }
 
 export async function runSimulatedBatch(opts: SimOptions): Promise<SimResult> {
-  const host = await FakeHost.connect({ cliPath: opts.cliPath, workspace: opts.workspace, extraArgs: ['--simulation'] });
+  const host = opts.launch
+    ? await FakeHost.connect({ cliPath: opts.cliPath, command: opts.launch.command, args: [...opts.launch.args, '--simulation'], env: opts.launch.env ?? {} })
+    : await FakeHost.connect({ cliPath: opts.cliPath, workspace: opts.workspace, extraArgs: ['--simulation'] });
   const w = opts.width ?? 64;
   const h = opts.height ?? 80;
   try {
