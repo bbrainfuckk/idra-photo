@@ -7,6 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { REPO_ROOT } from '../helpers.js';
+import { FakeHost } from '../../src/sim/fakeHost.js';
 
 const npmCli = process.env['npm_execpath'];
 function npm(args: string[], cwd: string): string {
@@ -24,7 +25,7 @@ type PackInfo = { filename: string; files: { path: string }[] };
 const info = (Array.isArray(parsed) ? parsed[0] : Object.values(parsed as Record<string, PackInfo>)[0]) as PackInfo;
 const tarball = path.join(tmp, info.filename);
 const packed = info.files.map((f) => f.path.replace(/\\/g, '/'));
-const required = ['dist/src/cli.js', 'dist/src/main.js', 'dist/src/server.js', 'README.md', 'LICENSE'];
+const required = ['dist/src/cli.js', 'dist/src/main.js', 'dist/src/server.js', 'README.md', 'LICENSE', 'design-library/sources.json', 'examples/consistency/product-photo.json'];
 const missing = required.filter((f) => !packed.includes(f));
 const leaked = packed.filter((f) => /^(dist\/tests|tests|src)\/|\.idra|outputs\/|\.sqlite$|\.env/.test(f));
 if (missing.length || leaked.length) {
@@ -40,6 +41,10 @@ const cli = path.join(prefix, 'node_modules', 'idra-photo', 'dist', 'src', 'cli.
 const ws = path.join(tmp, 'workspace');
 const doctor = spawnSync(process.execPath, [cli, 'doctor', '--workspace', ws], { encoding: 'utf8' });
 const sim = spawnSync(process.execPath, [cli, 'simulate', '--workspace', path.join(tmp, 'sim'), '--count', '3'], { encoding: 'utf8' });
+const host = await FakeHost.connect({ cliPath: cli, workspace: path.join(tmp, 'library') });
+const library = await host.call('idra_design_library', {});
+await host.close();
+const librarySources = (library.data['sources'] as unknown[] | undefined)?.length ?? 0;
 const binName = process.platform === 'win32' ? 'idra-photo.cmd' : 'idra-photo';
 const report = {
   tarball: path.basename(tarball),
@@ -49,6 +54,7 @@ const report = {
   doctor_output: doctor.stdout.trim().split('\n'),
   simulate_exit: sim.status,
   simulate_tail: sim.stdout.trim().split('\n').slice(-6),
+  design_library_sources: librarySources,
 };
 console.log(JSON.stringify(report, null, 2));
-process.exit(report.doctor_exit === 0 && report.simulate_exit === 0 && report.bin_shim_present ? 0 : 1);
+process.exit(report.doctor_exit === 0 && report.simulate_exit === 0 && report.bin_shim_present && librarySources === 6 ? 0 : 1);

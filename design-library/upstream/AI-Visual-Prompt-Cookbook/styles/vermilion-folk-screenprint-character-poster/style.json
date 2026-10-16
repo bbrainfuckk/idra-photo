@@ -1,0 +1,166 @@
+{
+  "style_name": "Vermilion Folk Screenprint Character Poster",
+  "style_slug": "vermilion-folk-screenprint-character-poster",
+  "style_version": "2.1",
+  "style_summary": "A hand-pulled theatrical poster system built around one monumental front-facing character, a warm uncoated paper field, a tightly limited vermilion-to-rose ink family, carved folk-pattern fills, and hand-lettered display type that behaves as part of the illustration.",
+  "category": "Type Posters",
+  "environment_variables": {
+    "SUBJECT": "the single monumental character or figure",
+    "SUBJECT_ACTION": "a restrained frontal action or expression",
+    "PRODUCT_OR_PROP": "one symbolic prop integrated into the portrait",
+    "LOCATION": "the implied event or cultural setting",
+    "BACKGROUND_ELEMENTS": "a few flat supporting motifs around the figure",
+    "MAIN_TEXT": "a short invented headline",
+    "SECONDARY_TEXT": "small invented event copy",
+    "ACCENT_SYMBOL": "a simple decorative glyph or emblem",
+    "WARDROBE_STYLE": "patterned clothing or character styling",
+    "STYLE_FIDELITY_ANCHORS": "observable style traits that must remain visible",
+    "SOURCE_CONTENT_TO_AVOID": "literal source content that generated samples must not recreate",
+    "ASPECT_RATIO": "9:16 or 16:9"
+  },
+  "style_fidelity_anchors": [
+    "One oversized front-facing bust dominates the frame, cropped firmly at the lower torso and nearly touching multiple edges.",
+    "The face is flattened into broad interlocking shapes with a long geometric nose, heavy horizontal eyelids, and intentionally lopsided hand-drawn contours.",
+    "A strict warm palette uses unprinted cream paper plus vermilion, scarlet, brick red, dusty rose, burgundy, and only tiny near-black accents.",
+    "Dense hand-carved folk motifs fill skin, hair, clothing, and props while leaving the cream paper visible as the line color.",
+    "Display lettering is chunky, rounded, irregular, vertically stacked or edge-hugging, and treated as an illustrated shape rather than typeset copy.",
+    "Small secondary lettering forms narrow footer or side bands with uneven baselines, compact spacing, and playful handmade symbols.",
+    "Ink coverage is tactile and imperfect, with dry-brush edges, screenprint grain, slight misregistration, and variable opacity on fibrous paper.",
+    "Depth stays shallow and poster-flat: overlaps create hierarchy, but there are no realistic shadows, atmospheric perspective, or volumetric rendering.",
+    "The composition is dense but controlled, using the large character as the organizing mass and fitting text into remaining edge channels.",
+    "The mood combines offbeat theatrical gravity, sly humor, and mid-century underground cultural-poster energy."
+  ],
+  "source_content_to_avoid": [
+    "A crowned or royal bearded male character presented as a monarch.",
+    "The exact drooping-eyed face, long rectangular nose, beard silhouette, ear shape, crown, and costume anatomy from the source.",
+    "Any Shakespeare character, Macbeth reference, Globe theatre reference, or royal tragedy premise.",
+    "The source headline, side copy, dates, ticket price, venue details, signatures, hashtags, or other literal lettering.",
+    "The exact crown-above-head and beard-below-face arrangement or a near-trace of the original silhouette.",
+    "Any watermark, creator mark, theatre logo, platform identifier, brand mark, or copied signature."
+  ],
+  "visual_deconstruction": {
+    "overall_style": "Expressionistic hand-screenprinted theatre poster with folk-art patterning and underground illustration character design.",
+    "composition_and_layout": "A single colossal frontal bust forms the central scaffold. The head and torso occupy roughly three quarters of the frame, with headline lettering squeezed into a tall outer channel and microcopy gathered along the bottom edge. In wide formats the same hierarchy expands laterally: the bust stays dominant while one strong text block and a narrow information strip occupy the side zones.",
+    "subject_placement": "Centered or slightly offset, straight-on, tightly cropped, and intentionally oversized; eyes sit close to the upper-middle axis while shoulders or a torso mass anchor the bottom.",
+    "camera_and_perspective": "Orthographic poster view with no lens realism. Features are assembled as flat overlapping cut-paper or ink shapes.",
+    "typography": "Hand-built bulbous display capitals with irregular widths, imperfect counters, vertical stacking, and compressed small-cap event copy with playful baseline shifts.",
+    "color_behavior": "A cream substrate remains active negative space. Reds progress from bright vermilion accents through dusty rose fields to deep burgundy shadows; near-black is reserved for a few grounding strokes.",
+    "graphic_elements": "Carved botanical, geometric, wave, knot, stripe, zigzag, and dot motifs; rough underlines; tiny emblems; edge-running text; occasional paint scuffs.",
+    "texture_and_finish": "Uncoated fibrous stock, uneven ink deposit, subtle misregistration, dry edges, and hand-pulled screenprint grain without digital noise overload.",
+    "lighting": "Flat even illumination implied by ink value rather than a light source; high local contrast comes from adjacent flat shapes.",
+    "mood": "Wry, theatrical, handmade, culturally rooted, slightly uncanny, and collectible rather than polished or commercial."
+  },
+  "composition": {
+    "primary_hierarchy": "Make the monumental character the first read, the short headline the second read, and the miniature event copy the third read.",
+    "portrait_format": "For 9:16, let the bust fill about 72 to 82 percent of the canvas, reserve one narrow vertical text channel, and place supporting copy in a compressed footer band.",
+    "landscape_format": "For 16:9, keep the bust at roughly 58 to 68 percent of the canvas and place the headline as a large lateral block; retain an intentionally crowded but readable footer or side strip.",
+    "negative_space": "Use cream paper as narrow breathing gaps inside and around the dense red shapes, not as a large empty photographic background.",
+    "cropping": "Crop boldly at shoulders, torso, headwear, or prop edges; permit slight asymmetry and edge contact to preserve handmade energy."
+  },
+  "typography": {
+    "headline": "Invented words only, rendered as thick rounded hand-painted capitals with inconsistent stroke widths, compressed spacing, and irregular vertical or horizontal stacking.",
+    "supporting_copy": "Small handmade condensed capitals arranged as date-like or venue-like graphic texture, but never copied from the source and never pretending to be a real event.",
+    "integration": "Let type press against the portrait silhouette, slip behind an edge, or occupy a narrow channel so it reads as a compositional shape.",
+    "legibility": "Keep the main headline short and largely legible; allow small copy to feel tactile and imperfect without becoming random glyph noise."
+  },
+  "color_palette": {
+    "paper_cream": "#F2E6D3",
+    "vermilion": "#D9321F",
+    "scarlet": "#CF2435",
+    "dusty_rose": "#C84F69",
+    "brick_red": "#9D2E23",
+    "burgundy": "#65151D",
+    "near_black": "#241316",
+    "usage": "Keep cream at about 35 to 45 percent as substrate and linework, mid reds at about 40 to 50 percent, deep burgundy at about 10 to 18 percent, and near-black below 5 percent."
+  },
+  "image_treatment": {
+    "rendering": "Flat vector-like ink shapes redrawn with analog irregularity, not clean digital vectors and not painterly realism.",
+    "surface": "Fine paper fiber, sparse pinholes, subtle ink-density variation, dry-brush seams, and slight channel misregistration.",
+    "detail": "Use nested motifs to create richness inside large areas while preserving bold silhouette readability at thumbnail size.",
+    "contrast": "High shape contrast against cream paper with no gradients, glossy highlights, or cast shadows."
+  },
+  "design_rules": [
+    "Begin with one monumental, front-facing silhouette before adding internal patterns or type.",
+    "Build facial features from broad, slightly distorted geometric slabs with heavy horizontal eyes and a strong nose shape.",
+    "Use cream negative lines to carve dense folk patterns through red ink masses.",
+    "Restrict the palette to the cream substrate, a family of warm reds, and tiny near-black anchors.",
+    "Treat the headline as a large illustrated object fitted tightly beside the subject.",
+    "Confine supporting copy to a narrow edge band and keep every word newly invented.",
+    "Simulate hand-screenprinted imperfection through restrained grain, minor misregistration, and rough ink edges.",
+    "Preserve poster flatness and let overlap, scale, and crop create all spatial hierarchy."
+  ],
+  "do": [
+    "Use one clear character and one symbolic prop per poster.",
+    "Keep the character large enough to remain the immediate first read in both requested aspect ratios.",
+    "Repeat a small family of botanical, geometric, and wave motifs across multiple surfaces.",
+    "Balance dense patterned areas with cream line channels and small paper gaps.",
+    "Make text brief, invented, handmade, and compositionally integrated."
+  ],
+  "avoid": [
+    "Do not recreate a monarch, crown, beard, Shakespearean tragedy, or the source poster wording.",
+    "Do not use photorealism, 3D rendering, realistic skin, cinematic lighting, depth of field, or perspective scenery.",
+    "Do not introduce cool blues, greens, metallic gradients, neon glows, or full-spectrum color.",
+    "Do not use clean corporate typography, modern UI labels, precise vector symmetry, or polished logo design.",
+    "Do not overload the image with random noise, heavy distress, illegible pseudo-text, watermarks, or copied identity marks."
+  ],
+  "prompt_template": "Create a {ASPECT_RATIO} poster image in the \"Vermilion Folk Screenprint Character Poster\" visual style. Style fidelity has priority over content novelty: the finished image must visibly preserve these anchors before introducing new content: {STYLE_FIDELITY_ANCHORS}. It must not recreate any of this literal source content: {SOURCE_CONTENT_TO_AVOID}. Subject: {SUBJECT}. Action or expression: {SUBJECT_ACTION}. Symbolic prop: {PRODUCT_OR_PROP}. Implied setting: {LOCATION}. Supporting background motifs: {BACKGROUND_ELEMENTS}. Main invented headline: {MAIN_TEXT}. Small invented supporting copy: {SECONDARY_TEXT}. Accent emblem: {ACCENT_SYMBOL}. Wardrobe and surface styling: {WARDROBE_STYLE}. Compose one monumental front-facing bust as the dominant mass, tightly cropped and nearly touching the frame, with broad interlocking facial planes, a long geometric nose, heavy horizontal eyelids, and intentionally uneven hand-drawn contours. In 9:16, reserve a narrow vertical headline channel and a compressed footer; in 16:9, expand the headline into a large lateral block while keeping the bust dominant. Keep the space shallow and poster-flat, using only overlap, scale, and cropping for hierarchy. Render dense carved folk motifs inside skin, clothing, hair, and the prop using visible cream paper as linework. Use only warm cream paper, vermilion, scarlet, brick red, dusty rose, burgundy, and tiny near-black anchors. Draw the headline as chunky rounded irregular handmade capitals that function as an illustrated shape; keep secondary lettering condensed, uneven, newly invented, and confined to an edge band. Simulate a hand-pulled screenprint on fibrous uncoated stock with restrained ink grain, minor misregistration, variable ink opacity, sparse pinholes, and dry-brush edges. Use flat even value separation with no modeled lighting. Preserve the offbeat theatrical gravity, sly humor, dense simplification, and mid-century underground cultural-poster energy. Ensure all displayed text is exactly the supplied invented wording or omitted if it cannot be rendered cleanly. Avoid photorealism, 3D rendering, gradients, glossy highlights, realistic shadows, depth of field, cool colors, full-spectrum palettes, clean corporate type, perfect vector symmetry, excessive digital noise, heavy grunge, random glyphs, illegible pseudo-text, watermarks, signatures, logos, platform marks, or any copied identity. Important content rule: match the specified style first, then make the subject, prop, scene, text, and story visibly new.",
+  "negative_prompt": "Photorealism, realistic skin, photography, 3D render, cinematic depth, perspective background, depth of field, gradients, glossy light, cast shadows, cool colors, blue, green, rainbow palette, polished corporate vector art, precise symmetry, modern sans-serif typesetting, generic AI fantasy art, anime, clean comic line art, watercolor, oil paint, excessive grunge, heavy compression, random glyphs, illegible pseudo-text, watermark, username, QR code, logo, signature, creator mark, copied theatre branding, crown, monarch, royal beard, Shakespeare, Macbeth, Globe theatre, source wording, source dates, source ticket copy.",
+  "examples": [
+    {
+      "case_name": "midnight-botanist",
+      "values": {
+        "SUBJECT": "an androgynous midnight botanist with a broad angular face and cropped hair",
+        "SUBJECT_ACTION": "holding a calm, knowing sideways glance while presenting a rare seedling",
+        "PRODUCT_OR_PROP": "a small glass cloche containing a curling fern",
+        "LOCATION": "an imaginary nocturnal conservatory festival",
+        "BACKGROUND_ELEMENTS": "flat leaf silhouettes, seed spirals, two tiny crescent emblems, and narrow paper gaps",
+        "MAIN_TEXT": "NIGHT BLOOM",
+        "SECONDARY_TEXT": "OPEN AFTER DUSK / HOUSE OF LEAVES",
+        "ACCENT_SYMBOL": "a three-petal seed emblem",
+        "WARDROBE_STYLE": "a high-collared work smock filled with carved vine, seed, and wave motifs"
+      }
+    },
+    {
+      "case_name": "signal-conductor",
+      "values": {
+        "SUBJECT": "an older woman transit conductor with a square face and close-set eyes",
+        "SUBJECT_ACTION": "raising one gloved hand in a precise departure signal",
+        "PRODUCT_OR_PROP": "an oversized circular brass route token",
+        "LOCATION": "a fictional underground night-line gathering",
+        "BACKGROUND_ELEMENTS": "flat rail arcs, punched ticket shapes, directional chevrons, and a single tunnel ring",
+        "MAIN_TEXT": "LAST SIGNAL",
+        "SECONDARY_TEXT": "PLATFORM NINE / DOORS AT MIDNIGHT",
+        "ACCENT_SYMBOL": "a split-arrow transit emblem",
+        "WARDROBE_STYLE": "a structured conductor jacket covered in carved rail, knot, stripe, and dot patterns"
+      }
+    },
+    {
+      "case_name": "desert-astronomer",
+      "values": {
+        "SUBJECT": "a young desert astronomer with a triangular face and wrapped hair",
+        "SUBJECT_ACTION": "squinting upward with quiet concentration as if measuring a star path",
+        "PRODUCT_OR_PROP": "a compact hand-built brass telescope crossing one shoulder",
+        "LOCATION": "an invented dune observatory open night",
+        "BACKGROUND_ELEMENTS": "flat star disks, orbit scratches, low dune zigzags, and a small rising moon",
+        "MAIN_TEXT": "RED ORBIT",
+        "SECONDARY_TEXT": "ONE NIGHT ONLY / DUNE FIELD STATION",
+        "ACCENT_SYMBOL": "an eight-point orbital star",
+        "WARDROBE_STYLE": "layered desert wraps densely patterned with angular constellations, waves, and woven diamonds"
+      }
+    },
+    {
+      "case_name": "tea-house-drummer",
+      "values": {
+        "SUBJECT": "a round-faced tea-house drummer with shaved sides and an asymmetrical topknot",
+        "SUBJECT_ACTION": "leaning forward with a mischievous half-smile before the first beat",
+        "PRODUCT_OR_PROP": "a broad frame drum tucked against the torso",
+        "LOCATION": "a fictional late-evening courtyard rhythm session",
+        "BACKGROUND_ELEMENTS": "flat steam curls, tea leaves, drumbeat rings, and tiled zigzag borders",
+        "MAIN_TEXT": "STEAM BEAT",
+        "SECONDARY_TEXT": "COURTYARD SESSION / AFTER THE LAST CUP",
+        "ACCENT_SYMBOL": "a paired heart-and-drum glyph",
+        "WARDROBE_STYLE": "a loose patterned coat filled with carved steam, leaf, diamond, and ripple motifs"
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "idempotency_key": "replace-with-a-fresh-key",
+  "request": "Make four matching product photographs for a warm editorial campaign. Vary only angle and props. Review every result.",
+  "count": 4,
+  "planning_mode": "variations",
+  "base_prompt": "A matte skincare bottle on a cream studio surface for an editorial campaign.",
+  "target_aspect": "4:5",
+  "consistency": {
+    "name": "Warm editorial",
+    "rules": [
+      {"id": "palette", "instruction": "Use cream #F4EFE6 for the background and charcoal #252525 for accents. No saturated accent colors. Hex values are targets, not proof of exact pixel color."},
+      {"id": "lighting", "instruction": "Soft window light from the upper left; warm neutral grading and soft contact shadows. No dramatic rim light or neon."},
+      {"id": "finish", "instruction": "Matte surfaces, restrained editorial photography, natural material detail. No glossy CGI, floating elements, or decorative gradients."},
+      {"id": "exclusions", "instruction": "No people, extra text, watermarks, or invented logos."}
+    ],
+    "allowed_changes": ["angle", "props"]
+  },
+  "max_retries": 2
+}

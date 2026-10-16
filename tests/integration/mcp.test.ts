@@ -7,8 +7,37 @@ import { FakeHost, runSimulatedBatch, type Step } from '../../src/sim/fakeHost.j
 import { makePng } from '../../src/sim/fixtures.js';
 import { sha256Hex } from '../../src/core/ids.js';
 import { CLI, REPO_ROOT, refPng, tmpWorkspace } from '../helpers.js';
+import type { JobPayload } from '../../src/core/queue.js';
 
-test('stdout carries only JSON-RPC; tools/list exposes exactly seven annotated tools', async () => {
+test('strict contract and image-bound review are enforced through the real MCP schemas', async () => {
+  const host = await FakeHost.connect({ cliPath: CLI, workspace: tmpWorkspace(), extraArgs: ['--simulation'] });
+  try {
+    const created = await host.call('idra_create_batch', {
+      idempotency_key: 'strict-mcp', request: 'Matching editorial images', count: 1,
+      base_prompt: 'A bottle on a cream background', target_aspect: '4:5',
+      consistency: { name: 'Editorial', rules: [{ id: 'palette', instruction: 'Cream background, charcoal accents.' }], allowed_changes: [] },
+    });
+    assert.equal(created.isError, false);
+    const batch_id = created.data['batch_id'];
+    const { data: { job } } = await host.call<{ job: JobPayload }>('idra_step', { batch_id });
+    fs.writeFileSync(job.save_to, makePng(64, 80, 888));
+    const missing = await host.call('idra_step', { batch_id, completed: { job_id: job.job_id, attempt_token: job.attempt_token } });
+    assert.equal(missing.isError, true);
+    assert.equal((missing.data['error'] as { code: string }).code, 'REVIEW_REQUIRED');
+    const bypass = await host.call('idra_reconcile', { batch_id, job_id: job.job_id, action: 'adopt', artifact_path: job.save_to, accept_duplicate: true });
+    assert.equal(bypass.isError, true);
+    const done = await host.call('idra_reconcile', {
+      batch_id, job_id: job.job_id, action: 'check',
+      review: { performed: true, passed: true, contract_hash: job.consistency!.contract_hash,
+        artifact_sha256: sha256Hex(fs.readFileSync(job.save_to)),
+        checks: [{ rule_id: 'palette', passed: true, observed: 'SIMULATED fixture observation, not an actual visual judgment' }] },
+    });
+    assert.equal(done.isError, false);
+    assert.equal(done.data['state'], 'completed');
+  } finally { await host.close(); }
+});
+
+test('stdout carries only JSON-RPC; tools/list exposes exactly eight annotated tools', async () => {
   const ws = tmpWorkspace();
   const child = spawn(process.execPath, [CLI, 'serve', '--workspace', ws], { stdio: ['pipe', 'pipe', 'pipe'] });
   let out = '';
@@ -34,9 +63,9 @@ test('stdout carries only JSON-RPC; tools/list exposes exactly seven annotated t
   const tools = (msgs.find((m) => m.id === 2)!.result!['tools'] as { name: string; annotations: { readOnlyHint?: boolean } }[]).sort((a, b) => a.name.localeCompare(b.name));
   assert.deepEqual(
     tools.map((t) => t.name),
-    ['idra_control_batch', 'idra_create_batch', 'idra_extend', 'idra_reconcile', 'idra_report_problem', 'idra_status', 'idra_step'],
+    ['idra_control_batch', 'idra_create_batch', 'idra_design_library', 'idra_extend', 'idra_reconcile', 'idra_report_problem', 'idra_status', 'idra_step'],
   );
-  for (const t of tools) assert.equal(t.annotations.readOnlyHint, t.name === 'idra_status');
+  for (const t of tools) assert.equal(t.annotations.readOnlyHint, ['idra_status', 'idra_design_library'].includes(t.name));
   const bad = msgs.find((m) => m.id === 4)!.result! as { isError?: boolean };
   assert.equal(bad.isError, true, 'malformed ids are rejected by schema validation');
 });

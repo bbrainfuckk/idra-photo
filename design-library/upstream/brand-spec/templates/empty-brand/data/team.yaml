@@ -1,0 +1,49 @@
+# team.yaml — sample data file
+#
+# THIS IS A SAMPLE. Replace with your brand's actual team registry, or
+# delete if not applicable. Demonstrates the data/ layer convention:
+# one topic per file, comment header documenting schema + confidence.
+#
+# Schema (per entry):
+#   id           — kebab-case unique identifier
+#   name         — display name
+#   role         — current role title
+#   bio_short    — one sentence, used in bylines and decks
+#   bio_long     — paragraph, used in long-form bios and About pages
+#   joined       — ISO date YYYY-MM-DD
+#   public       — true if name may appear in external content
+#   confidence   — high | medium | low (data freshness, not the person)
+#
+# Confidence convention:
+#   high   — verified within last 90 days
+#   medium — verified within last 12 months
+#   low    — older than 12 months; refresh before citing externally
+#
+# last_updated: 2026-01-01
+# status: sample
+
+team:
+  - id: jane-founder
+    name: Jane Example
+    role: Co-founder & CEO
+    bio_short: "Jane previously led product at {Prior Company} and has spent a decade building tools for {domain}."
+    bio_long: |
+      Jane co-founded Acme in 2024 after a decade leading product teams
+      at {Prior Company} and {Other Prior Company}. She writes
+      regularly on {topic} and speaks at industry events on {related
+      topic}.
+    joined: "2024-01-15"
+    public: true
+    confidence: high
+
+  - id: alex-cofounder
+    name: Alex Example
+    role: Co-founder & CTO
+    bio_short: "Alex builds the technical backbone of Acme and previously led engineering at {Prior Company}."
+    bio_long: |
+      Alex leads engineering at Acme. Before co-founding the company,
+      Alex spent eight years building distributed systems at {Prior
+      Company}, focused on {technical domain}.
+    joined: "2024-01-15"
+    public: true
+    confidence: high

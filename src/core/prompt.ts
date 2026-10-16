@@ -1,5 +1,6 @@
 import { constraintLines, type Constraints } from './constraints.js';
 import { AUTO_PREFIX, type PlanningMode } from './planning.js';
+import { consistencyLines, type Consistency } from './consistency.js';
 
 export interface PromptReference {
   label: string;
@@ -13,6 +14,7 @@ export interface PromptInput {
   constraints: Constraints;
   references: PromptReference[];
   targetAspect: string | null;
+  consistency?: Consistency | null;
 }
 
 /**
@@ -22,6 +24,7 @@ export interface PromptInput {
  */
 export function assemblePrompt(input: PromptInput): string {
   const parts: string[] = [];
+  if (input.consistency) parts.push(consistencyLines(input.consistency));
   if (input.mode === 'variations' && input.basePrompt) {
     parts.push(input.basePrompt.trim());
     parts.push(`Variation for this image: ${variationText(input.concept)}`);

@@ -1,0 +1,122 @@
+{
+  "style_version": "2.0.0",
+  "style_name": "Visual OS 051 — Freeze the Gear",
+  "style_slug": "vector-atelier",
+  "style_summary": "Full-bleed future-sport posters isolate one razor-sharp piece of gear against directional motion trails, luminous gradients and a single giant white geometric slogan.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Prioritized visual system",
+    "SOURCE_CONTENT_TO_AVOID": "Reference-specific people, brand marks, layouts and copied imagery to replace",
+    "ANCHOR": "One sharply frozen sport object that carries the concept",
+    "MOTION_SCENE": "Everything around the anchor stretched into directional speed trails",
+    "GRADIENT": "Luminous saturated gradient and its light direction",
+    "MAIN_TEXT": "Exact uppercase campaign slogan",
+    "DESIGN_DIRECTION": "Ratio-specific poster composition and anchor placement",
+    "SUBJECT": "One sharply frozen sport object that carries the concept",
+    "SUBJECT_ACTION": "Directional speed that streaks everything except the frozen gear",
+    "PRODUCT_OR_PROP": "The razor-sharp piece of gear used as the visual anchor",
+    "LOCATION": "Luminous saturated gradient field with a clear light sweep",
+    "BACKGROUND_ELEMENTS": "People, surfaces and lights stretched into motion trails",
+    "SECONDARY_TEXT": "No extra copy beyond the giant slogan",
+    "ACCENT_SYMBOL": "Giant white geometric uppercase slogan as a compositional shape",
+    "WARDROBE_STYLE": "Blurred supporting athletes or kit that never rival the frozen gear"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] Make one sport object razor-sharp and freeze it as the only stable visual anchor; all supporting action, people, surfaces and lights streak with directional motion blur.",
+    "[CORE] Use a luminous saturated gradient field with a clear directional light sweep, rich color separation and a softly photographic sports-campaign finish.",
+    "[CORE] Set one giant white geometric sans-serif slogan in uppercase, cropped or angled through the frame as an active compositional shape; keep all other copy absent or microscopic.",
+    "[CORE] Compose full-bleed edge-to-edge posters with an oversized foreground object, aggressive perspective and a readable path of motion from one side of the frame to the other.",
+    "[CORE] Preserve tactile material realism on the frozen anchor: rubber, leather, textile, metal, wood or composite surfaces must remain crisp while the surrounding world smears.",
+    "[FLEX] Let each case use its own saturated color atmosphere and sport context while preserving the one-anchor, giant-type, motion-trail grammar.",
+    "[FLEX] Rebuild the composition for portrait and landscape; do not crop a portrait poster into landscape or repeat the same camera angle across cases."
+  ],
+  "source_content_to_avoid": [
+    "The exact reference people, faces, poses, skatepark, boxing scene, type treatment or image crop",
+    "Nike, Reebok or any other brand marks, logos, swooshes, product names, watermarks or copied campaign copy",
+    "More than one equally sharp object, duplicated gear, malformed hands, extra limbs or an anchor hidden by blur",
+    "Flat backgrounds, muted catalog lighting, generic collage grids, tiny unreadable paragraphs or muddy all-over blur"
+  ],
+  "visual_deconstruction": {
+    "source": "The reference pairs a single frozen sport object with a world that stretches into speed lines, a glowing gradient and oversized white geometric type.",
+    "hierarchy": "The sharp object is read first, the giant slogan second, and the motion field supplies direction, energy and color without competing for edge clarity."
+  },
+  "composition": {
+    "principle": "An edge-to-edge campaign poster with one crisp anchor, a diagonal or sweeping motion corridor, a luminous gradient field and one large typographic block.",
+    "adaptation": "Portrait can place the anchor low or central with type wrapping around it; landscape can drive the anchor across a broad horizontal vanishing line. Recompose the motion direction for each ratio."
+  },
+  "typography": {
+    "form": "Heavy geometric grotesk or blunt display sans, uppercase, solid white, clean edges and minimal tracking; the words behave like a physical poster plane.",
+    "hierarchy": "Use exactly one giant slogan per image. Crop or angle it boldly, but keep the full phrase legible enough to read; omit supporting copy except an optional tiny VISUAL OS 051 marker."
+  },
+  "color_palette": {
+    "frame": "Saturated electric blue, cobalt, violet, vermilion, coral, magenta, lime and cyan gradients chosen per case.",
+    "photo": "Natural object materials and skin tones remain credible inside the color field; white type and sharp highlights provide the high-contrast anchor."
+  },
+  "photographic_direction": {
+    "camera": "Low, close, wide-angle campaign photography with decisive foreshortening; the frozen anchor stays at the highest micro-detail while the environment stretches behind it.",
+    "texture": "Crisp tactile surface texture on the anchor, controlled optical streaks and smooth luminous gradient transitions in the surrounding field; no artificial grain or noisy sharpening.",
+    "light": "A bright directional sweep, rim light or luminous horizon crosses the scene; light trails follow the same vector as the motion blur."
+  },
+  "design_rules": [
+    "Freeze one unmistakable piece of gear and blur the speed around it.",
+    "Use one giant white uppercase slogan as the only major text element.",
+    "Let the gradient and motion trails carry the case color and direction.",
+    "Keep the frozen anchor's edges, material and contact details sharp and believable.",
+    "Recompose the same visual grammar for 9:16 and 16:9 instead of cropping between ratios."
+  ],
+  "do": [
+    "Make the selected shoe, ball, wheel or glove instantly legible at a glance.",
+    "Use directional blur behind and around the anchor so the speed vector is obvious.",
+    "Keep the slogan exact, white, uppercase and large enough to work as a graphic shape."
+  ],
+  "avoid": [
+    "Blurred or duplicated anchor objects, generic motion streak wallpaper or evenly sharp scenes.",
+    "Brand logos, copied reference athletes, copied source composition or extra marketing paragraphs.",
+    "Low-contrast type, muddy gradients, accidental sports-object swaps or fake UI overlays."
+  ],
+  "negative_prompt": "No logos, brand names, swooshes, watermarks, copied athlete likeness, copied reference layout, duplicate anchor objects, blurred hero object, multiple equally sharp objects, malformed anatomy, extra limbs, flat studio background, muted catalog look, muddy blur, noisy grain, fake UI, tiny paragraphs, illegible slogan, misspelled title, low resolution.",
+  "prompt_template": "Create a premium full-bleed future-sport campaign poster in {ASPECT_RATIO}.\n{STYLE_FIDELITY_ANCHORS}\nFrozen anchor object: {ANCHOR}\nMotion environment: {MOTION_SCENE}\nGradient and lighting: {GRADIENT}\nExact giant display text, render verbatim as uppercase: {MAIN_TEXT}. Use one heavy geometric white sans-serif slogan only; no extra paragraphs.\nConcept direction: {DESIGN_DIRECTION}\nBuild a high-end sports photograph with one sharply frozen foreground gear object, strong foreshortening and a directional corridor of optical motion trails behind it. Keep the anchor's material, edge and contact detail razor-sharp while people, surfaces and lights around it streak. Make the gradient luminous and saturated, not flat. Recompose specifically for the requested aspect ratio. Do not copy any reference-specific person, crop, logo or layout. Exclude: {SOURCE_CONTENT_TO_AVOID}.\nGenerate as a 4K ultra-high-resolution raster image.\nPreserve the specified reference-style texture, edge character and intentional softness at their described scale, intensity and locations. Avoid artifacts that are absent from the intended style; do not automatically denoise, sharpen, polish or distress the image.",
+  "examples": [
+    {
+      "case_name": "full-speed",
+      "values": {
+        "ANCHOR": "one original unbranded performance running shoe in a close low-angle three-quarter view, the knit, outsole ribs and laces perfectly frozen",
+        "MOTION_SCENE": "a runner's legs, track markings, stadium lights and air stream rushing laterally behind the shoe into long blue-violet speed trails",
+        "GRADIENT": "electric cobalt at the lower left blending into ultraviolet and cool lavender toward the upper right, with a bright white-blue horizon streak",
+        "MAIN_TEXT": "FULL SPEED",
+        "DESIGN_DIRECTION": "Portrait: shoe dominates the lower center and giant FULL SPEED sweeps diagonally behind it. Landscape: shoe drives from left toward right across a wide luminous track corridor; keep the typography spanning the upper third without covering the shoe."
+      }
+    },
+    {
+      "case_name": "stay-sharp",
+      "values": {
+        "ANCHOR": "one regulation tennis ball suspended midair, felt texture, curved seam and tiny fibers perfectly crisp",
+        "MOTION_SCENE": "a tennis player, racket arc, court lines and sunset air whipping around the ball into fast directional streaks",
+        "GRADIENT": "acid lime and bright chartreuse near the ball blending through cyan into deep royal blue, with a clean luminous flare on the trajectory",
+        "MAIN_TEXT": "STAY SHARP",
+        "DESIGN_DIRECTION": "Portrait: ball sits slightly off-center with the racket and athlete stretched behind it; STAY SHARP cuts vertically and diagonally through the open gradient. Landscape: freeze the ball at the apex of a left-to-right serve with a broad horizontal trail and type anchored along the upper edge."
+      }
+    },
+    {
+      "case_name": "own-the-line",
+      "values": {
+        "ANCHOR": "one weathered skateboard wheel and metal axle in extreme close-up, rubber grain, bearing and scuffed edge razor-sharp",
+        "MOTION_SCENE": "a skater carving a concrete bowl, deck, knees, palm trees and curved coping stretched into a sweeping circular motion trail",
+        "GRADIENT": "deep cobalt and ultramarine at the base rising into violet and soft periwinkle, with a hot white-blue arc following the bowl line",
+        "MAIN_TEXT": "OWN THE LINE",
+        "DESIGN_DIRECTION": "Portrait: wheel anchors the lower-left foreground while the bowl arcs behind it; the giant phrase follows the curve in a bold diagonal crop. Landscape: wheel remains the crisp near-camera anchor as the skater and concrete line streak across a wide frame."
+      }
+    },
+    {
+      "case_name": "make-impact",
+      "values": {
+        "ANCHOR": "one black leather boxing glove at the instant before contact, seams, grain and wrapped wrist perfectly frozen",
+        "MOTION_SCENE": "a boxer, ropes, ring lights and a red training bag whipping into radial and horizontal impact trails behind the glove",
+        "GRADIENT": "hot vermilion and orange at the anchor blending into scarlet, magenta and deep plum at the edges, with a white-hot impact flare",
+        "MAIN_TEXT": "MAKE IMPACT",
+        "DESIGN_DIRECTION": "Portrait: glove dominates the middle foreground and the phrase is stacked or cropped behind it like a physical wall. Landscape: glove launches from left to right through a wide red-orange ring of trails; keep the impact flare and text clean."
+      }
+    }
+  ],
+  "category": "Product + Campaign"
+}

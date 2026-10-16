@@ -4,7 +4,7 @@
 
 | Package | Version | License |
 |---|---|---|
-| @modelcontextprotocol/sdk | 1.30.0 | MIT |
+| @modelcontextprotocol/sdk | 1.32.1 | MIT |
 | ajv | 8.20.0 | MIT |
 | ajv-formats | 3.0.1 | MIT |
 | cross-spawn | 7.0.6 | MIT |
@@ -19,7 +19,7 @@
 | zod | 4.6.5 | MIT |
 | zod-to-json-schema | 3.25.2 | ISC |
 
-## @modelcontextprotocol/sdk 1.30.0
+## @modelcontextprotocol/sdk 1.32.1
 
 ```
 MIT License

@@ -1,0 +1,137 @@
+{
+  "style_version": "1.0.0",
+  "style_name": "Cream Curve Editorial",
+  "style_slug": "cream-curve-editorial",
+  "style_summary": "Sunlit photographic editorial posters shaped by monumental condensed cream lettering, elastic curves and deliberate subject/type depth exchanges. Each theme gives the lettering a different spatial job.",
+  "environment_variables": {
+    "ASPECT_RATIO": "Output aspect ratio: 9:16 or 16:9.",
+    "STYLE_FIDELITY_ANCHORS": "Joined prioritized CORE and FLEX rules below.",
+    "SOURCE_CONTENT_TO_AVOID": "Joined original content exclusions below.",
+    "MAIN_TEXT": "Exact short English headline.",
+    "SUBJECT_SCENE": "New subject, action, wardrobe or objects and real photographic setting.",
+    "PALETTE": "Case-specific dark saturated photographic colors and warm cream lettering.",
+    "DESIGN_DIRECTION": "Content-driven relation between typography and subject.",
+    "PORTRAIT_PLAN": "Composition intent for a 9:16 canvas.",
+    "LANDSCAPE_PLAN": "Composition intent for a 16:9 canvas.",
+    "SUBJECT": "New photographic subject and setting from SUBJECT_SCENE",
+    "SUBJECT_ACTION": "Action that determines the lettering path and overlap",
+    "PRODUCT_OR_PROP": "Objects that interlock with the cream letterforms",
+    "LOCATION": "Sunlit editorial environment carrying the photograph",
+    "BACKGROUND_ELEMENTS": "Deep cool or earthy shadows and optional cream support curves",
+    "SECONDARY_TEXT": "No extra supporting copy beyond the exact headline",
+    "ACCENT_SYMBOL": "Small vivid color accent against warm cream type",
+    "WARDROBE_STYLE": "Wardrobe or object surfaces visible in the photograph"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] Monumental warm-cream uppercase lettering is an active spatial structure: extremely condensed heavy sans-serif glyphs with elastic vertical stretching, slant and smoothly warped contours. It dominates the graphic area while the complete headline remains readable.",
+    "[CORE] Real sunlit editorial photography carries the image: direct hard daylight, dimensional natural detail, rich deep cool or earthy shadows and a small vivid color accent, contrasted with flat light-cream letterforms.",
+    "[CORE] Integrate photograph and lettering through controlled foreground/background exchanges. At least one clear subject/type overlap must make depth legible while protecting the main action and crucial letters.",
+    "[FLEX] Let the theme determine the typography path: a banking bend, radial groove, diving sweep or upward harvest fan are possibilities, not a shared layout.",
+    "[FLEX] Choose the camera height, subject scale, focal placement, useful quiet areas and edge bleed for each case; a centered close-up portrait is not required.",
+    "[FLEX] Supporting cream curves may emerge from the action, scenery or letter terminals when useful. They are optional, graphic and sparse, without a mandatory ribbon inventory.",
+    "[FLEX] Adapt the dominant dark photographic hue and accent to the case while retaining warm light lettering, strong tonal separation and sunlit realism.",
+    "[FLEX] Recompose for each aspect ratio so that the same idea has a deliberate portrait and landscape expression instead of a mechanical crop."
+  ],
+  "source_content_to_avoid": [
+    "The original blonde woman taking a close selfie in oversized white sunglasses, gold hoops and a dark-green rugby shirt with white collar.",
+    "The foreground hand holding a yellow-orange drink with a white straw.",
+    "The tennis court, net and white perimeter fence as a scene.",
+    "The exact SUMMER TIME wording and the same upper-word/lower-word portrait arrangement.",
+    "All creator signatures, watermarks, usernames, platform marks and AI design logos from the source."
+  ],
+  "visual_deconstruction": {
+    "source_observations": "The reference enlarges stretched cream words beyond the page, places a sunlit close-up portrait between lettering layers, and uses court-like sweeping lines to connect foreground and distance. Navy and green photographic areas contrast with warm skin and cream text. Corner attribution is source identity, not style.",
+    "reusable_system": "Heavy narrow type acts as elastic architecture inside full-bleed photography; natural hard light and flat cream graphics remain visibly different materials.",
+    "scope": "Creative reinterpretation within the visual family, using new content and case-driven spatial relationships."
+  },
+  "composition": {
+    "hierarchy": "One immediate photographic focal point and one massive readable headline. Their overlap provides depth; quieter dark photographic pockets let curves and glyph counters breathe.",
+    "ratio_strategy": "Use the applicable per-case ratio plan, with independent framing and type path. Allow purposeful edge bleed without losing whole letters or the essential action.",
+    "variation": "Banked diagonal full-body action; overhead radial equipment; small diver and converging water-space; low-angle upward harvest."
+  },
+  "typography": {
+    "classification": "Very heavy extra-condensed uppercase grotesk with long straight stems, compressed counters and smooth curved deformation.",
+    "treatment": "Warm cream flat fill, no stroke, extrusion, bevel or drop shadow. Warp letter silhouettes and baselines while preserving word recognition.",
+    "copy": "Only the specified MAIN_TEXT, once. No filler copy or invented brand marks."
+  },
+  "color_palette": {
+    "constant": "Warm ivory / butter cream #F5E9C8 for typography.",
+    "photographic_base": "Deep navy #042738, bottle green #123E34, dark plum #392C35 or related saturated shadows.",
+    "accent": "One case-specific natural sunlit accent such as rust orange, lemon yellow or red.",
+    "proportion": "Cream type is a major graphic mass; dark photography provides contrast, with restrained accent area."
+  },
+  "image_treatment": {
+    "medium": "Full-bleed realistic editorial photograph integrated with flat warped lettering.",
+    "light": "Hard directional natural sun, shaped shadows, realistic specular highlights, warm lit skin or natural objects.",
+    "texture": "Fine low-strength photographic grain only in image regions; natural skin, water, vinyl and vegetable surface detail. Typography keeps clean smooth edges. No paper distress, halftone, scratches or artificial blur; softness only from plausible optical depth."
+  },
+  "design_rules": [
+    "Use the theme to change hierarchy, geometry or photographic interaction, rather than only replacing words and props.",
+    "Render the exact headline once, retaining distinguishable glyphs through stretching, curving and occlusion.",
+    "Use physical overlap to explain depth, never random bands covering a face, hand, essential mechanism or complete word.",
+    "Keep the design sparse: photograph, giant cream headline and at most a few purposeful supporting curves.",
+    "Maintain plausible anatomy, equipment construction, physical action and natural light.",
+    "Each ratio receives its own framing and distribution of type, subject and quiet space."
+  ],
+  "do": [
+    "Make cream letters feel spatially elastic and imposing.",
+    "Keep the photographed action or object instantly understandable.",
+    "Use deliberate case-specific shape logic and purposeful overlaps.",
+    "Keep authentic small-scale photographic detail."
+  ],
+  "avoid": [
+    "Repeating the source selfie pose or the same top/bottom word sandwich in every case.",
+    "Ordinary straight title bars over unrelated stock photography.",
+    "Decorative curves without a link to action or type.",
+    "Fake 3D lettering, grunge, excessive labels or logo imitations."
+  ],
+  "prompt_template": "Create one finished {ASPECT_RATIO} full-bleed raster editorial campaign poster. Visual family: Cream Curve Editorial, real hard-sun photography interwoven with huge flat warm-cream extra-condensed elastic typography.\n\nPriority visual rules:\n{STYLE_FIDELITY_ANCHORS}\n\nExact headline, once, no other text: \"{MAIN_TEXT}\".\nPhotographic content: {SUBJECT_SCENE}\nPalette: {PALETTE}\nDesign intention: {DESIGN_DIRECTION}\nChoose only the plan matching the requested canvas. 9:16 plan: {PORTRAIT_PLAN} 16:9 plan: {LANDSCAPE_PLAN}\n\nUse hard natural sunlight and authentic small-scale surface detail, with fine low-strength photographic grain confined to photo regions. Cream lettering has clean smooth edges, flat fill, no extrusion, outline or drop shadow. Optical softness may occur naturally in the photograph. Do not add paper distress. Keep the headline legible and protect the crucial action at crossings. The result must look like a boldly art-directed photographic poster, with typography actually shaped by this subject. Sparse visual hierarchy; do not add a grid, border, secondary copy or logos.\n\nReplace all source content: {SOURCE_CONTENT_TO_AVOID}\n\nAvoid malformed anatomy, duplicated objects, incoherent equipment, unreadable letters, misspellings, unmotivated ribbons, generic straight headline layouts, flat cartoon rendering, CGI skin, collage stickers, halftone, faux-vintage scratches, watermarks and creator marks.",
+  "negative_prompt": "Misspelled or repeated headline, unrelated extra copy, original subject or source identity marks, malformed anatomy, repeated limbs, impossible machinery, unmotivated ribbons, identical case layouts, generic straight heading, 3D beveled letters, gradients in type, cartoon treatment, CGI skin, halftone, grunge, artificial edge sharpening, borders, watermarks.",
+  "examples": [
+    {
+      "case_name": "roll-free",
+      "values": {
+        "MAIN_TEXT": "ROLL FREE",
+        "SUBJECT_SCENE": "A full-body adult woman with dark curly hair in a low balanced roller-skating turn on an empty sunlit deep-teal seaside promenade. Rust-orange short-sleeve jersey, navy shorts, cream quad skates, plain dark helmet and subtle wrist guards. Two anatomically correct legs, one leading skate and one following skate, four wheels per skate. Clear distant horizon, no tennis court.",
+        "PALETTE": "Deep teal and navy paving and sea, warm cream lettering, rust-orange jersey and warm brown skin.",
+        "DESIGN_DIRECTION": "Make the headline bank around the skater like a bend in a course. The compressed word silhouettes lean in sympathy with her turn; one cream letter terminal can continue into the pavement curve. Full-body centrifugal motion replaces a close portrait.",
+        "PORTRAIT_PLAN": "Low wide-angle camera looking along a tall S-turn. Place the skater off-center in the lower-middle, leaning across a cream bend. Stretch ROLL through the upper inward curve and FREE through the lower outward curve; the skater interrupts one letter edge but does not block entire letters.",
+        "LANDSCAPE_PLAN": "Use a low panoramic view across the bend, skater in the right third moving inward, ROLL entering from the left and FREE lifting behind her toward the right. A broad horizontal cream sweep carries the action across the canvas; retain readable letter sequence."
+      }
+    },
+    {
+      "case_name": "deep-groove",
+      "values": {
+        "MAIN_TEXT": "DEEP GROOVE",
+        "SUBJECT_SCENE": "A nearly overhead editorial photograph of one real black vinyl record on a dark plum compact turntable on a cobalt outdoor table. One adult hand with warm dark skin reaches from an edge to gently cue the outer record rim. Intact circular disc with a small blank orange center label, one plausible tonearm and sunlight casting a crisp hand shadow. No additional discs, no visible brand labels. The table contains only the turntable and reaching hand: no glass, drink, cup, food or extra accessories anywhere, including cropped frame edges.",
+        "PALETTE": "Midnight plum and cobalt photographic field, near-black vinyl, warm cream type and one small orange center label.",
+        "DESIGN_DIRECTION": "Let the black disc become the visual gravity center. Bend the giant condensed words in two broad readable arcs around it, like amplified grooves, allowing the hand and a portion of the record to overlap the cream lettering. This is an equipment-centered radial composition, not a person portrait.",
+        "PORTRAIT_PLAN": "Offset the disc below the center, with DEEP arching above and GROOVE curling around a lower side. The hand enters diagonally from upper right. Leave an asymmetrical dark crescent of table as negative space. Do not set tiny text on a complete ring.",
+        "LANDSCAPE_PLAN": "Shift the turntable to the left half and let the giant two-word headline sweep outward toward the right in elongated arcs, echoing one record groove across the width. The hand enters from the upper edge without blocking the central label or tonearm."
+      }
+    },
+    {
+      "case_name": "dive-in",
+      "values": {
+        "MAIN_TEXT": "DIVE IN",
+        "SUBJECT_SCENE": "An adult athletic woman with short dark hair wearing a plain burnt-red one-piece swimsuit, photographed in clean side profile mid-dive just above a deep-blue outdoor swimming pool. Her two arms extend together in front of her head, body and two legs form a plausible streamlined shallow diagonal; no extra limbs. Sunlit water caustics and a slim stone pool edge, no crowd. This is a single instant before water entry: undisturbed water with ordinary ripples only, no splash, foam or impact ring anywhere.",
+        "PALETTE": "Deep cobalt and midnight-blue water, sunlit turquoise reflections, cream lettering and a restrained burnt-red swimsuit.",
+        "DESIGN_DIRECTION": "Use the long streamlined dive to aim the typography into the water. Massive stretched DIVE letters tip toward the swimmer trajectory, and IN compresses into the destination area. A flat cream curve may indicate the trajectory, without depicting any physical splash; preserve the clean human silhouette. Make depth unmistakable by letting the lower torso or legs pass in front of one upper cream letter edge while the arms and head stay unobstructed. Do not leave the figure floating entirely separate from the letterforms.",
+        "PORTRAIT_PLAN": "Use a high oblique side view with the complete small diver in the upper third, roughly one quarter of the canvas width, diagonally aiming toward an open deep-blue water destination below. DIVE stretches and tips down along one side; IN gathers at the lower destination. Let the large dark water-space and converging type carry the vertical drop; never repeat a centered large-body sports portrait.",
+        "LANDSCAPE_PLAN": "Use a true side-on broad lateral scene. The diver spans the middle third traveling left to right; DIVE swells behind and above the body, IN sits near the right-hand entry zone. Type curves imply the arc; the lower water strip provides breathing space."
+      }
+    },
+    {
+      "case_name": "fresh-pick",
+      "values": {
+        "MAIN_TEXT": "FRESH PICK",
+        "SUBJECT_SCENE": "A low ground-level editorial close-up of an adult gardener hand reaching from the upper side and lifting one small bunch of three fresh orange carrots with long green leaves from rich dark garden soil. Carrots point downward and carry natural soil crumbs on their roots; the green tops arch upward in hard sunlight. A simple deep-green garden bed and dark blurred foliage form the background. Only one plausible hand and wrist, no face, no tools, crate, citrus, peel, glass or labels.",
+        "PALETTE": "Bottle-green foliage, dark warm earth and navy-green shadows, warm cream lettering, and a focused vivid-orange carrot accent.",
+        "DESIGN_DIRECTION": "Turn the pulling-up harvest action into an upward stretch of type. The tall cream stems rise like growing shoots from the dark ground and bow gently with the leaves, with the carrots hanging in the open gap. A low camera and vertical tension replace overhead loops and portrait framing; avoid any circular ribbon.",
+        "PORTRAIT_PLAN": "Ground-level view looking slightly upward. Carrots hang off-center above the lower soil band, hand and leafy tops entering near the upper side. FRESH climbs tall on one side and PICK bows upward from the opposite lower corner. Stretch letter stems into an open growing fan, with carrots crossing one clean letter edge; keep words readable.",
+        "LANDSCAPE_PLAN": "Wide low garden view. Place the raised carrots and hand in the right third, foliage arcing toward the center. FRESH rises from the left-hand ground and PICK leans up beneath and behind the harvest on the right, forming an open ascending sweep with a dark central interval. Preserve a visible soil strip and avoid a radial or top/bottom text layout."
+      }
+    }
+  ],
+  "category": "Type Posters"
+}

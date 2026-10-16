@@ -12,7 +12,8 @@ npm test
 |---|---|---|
 | Unit | `tests/unit/validate.test.ts`, `planning.test.ts` | Image decoding and limits, planning modes, duplicate flags, prompt and constraint assembly |
 | Queue and recovery | `tests/unit/queue.test.ts` | Claims, idempotency, the combined step, conflicts, retries, pause/resume/cancel, extend, reconcile, crash points, path security, manifests, migrations |
-| MCP integration | `tests/integration/mcp.test.ts` | Protocol-clean stdout, 7 annotated tools, the 100-job run over stdio, a killed-and-resumed process, concurrent processes, no network, no API clients |
+| Strict consistency | `tests/unit/consistency.test.ts`, MCP integration | Missing/stale/wrong-file evidence, complete rule coverage, rejected pixels, corrected retries, exhaustion, aspect, recovery, persisted contracts, allowed variation, and anchor availability |
+| MCP integration | `tests/integration/mcp.test.ts` | Protocol-clean stdout, 8 annotated tools, strict review schemas, the 100-job run over stdio, a killed-and-resumed process, concurrent processes, no network, no API clients |
 | Packaging | `npm run pack:check` | Installs from the packed tarball and runs `doctor` and `simulate` from the installed copy |
 | Overhead | `npm run overhead` | Bytes and calls, see `overhead.md` |
 | Real native generation | manual, below | Not automated, because it uses real image generation |

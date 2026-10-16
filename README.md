@@ -8,7 +8,7 @@ Drag a photo into Codex, type one prompt, say how many images you want. Codex ma
 - Everything Idra stores stays on your computer.
 - Idra itself never generates images and never makes network requests. Codex still uses its own image service and your own Codex plan.
 
-> Status: v0.1. Tested end to end in the Codex desktop app on Windows with real image generation: a 3-image same-style batch and a 4-character counterpart batch, each finished in one Codex turn. The macOS/Linux launcher passes the automated tests on GitHub but has not been tried with Codex on a real Mac yet. Evidence: [Compatibility](docs/compatibility.md).
+> Status: v0.2 adds strict consistency contracts and required image-bound reviews, covered by automated fixture tests. The earlier v0.1 flow was tested with real image generation in the Codex desktop app on Windows: a 3-image same-style batch and a 4-character counterpart batch. Strict v0.2 visual quality has not yet been benchmarked with real generations. Evidence: [Compatibility](docs/compatibility.md).
 
 ## Easiest: ask Codex to install it
 
@@ -90,6 +90,14 @@ More things you can say:
 | "Use these exact prompts: ..." | Explicit mode: your prompts, unchanged. |
 
 ### Keeping things the same
+
+For a matching campaign, image series, or UI concept set, ask:
+
+> Use Idra Photo with strict consistency. Make 6 product images using this reference. Keep the cream-and-charcoal palette, soft left window light, matte texture, and typography fixed. Only change the product angle and props. Review every image and correct drift before accepting it. 4:5.
+
+Idra saves a named design contract and repeats its rules in every prompt. It requires a visual review of every rule against the actual generated file. The first reviewed image becomes an additional style reference. Missing reviews block acceptance; failed reviews reject the file and use the bounded retry budget. Recovery and “make more” retain the same contract. See [Strict consistency](docs/consistency.md), [examples](examples/consistency), and the [consolidated design library](design-library).
+
+Existing batches without a consistency contract retain the original behavior:
 
 Codex passes these as rules on every image. They are prompt requirements, not pixel locks. Check the results yourself.
 

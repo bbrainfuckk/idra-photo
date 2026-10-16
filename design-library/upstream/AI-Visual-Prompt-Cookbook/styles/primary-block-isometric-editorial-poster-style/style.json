@@ -1,0 +1,162 @@
+{
+  "style_name": "Primary Block Isometric Editorial Poster Style",
+  "style_slug": "primary-block-isometric-editorial-poster-style",
+  "style_version": "1.0.0",
+  "style_summary": "A crisp editorial poster system built from a sparse diagonal cluster of oversized rounded cuboids, oblique isometric depth, black hairline construction, bright primary-color top planes, darker side faces, oversized grotesk labels, and tiny Swiss-style perimeter copy on warm white paper.",
+  "category": "Editorial + Minimal",
+  "environment_variables": {
+    "SUBJECT": "central family of modular objects",
+    "SUBJECT_ACTION": "spatial arrangement or implied action",
+    "PRODUCT_OR_PROP": "supporting object or modular prop",
+    "LOCATION": "conceptual setting or poster context",
+    "BACKGROUND_ELEMENTS": "secondary visual details",
+    "MAIN_TEXT": "large headline or face label",
+    "SECONDARY_TEXT": "small perimeter information",
+    "ACCENT_SYMBOL": "arrow, dot, numeral, or geometric mark",
+    "WARDROBE_STYLE": "material and styling treatment",
+    "STYLE_FIDELITY_ANCHORS": "observable style traits that must remain visible",
+    "SOURCE_CONTENT_TO_AVOID": "literal source content that generated samples must not recreate",
+    "ASPECT_RATIO": "9:16 or 16:9"
+  },
+  "style_fidelity_anchors": [
+    "Warm off-white editorial paper field with a thin black perimeter rule and generous clean margins",
+    "Five to eight oversized rounded cuboids arranged as one loose diagonal stepped cluster",
+    "Oblique isometric projection with a visible top plane and two extruded side planes on most forms",
+    "Black hairline outlines, crisp vector-like edges, rounded top corners, and no photographic realism",
+    "Cobalt blue, vermilion red-orange, grass green, cadmium yellow, and warm cream used as discrete solid color masses",
+    "Side planes are darker tonal versions of their top planes, creating depth without gradients or cast shadows",
+    "One oversized black grotesk letter, numeral, or short word sits diagonally on each major top plane",
+    "Tiny condensed grotesk and monospaced editorial information runs along the top, bottom, and rotated side margins",
+    "Extreme scale contrast between monumental object labels and miniature publication-style metadata",
+    "Flat even illumination with subtle uncoated paper tooth and restrained print-like ink texture",
+    "Asymmetrical Swiss editorial hierarchy with open negative space and a deliberately irregular reading path"
+  ],
+  "source_content_to_avoid": [
+    "Do not recreate computer keyboard keys, keycaps, or a keyboard layout",
+    "Do not reuse Flight X08, Esc, From, The, World, Or Die, or any other source wording",
+    "Do not repeat the source story about AI, escape, a final journey, or the end of the world",
+    "Do not copy the exact eight-block arrangement, color order, letter sequence, or vertical stacking pattern",
+    "Do not reproduce the March 2024 date, ticket notice, countdown copy, studio credit, issue number, or website",
+    "Do not include a creator signature, watermark, username, platform logo, QR code, or brand mark"
+  ],
+  "visual_deconstruction": {
+    "overall_style": "Contemporary Swiss-influenced editorial poster design fused with flat isometric object illustration and playful monumental typography.",
+    "composition_logic": "A single diagonal cascade of large extruded forms dominates the inner field while small text bands cling to the perimeter, creating a two-speed reading system.",
+    "subject_placement": "The block cluster occupies roughly two thirds of the canvas and steps through the center; open corners and margin corridors keep the composition breathable.",
+    "camera_perspective": "Consistent three-quarter oblique projection shows top faces and two vertical sides with mild dimensional exaggeration but no lens effects.",
+    "lighting": "Flat studio-like illumination; depth is encoded by darker side colors rather than highlights, reflections, or shadows.",
+    "surface_language": "Smooth colored card or molded graphic solids with fine black outlines and a slight uncoated print texture.",
+    "graphic_system": "Large diagonal words live on the forms; tiny headlines, dates, arrows, issue data, and notes form an independent editorial frame around them.",
+    "mood": "Playful, urgent, intelligent, and slightly speculative, with the clarity of a design-school exhibition poster."
+  },
+  "composition": {
+    "layout": "Build one loose stepped cluster of five to eight distinct extruded forms; preserve open paper around the cluster and reserve narrow perimeter zones for microcopy.",
+    "scale": "Let one or two forms become dominant anchors while smaller forms bridge the diagonal rhythm; never tile the canvas uniformly.",
+    "depth": "Use a shared oblique projection and visible darker side planes; overlap forms sparingly so every silhouette and label remains legible.",
+    "vertical_behavior": "For 9:16, run the cluster from upper-left toward lower-right through the tall center, with rotated metadata on both long edges.",
+    "horizontal_behavior": "For 16:9, spread the cluster in a shallow left-to-right arc, keeping large empty zones near two opposite corners for editorial text."
+  },
+  "typography": {
+    "display_style": "Large plain neo-grotesk letters or one- to three-word labels in black, set with neutral weight and placed diagonally across colored top planes.",
+    "microcopy_style": "Compact bold grotesk or monospaced publication text, tightly leading, sometimes stacked one word per line and sometimes rotated ninety degrees.",
+    "hierarchy": "Use monumental on-object labels, small but readable border headlines, and tiny issue/date information as three sharply separated scales.",
+    "placement": "Keep display type centered within top planes while microcopy hugs margins, corners, and thin perimeter rules.",
+    "constraints": "Use only the new case wording; no source slogans, dates, credits, brand marks, signatures, watermarks, or dense paragraphs."
+  },
+  "color_palette": {
+    "background": "warm paper white, approximately #F2F0E8",
+    "primary": "cobalt blue #357FDD, vermilion #F0330B, grass green #04B92D, cadmium yellow #FFD30A",
+    "secondary": "warm cream #EDE5CE and near-black #090909",
+    "depth_behavior": "Each side plane shifts to a darker, slightly muted version of its top color; outlines remain near-black",
+    "distribution": "Use three or four saturated colors as separated islands, one or two cream forms as breathing points, and black only for linework and typography"
+  },
+  "image_treatment": {
+    "rendering": "Crisp flat vector-like editorial illustration with restrained dimensional extrusion; it must not look like glossy CGI or a photograph.",
+    "texture": "Subtle uncoated stock grain and faint ink tooth visible only at close inspection; edges and type remain clean.",
+    "lighting": "No directional highlights and no cast shadows; all dimensional information comes from top-versus-side color values.",
+    "finish": "Print-ready poster appearance with a warm paper base, solid spot-color feeling, and thin consistent outlines."
+  },
+  "design_rules": [
+    "Preserve the warm-white field, perimeter microcopy, and central stepped form cluster in every subject variation",
+    "Keep a single consistent oblique isometric projection across all extruded forms",
+    "Limit the palette to cobalt, vermilion, grass green, cadmium yellow, cream, and black",
+    "Put one short readable black label on each major top plane and keep long copy away from the objects",
+    "Use darker solid side planes rather than gradients, reflections, or cast shadows",
+    "Change the literal object family and story in every case while retaining the same density and editorial hierarchy",
+    "Adapt the cluster direction to the aspect ratio without simply cropping a vertical composition into a horizontal one"
+  ],
+  "do": [
+    "Use five to eight chunky rounded extruded forms with clear top and side planes",
+    "Combine oversized black labels with tiny rotated publication metadata",
+    "Leave deliberate warm-white negative space around an asymmetrical diagonal cluster",
+    "Keep outlines thin, black, consistent, and visibly hand-independent",
+    "Make the horizontal and vertical versions compositionally native to their canvases"
+  ],
+  "avoid": [
+    "Avoid keyboards, keycaps, computer controls, and the reference letter sequence",
+    "Avoid glossy plastic CGI, realistic product photography, bevel highlights, ambient occlusion, and cast shadows",
+    "Avoid gradients, translucent materials, neon glows, halftone explosions, stickers, collages, or complex scenery",
+    "Avoid filling every gap; the poster needs controlled negative space and a sparse perimeter information system",
+    "Avoid copied slogans, dates, credits, brand marks, watermarks, platform marks, and QR codes"
+  ],
+  "prompt_template": "Create a {ASPECT_RATIO} editorial poster in the Primary Block Isometric Editorial Poster Style. Subject: {SUBJECT}. Spatial action: {SUBJECT_ACTION}. Supporting object or prop: {PRODUCT_OR_PROP}. Conceptual setting: {LOCATION}. Background details: {BACKGROUND_ELEMENTS}. Main on-object text: {MAIN_TEXT}. Secondary perimeter copy: {SECONDARY_TEXT}. Accent symbol: {ACCENT_SYMBOL}. Material and styling direction: {WARDROBE_STYLE}. Preserve these style fidelity anchors: {STYLE_FIDELITY_ANCHORS}. Avoid recreating this source content: {SOURCE_CONTENT_TO_AVOID}. Build one sparse asymmetrical cluster of five to eight oversized rounded cuboids or subject-specific modular solids on a warm off-white paper field. Use a consistent oblique isometric view with visible top planes and two darker solid side planes, black hairline outlines, crisp vector-like edges, no gradients, and no cast shadows. Limit colors to cobalt blue, vermilion red-orange, grass green, cadmium yellow, warm cream, and near-black. Place one oversized black neo-grotesk letter, numeral, or short word diagonally on each major top plane. Add tiny condensed or monospaced publication copy along the outer margins, including a few rotated vertical lines, an arrow, and small issue-like data, while retaining generous negative space. Keep the result flat, print-like, precise, playful, and editorial, with subtle uncoated paper tooth. Match the visual system first, then change the literal content. Do not include keyboards, source wording, brand marks, signatures, watermarks, platform UI, or QR codes.",
+  "negative_prompt": "computer keyboard, keyboard keycaps, escape key, flight poster, source wording, end-of-world story, AI apocalypse copy, copied date, copied issue number, studio credit, website, logo, watermark, username, QR code, brand mark, glossy 3D render, photoreal object, realistic room, cinematic lighting, strong shadows, reflections, gradients, translucent plastic, chrome, complex environment, dense collage, sticker bomb, grunge distress, neon glow, blurred typography, misspelled main words, excessive text, borderless full bleed",
+  "examples": [
+    {
+      "case_name": "rooftop-garden-modules",
+      "values": {
+        "SUBJECT": "a family of abstract modular rooftop garden planters shaped as broad rounded architectural blocks",
+        "SUBJECT_ACTION": "stepping upward diagonally as a compact urban growing system",
+        "PRODUCT_OR_PROP": "one small cream water reservoir block and a simple geometric leaf marker",
+        "LOCATION": "conceptual city-garden exhibition poster",
+        "BACKGROUND_ELEMENTS": "warm blank paper, one tiny watering schedule, a thin arrow, and sparse coordinate marks at the edges",
+        "MAIN_TEXT": "GROW / SUN / RAIN / ROOT",
+        "SECONDARY_TEXT": "CITY PLOT 07 — OPEN GARDEN — SEASON ONE",
+        "ACCENT_SYMBOL": "↗",
+        "WARDROBE_STYLE": "smooth matte architectural card models with solid spot-color planes"
+      }
+    },
+    {
+      "case_name": "deep-sea-signal-buoys",
+      "values": {
+        "SUBJECT": "a set of abstract ocean research buoys reduced to rounded extruded signal blocks",
+        "SUBJECT_ACTION": "drifting in a staggered diagonal formation as if transmitting depth readings",
+        "PRODUCT_OR_PROP": "a cream sonar marker and a single black direction arrow",
+        "LOCATION": "marine research symposium poster",
+        "BACKGROUND_ELEMENTS": "empty paper field with tiny depth coordinates, one vertical data line, and sparse wave symbols at the margins",
+        "MAIN_TEXT": "DEEP / TIDE / ECHO / NORTH",
+        "SECONDARY_TEXT": "FIELD LOG 12 — SIGNAL WINDOW — 06:40",
+        "ACCENT_SYMBOL": "≈",
+        "WARDROBE_STYLE": "flat matte scientific modules with crisp diagrammatic edges"
+      }
+    },
+    {
+      "case_name": "sound-lab-speaker-stack",
+      "values": {
+        "SUBJECT": "a playful group of abstract acoustic test modules and low speaker plinths",
+        "SUBJECT_ACTION": "spreading across the canvas in a rhythmic stepped sequence like a visual chord",
+        "PRODUCT_OR_PROP": "one small cream calibration block and a compact volume marker",
+        "LOCATION": "experimental sound laboratory event poster",
+        "BACKGROUND_ELEMENTS": "open paper field with tiny frequency data, a rotated session note, and two small dot markers",
+        "MAIN_TEXT": "BASS / TONE / AIR / LOOP",
+        "SECONDARY_TEXT": "ROOM B — LISTENING TEST — FOUR CHANNELS",
+        "ACCENT_SYMBOL": "••",
+        "WARDROBE_STYLE": "minimal matte audio modules rendered as geometric editorial solids"
+      }
+    },
+    {
+      "case_name": "night-market-food-boxes",
+      "values": {
+        "SUBJECT": "a compact family of abstract takeaway food boxes reduced to rounded solid geometric containers",
+        "SUBJECT_ACTION": "forming a loose celebratory cascade across the poster",
+        "PRODUCT_OR_PROP": "one cream condiment block and a tiny chopstick-like directional marker",
+        "LOCATION": "independent night market festival poster",
+        "BACKGROUND_ELEMENTS": "warm blank paper with tiny stall numbers, opening hours, a rotated side note, and one downward arrow",
+        "MAIN_TEXT": "HOT / SWEET / SALT / LATE",
+        "SECONDARY_TEXT": "MARKET 09 — ONE NIGHT — DOORS AT SEVEN",
+        "ACCENT_SYMBOL": "↓",
+        "WARDROBE_STYLE": "flat matte paperboard containers simplified into precise isometric color blocks"
+      }
+    }
+  ]
+}

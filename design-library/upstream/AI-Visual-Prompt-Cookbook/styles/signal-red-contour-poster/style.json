@@ -1,0 +1,168 @@
+{
+  "style_name": "Signal Red Contour Poster",
+  "style_slug": "signal-red-contour-poster",
+  "style_version": "2.1",
+  "style_summary": "A severe two-ink public-information poster system built from a near-black field, one monumental flat silhouette defined by an agitated signal-red contour, and detached white grotesk text arranged around the perimeter like urgent fragments.",
+  "category": "Type Posters",
+  "environment_variables": {
+    "SUBJECT": "the single monumental subject that dominates the poster",
+    "SUBJECT_ACTION": "the subject's simple readable action or transformation",
+    "PRODUCT_OR_PROP": "one secondary object integrated into the silhouette",
+    "LOCATION": "the implied setting, kept mostly abstract",
+    "BACKGROUND_ELEMENTS": "a very small number of supporting marks or empty-space cues",
+    "MAIN_TEXT": "short uppercase headline split into detached fragments",
+    "SECONDARY_TEXT": "brief uppercase supporting line and microcopy",
+    "ACCENT_SYMBOL": "tiny red typographic or geometric signal mark",
+    "WARDROBE_STYLE": "surface, material, or styling treatment for the subject",
+    "STYLE_FIDELITY_ANCHORS": "observable style traits that must remain visible",
+    "SOURCE_CONTENT_TO_AVOID": "literal source content that generated samples must not recreate",
+    "ASPECT_RATIO": "4:5 or 5:4"
+  },
+  "style_fidelity_anchors": [
+    "Use an almost pure black ground occupying roughly eighty-five percent of the image, with no pictorial background scene.",
+    "Build the composition around one huge black-filled silhouette that nearly disappears into the ground and is revealed by a vivid signal-red perimeter contour.",
+    "Make the red contour uneven, scraped, dry-brush, and slightly broken, with variable thickness and occasional edge chatter.",
+    "Keep the image resolutely flat and poster-like, without modeled volume, spatial depth, perspective scenery, or cast shadows.",
+    "Arrange large white neo-grotesk uppercase text as detached fragments around the outer margins rather than as a conventional centered headline.",
+    "Rotate at least one supporting text block ninety degrees and allow deliberate collisions or near-tangencies between type and the contour subject.",
+    "Maintain an asymmetric perimeter balance with broad uninterrupted black negative space between typographic islands.",
+    "Restrict the palette to black, white, and one saturated emergency red, with red used only for contours and tiny signal marks.",
+    "Use very small red typographic or geometric symbols as a secondary information layer near an edge or corner.",
+    "Keep interior detail extremely sparse: only a few red contour loops or cuts may describe the subject's essential structure.",
+    "Favor an austere late-modernist public-information mood mixed with raw expressionist mark-making.",
+    "Preserve hard digital black and white fields while confining tactile print abrasion to the red ink edges."
+  ],
+  "source_content_to_avoid": [
+    "Do not depict a smoking person, cigarette, cigar, pipe, smoke cloud, or tobacco-related object.",
+    "Do not reuse the original standing human pose, face profile, arm position, hand-to-mouth gesture, or large anthropomorphic body silhouette.",
+    "Do not reproduce any German anti-smoking warning, including the visible headline and mortality statement.",
+    "Do not recreate the original head-centered smoke lobes, the central bent elbow loop, or the exact body contour path.",
+    "Do not include the original artist credit, lower-right signature block, letter-cluster emblem, logo, or identity mark.",
+    "Do not imitate the exact placement of the source's four principal text groups or its lower-right credit arrangement.",
+    "Do not use a tobacco-harm, addiction, or death-from-smoking story premise.",
+    "Do not add watermarks, usernames, platform marks, QR codes, or brand symbols."
+  ],
+  "visual_deconstruction": {
+    "style_category": "Late-modernist public-information poster with expressionist contour drawing",
+    "composition_and_layout": "One monumental edge-defined silhouette occupies the central field while isolated text fragments form an irregular perimeter frame.",
+    "subject_placement": "The main form is oversized, centrally dominant, and cropped or pressed close to multiple edges; interior information remains minimal.",
+    "camera_and_perspective": "Orthographic and fully flat, with no lens, horizon, or environmental depth.",
+    "typography_style": "Clean light-to-regular neo-grotesk capitals, oversized, tightly spaced, broken across lines, with occasional vertical rotation.",
+    "color_behavior": "Black is the ground and interior mass, white carries primary information, and emergency red acts as the sole expressive contour ink.",
+    "graphic_elements": "Dry-brush contour, small red micro-symbols, perimeter-aligned text blocks, and large voids.",
+    "texture_and_finish": "Crisp black and white digital fields contrasted with distressed red ink edges and slight registration-like irregularity.",
+    "lighting": "No illumination model; contrast is created entirely by the three-color graphic system.",
+    "mood": "Urgent, severe, institutional, confrontational, and slightly uncanny."
+  },
+  "composition": {
+    "primary_structure": "Enlarge one icon-like silhouette to occupy roughly sixty to seventy-five percent of the canvas while keeping it black-filled against the black field.",
+    "hierarchy": "Red contour first reveals the subject; white perimeter headline fragments are the second read; tiny red signals and microcopy are the third read.",
+    "negative_space": "Protect several broad black voids and avoid filling the background with scenery or decoration.",
+    "edge_behavior": "Let the contour approach or cross the crop at one or two edges; keep typography anchored to different margins rather than one grid column.",
+    "ratio_adaptation": "For 4:5, stretch the subject vertically and distribute type at top, sides, and bottom; for 5:4, widen the silhouette and place rotated text near the shorter side margins."
+  },
+  "typography": {
+    "family": "Neutral neo-grotesk sans serif similar to Helvetica or Univers, not condensed or decorative.",
+    "case_and_weight": "Uppercase, light-to-regular weight, crisp white, with little stroke contrast.",
+    "scale": "Use two or three oversized headline fragments and one small supporting statement; avoid a single centered title block.",
+    "placement": "Align fragments to outer margins, split phrases across hard line breaks, rotate one cluster ninety degrees, and tolerate controlled overlap with the subject contour.",
+    "microtype": "Use tiny red letters or geometric marks in a compact cluster as a quiet counterpoint to the large white type."
+  },
+  "color_palette": {
+    "field_black": "#000000 — approximately 84–88% of the canvas",
+    "paper_white": "#F5F5F2 — primary typography only",
+    "signal_red": "#FF1010 — distressed contour and micro-symbols only",
+    "behavior": "No gradients, tints, secondary colors, realistic materials, or ambient color; preserve extreme three-color contrast."
+  },
+  "image_treatment": {
+    "rendering_mode": "Flat graphic silhouette with a single distressed contour ink",
+    "subject_detail": "Reduce the subject to one immediately readable outer mass and two to five interior contour cues.",
+    "edge_texture": "Simulate coarse screenprint drag, dry marker skips, and slight red-ink abrasion only on contours.",
+    "background": "Featureless solid black with no horizon, room, landscape, or photo texture.",
+    "finish": "High-resolution, hard-edged poster art; retain intentional contour roughness while keeping large fields clean."
+  },
+  "design_rules": [
+    "Use exactly one dominant silhouette and at most one integrated prop.",
+    "Reveal black-on-black form primarily through the signal-red contour rather than fill contrast.",
+    "Keep all important words short, uppercase, and distributed as independent spatial fragments.",
+    "Rotate one typographic block to interrupt normal reading direction.",
+    "Reserve red for the tactile contour and micro-signals; never use it as a large fill.",
+    "Limit interior contour marks to the minimum needed for recognition.",
+    "Let asymmetric voids carry as much compositional weight as the subject.",
+    "Adapt the perimeter layout to the chosen aspect ratio without centering everything."
+  ],
+  "do": [
+    "Do preserve the huge black-on-black silhouette and its raw red perimeter trace.",
+    "Do keep text crisp, white, uppercase, fragmented, and margin-led.",
+    "Do use one rotated text cluster and one tiny red signal cluster.",
+    "Do simplify new subjects into bold icon-like masses.",
+    "Do retain large quiet black zones and severe tonal contrast."
+  ],
+  "avoid": [
+    "Avoid photorealism, 3D rendering, gradients, soft lighting, shadows, and cinematic depth.",
+    "Avoid dense illustrated environments, multiple characters, decorative borders, stickers, or collage clutter.",
+    "Avoid filled red shapes larger than a small accent; the dominant form remains black.",
+    "Avoid rounded playful display fonts, serif type, handwriting, or grunge applied to the white lettering.",
+    "Avoid tobacco imagery, copied warnings, signatures, credits, logos, and source-specific anatomy."
+  ],
+  "prompt_template": "Create a {ASPECT_RATIO} image in the \"Signal Red Contour Poster\" visual style. Style fidelity has priority over content novelty. Subject: {SUBJECT}. Action: {SUBJECT_ACTION}. Prop or product: {PRODUCT_OR_PROP}. Implied location: {LOCATION}. Background elements: {BACKGROUND_ELEMENTS}. Main text: {MAIN_TEXT}. Secondary text: {SECONDARY_TEXT}. Accent symbol: {ACCENT_SYMBOL}. Surface or styling: {WARDROBE_STYLE}. Style fidelity anchors: {STYLE_FIDELITY_ANCHORS}. Source content to avoid: {SOURCE_CONTENT_TO_AVOID}. Build one huge, flat, black-filled silhouette that occupies roughly sixty to seventy-five percent of a featureless pure-black canvas. Reveal that nearly invisible mass with one saturated signal-red dry-brush contour: uneven thickness, scraped gaps, slight edge chatter, and only two to five interior contour loops. Preserve broad asymmetric black negative space. Place crisp white uppercase neo-grotesk headline fragments around different outer margins, with hard line breaks, tight spacing, and at least one block rotated ninety degrees; allow controlled near-collisions with the red contour. Add only one tiny cluster of red letters or geometric signal marks near an edge. Use a strict black, off-white, and emergency-red palette. Keep the rendering orthographic and completely flat with no environment, depth, modeled light, or cast shadow. The poster must feel severe, urgent, late-modernist, and institutionally confrontational, with clean black and white fields and tactile abrasion confined to the red ink. Avoid photorealism, 3D, gradients, glow, shading, bevels, multiple subjects, busy scenery, collage clutter, decorative borders, serif or playful fonts, large red fills, watermarks, usernames, signatures, brands, and source-specific content. Important content rule: preserve every observable style anchor first, then use the supplied new subject, action, prop, setting, and text so the original source narrative is not recreated.",
+  "negative_prompt": "Photorealism, photographic backgrounds, 3D render, volumetric light, gradients, glow, shadows, modeled anatomy, realistic skin, perspective scenery, multiple subjects, crowded objects, collage, halftone photo, paper mockup, decorative frame, sticker pack, large red fills, extra colors, serif type, script type, playful rounded fonts, distressed white type, centered conventional headline, tobacco, cigarette, cigar, pipe, smoke cloud, smoking gesture, copied German warning text, copied human silhouette, signature, artist credit, logo, watermark, username, QR code, platform mark.",
+  "examples": [
+    {
+      "case_name": "static-siren",
+      "values": {
+        "SUBJECT": "an oversized tabletop emergency radio reduced to a blocky icon-like mass",
+        "SUBJECT_ACTION": "emitting two compressed signal-wave loops from one corner",
+        "PRODUCT_OR_PROP": "a single bent antenna integrated into the silhouette",
+        "LOCATION": "an abstract overnight broadcast zone with no visible room",
+        "BACKGROUND_ELEMENTS": "only two short red frequency ticks and otherwise empty black space",
+        "MAIN_TEXT": "HOLD / THE / SIGNAL",
+        "SECONDARY_TEXT": "STAY WITH THE FREQUENCY",
+        "ACCENT_SYMBOL": "three tiny offset red bars",
+        "WARDROBE_STYLE": "matte black industrial casing with no visible branding"
+      }
+    },
+    {
+      "case_name": "night-bloom",
+      "values": {
+        "SUBJECT": "one enormous closed night flower rendered as a heavy black botanical silhouette",
+        "SUBJECT_ACTION": "unfurling a single petal into a looping contour",
+        "PRODUCT_OR_PROP": "one long angular stem crossing the lower field",
+        "LOCATION": "an abstract midnight garden without landscape detail",
+        "BACKGROUND_ELEMENTS": "one small red pollen cluster and uninterrupted black voids",
+        "MAIN_TEXT": "OPEN / AFTER / DARK",
+        "SECONDARY_TEXT": "THE NIGHT HAS ITS OWN CLOCK",
+        "ACCENT_SYMBOL": "a tiny red four-point bloom",
+        "WARDROBE_STYLE": "flat ink-black petals with only essential red contour cuts"
+      }
+    },
+    {
+      "case_name": "tangled-transit",
+      "values": {
+        "SUBJECT": "an oversized bicycle lock simplified into a dense black looping silhouette",
+        "SUBJECT_ACTION": "twisting into one impossible knot",
+        "PRODUCT_OR_PROP": "a single small key trapped inside the central loop",
+        "LOCATION": "an abstract transit threshold with no street or architecture",
+        "BACKGROUND_ELEMENTS": "two red directional ticks and vast black negative space",
+        "MAIN_TEXT": "MOVE / WITHOUT / KNOTS",
+        "SECONDARY_TEXT": "CLEAR THE WAY FOR EVERYONE",
+        "ACCENT_SYMBOL": "a compact red double-arrow",
+        "WARDROBE_STYLE": "rubberized black metal reduced to a single graphic mass"
+      }
+    },
+    {
+      "case_name": "heat-signal",
+      "values": {
+        "SUBJECT": "one monumental desk fan reduced to a circular black machine silhouette",
+        "SUBJECT_ACTION": "sagging downward as three blades appear to soften from heat",
+        "PRODUCT_OR_PROP": "a short power cord forming one angular loop",
+        "LOCATION": "an abstract heat-alert field without a room or horizon",
+        "BACKGROUND_ELEMENTS": "three tiny red temperature notches and otherwise empty black space",
+        "MAIN_TEXT": "WHEN / AIR / STOPS",
+        "SECONDARY_TEXT": "HEAT BUILDS FASTER THAN YOU THINK",
+        "ACCENT_SYMBOL": "a tiny red stacked-temperature glyph",
+        "WARDROBE_STYLE": "flat matte-black appliance geometry with sparse interior contour cuts"
+      }
+    }
+  ]
+}

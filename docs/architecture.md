@@ -16,7 +16,7 @@ Codex agent ── stdio MCP ──> idra-photo serve --workspace <dir>
 1. `idra_create_batch` stores the request, references (validated, hashed, copied), constraints, and one row per job with its fully assembled prompt.
 2. `idra_step` without `completed` claims one job in a `BEGIN IMMEDIATE` transaction and returns it: prompt, reference paths, aspect, `save_to`, and an attempt token.
 3. Codex generates with its own tool and either copies the file to `save_to` or passes its path as `artifact_path`. Only authorized folders are accepted.
-4. `idra_step` with `completed` validates the image, copies it to `outputs/` without overwriting, commits the completion, and claims the next job. All of that happens in one exchange.
+4. `idra_step` with `completed` validates the image and, for consistency batches, checks the required file-bound review before copying it to `outputs/`, committing completion, and claiming the next job. Missing reviews leave the attempt open; failed reviews use bounded retries.
 
 No call blocks while an image is being made. Waiting is stored state, not a request that stays open.
 
@@ -29,6 +29,7 @@ No call blocks while an image is being made. Waiting is stored state, not a requ
 | `src/core/queue.ts` | Claims, completion, retries, control, extend, reconcile, status |
 | `src/core/planning.ts`, `prompt.ts`, `constraints.ts` | Modes, duplicate flags, per-job prompts |
 | `src/core/references.ts` | Reference import and availability checks |
+| `src/core/consistency.ts` | Immutable design contracts, permitted variation axes, review coverage and hash binding |
 | `src/artifacts/` | Path safety, image validation, staging and finalization |
 | `src/storage/` | SQLite via `node:sqlite` with no native addon, plus migrations |
 | `src/sim/` | Fake host and fixture images (simulation only) |

@@ -471,11 +471,11 @@ test('manifest records counts, hashes, and requested vs actual aspect', () => {
 test('migrations apply once and state survives reopening', () => {
   const ws = tmpWorkspace();
   let ctx = open(ws);
-  assert.equal(ctx.db.schemaVersion(), 2);
+  assert.equal(ctx.db.schemaVersion(), 3);
   const id = create(ctx, 2);
   closeWorkspace(ctx);
   ctx = open(ws);
-  assert.equal(ctx.db.schemaVersion(), 2);
+  assert.equal(ctx.db.schemaVersion(), 3);
   assert.deepEqual(ctx.db.migrate().applied, []);
   assert.equal(ctx.repo.allJobs(id).length, 2);
   closeWorkspace(ctx);
@@ -492,7 +492,7 @@ test('a v0.1 database (schema 1) upgrades in place and keeps its batches', () =>
     VALUES ('b_old', 'old', 'k-old', ?, ?, 'r', 'variations', 'p', 0, '{}', NULL, 'active', 0, NULL, ?, 2, 0)`).run(now, now, path.join(ws, 'outputs', 'old'));
   raw.close();
   const ctx = open(ws);
-  assert.equal(ctx.db.schemaVersion(), 2);
+  assert.equal(ctx.db.schemaVersion(), 3);
   assert.equal(ctx.repo.getBatch('b_old')!.variety, 'balanced');
   const id = create(ctx, 2, { variety: 'bold' });
   assert.equal(ctx.repo.getBatch(id)!.variety, 'bold');
