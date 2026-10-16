@@ -6,9 +6,19 @@ Drag a photo into Codex, type one prompt, say how many images you want. Codex ma
 
 **New: a portable skill + MCP for Codex and Claude Code.** Start with “Use Idra Photo: make 2 skincare photos.” The skill expands the short request into a design brief, explains its assumptions, and checks both the requested content and visual consistency. Claude needs a connected image-generation tool; Idra does not give Claude a built-in photo model. See [Claude setup](docs/claude.md) and [real results with rejected attempts](docs/results/README.md).
 
-| Product photo pair | Matching UI concepts |
+## Real generated examples
+
+**Product photos** — “Make 2 square skincare product photos.”
+
+| Front view | Matching angle variation |
 |---|---|
-| ![Real generated product photo](docs/results/product/2.png) | ![Real generated settings concept](docs/results/ui/2.png) |
+| ![Matte skincare bottle on a cream background, front view](docs/results/product/1.png) | ![Matching skincare bottle with a changed pump angle](docs/results/product/2.png) |
+
+**UI concepts** — “Make a matching dashboard and settings screen, square.”
+
+| Dashboard | Matching settings screen |
+|---|---|
+| ![Blue and white analytics dashboard](docs/results/ui/1.png) | ![Matching blue and white account settings screen](docs/results/ui/2.png) |
 
 These are real generated examples reviewed through the queue by a manual Codex host. They demonstrate the short-brief and correction workflow; they are not an autonomous Claude image benchmark.
 
