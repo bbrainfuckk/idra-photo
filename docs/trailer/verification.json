@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-16",
+  "renderer": "idra-motion",
+  "master": {
+    "fps": 60,
+    "temporal_samples": 2
+  },
+  "web": {
+    "fps": 30,
+    "crf": 25
+  },
+  "visual_check": {
+    "inspected_beats_seconds": [
+      2.1,
+      6.7,
+      11,
+      15.5,
+      19.6,
+      22.5,
+      26,
+      30.8,
+      34.5
+    ],
+    "draft_browser_playback": {
+      "duration_seconds": 36,
+      "reached_end": true,
+      "muted": false,
+      "media_error": null
+    },
+    "notes": "Actual generated examples inspected at every beat, including rejected and corrected UI. Browser playback checked through the final title card with soundtrack enabled. Technical checks do not constitute an independent designer benchmark."
+  },
+  "files": [
+    {
+      "file": "idra-photo-master.mp4",
+      "bytes": 14727986,
+      "sha256": "1dfc990ca218cba7f3982dd89c0a492bee8fe28c9a4a92b668954c805cfea566",
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 36,
+      "fps": 60,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_sample_rate": 48000,
+      "measured_lufs": -16.14,
+      "measured_true_peak_db": -6.2,
+      "decode_check": "pass"
+    },
+    {
+      "file": "idra-photo-trailer.mp4",
+      "bytes": 3995686,
+      "sha256": "755fb89d990644bac6eebe4cb44d6b155c4f754c31125a962c9832807863cd5c",
+      "width": 1920,
+      "height": 1080,
+      "duration_seconds": 36,
+      "fps": 30,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_sample_rate": 48000,
+      "measured_lufs": -16.14,
+      "measured_true_peak_db": -6.21,
+      "decode_check": "pass"
+    }
+  ],
+  "poster": {
+    "file": "poster.jpg",
+    "width": 1920,
+    "height": 1080,
+    "source_time_seconds": 2.1
+  }
+}

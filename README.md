@@ -6,6 +6,12 @@ Drag a photo into Codex, type one prompt, say how many images you want. Codex ma
 
 **New: a portable skill + MCP for Codex and Claude Code.** Start with “Use Idra Photo: make 2 skincare photos.” The skill expands the short request into a design brief, explains its assumptions, and checks both the requested content and visual consistency. Claude needs a connected image-generation tool; Idra does not give Claude a built-in photo model. See [Claude setup](docs/claude.md) and [real results with rejected attempts](docs/results/README.md).
 
+## Watch the trailer
+
+[![Watch the 36-second Idra Photo trailer](docs/trailer/poster.jpg)](docs/trailer/idra-photo-trailer.mp4)
+
+[Watch or download the trailer](https://github.com/bbrainfuckk/idra-photo/raw/refs/heads/main/docs/trailer/idra-photo-trailer.mp4) · [Scene, credits, and render details](docs/trailer/README.md)
+
 ## Real generated examples
 
 **Product photos** — “Make 2 square skincare product photos.”

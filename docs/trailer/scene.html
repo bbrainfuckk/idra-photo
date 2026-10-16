@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Idra Photo — Keep the look</title>
+<!--
+IDRA PHOTO TRAILER • 1920 × 1080 • 36 seconds • caption-led, no narration.
+All footage assets are the real 2026-10-16 Codex generation results in idra-photo.
+No application dashboard is invented: the prompt, brief and review graphics illustrate the workflow.
+BEAT SHEET — seconds | ON SCREEN / ACTION | HEARD
+00.0–03.5 | idra-photo / One simple prompt. One consistent direction. Four real results arrive. | warm chord, soft impacts
+03.5–08.0 | Start with one sentence. A short skincare request types in. | whoosh, synchronized key ticks
+08.0–13.0 | Set the look. Keep it fixed. Palette, lighting, finish and allowed angle appear beside the photo. | four ticks, rising pluck
+13.0–17.5 | The same direction. A new angle. Both accepted product photos reveal. | paired pops, steady music
+17.5–23.5 | Catch the drift. One blue accent. Actual rejected dashboard with green marks; then corrected attempt. | muted reject tap, correction click
+23.5–28.5 | Matching UI concepts, too. Accepted dashboard and settings arrive together. | paired pops, chord lift
+28.5–32.0 | Your tools. One saved brief. Codex / Claude connect to Skill + local MCP. Generator requirement is visible. | two connection ticks
+32.0–36.0 | idra-photo / Your AI generates. Idra manages the batch. GitHub address, real results. | final impact, resolved chord
+-->
+<style>
+@font-face{font-family:IDRA;src:url("/fonts/Inter-opsz.woff2") format("woff2");font-weight:100 900}
+:root{--paper:#f2f0e9;--ink:#191b1d;--muted:#777a7d;--line:#d5d4cf;--blue:#3868ed}
+html,body{margin:0;height:100%;overflow:hidden;background:#191b1d}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;background:var(--paper);color:var(--ink);font-family:IDRA,sans-serif;-webkit-font-smoothing:antialiased}
+#stage *{box-sizing:border-box}
+.scene,.cam{position:absolute;inset:0;width:1920px;height:1080px}
+.scene{visibility:hidden;background:var(--paper)}
+.cam{transform-origin:0 0}
+.dark{background:var(--ink);color:var(--paper)}
+.abs{position:absolute}
+.kicker{font-size:23px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.head{font-size:88px;line-height:1.04;font-weight:600;letter-spacing:-.055em;margin:0}
+.sub{font-size:32px;line-height:1.4;font-weight:400;color:var(--muted)}
+.result{position:absolute;object-fit:cover;border:1px solid rgba(0,0,0,.09);border-radius:8px}
+.caret{display:inline-block;height:1em;width:3px;background:var(--blue);margin-left:5px;vertical-align:-.12em}
+#header{position:absolute;left:86px;right:86px;top:54px;display:flex;align-items:center;justify-content:space-between;z-index:10;height:48px;border-bottom:1px solid;padding-bottom:25px}
+#header b{font-size:25px;letter-spacing:-.035em;font-weight:700}
+#chapter{font-size:18px;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+#progress{position:absolute;left:86px;top:1018px;height:2px;background:var(--blue);z-index:10}
+#footer{position:absolute;left:86px;right:86px;top:1036px;z-index:10;display:flex;justify-content:space-between;font-size:17px;font-weight:500;letter-spacing:.02em}
+.wordmark{font-size:148px;line-height:1.05;font-weight:600;letter-spacing:-.075em}
+.rule{display:flex;align-items:center;gap:23px;border-bottom:1px solid var(--line);height:90px;font-size:29px;font-weight:500}
+.rule em{font-style:normal;color:var(--muted);display:inline-block;width:113px;font-size:23px;font-weight:400}
+.dot{display:inline-block;width:22px;height:22px;border-radius:50%;flex-shrink:0}
+.check{display:inline-flex;align-items:center;justify-content:center;border:2px solid currentColor;border-radius:50%;width:30px;height:30px;font-size:20px;font-weight:600}
+.label{font-size:22px;font-weight:500;color:var(--muted)}
+.client{position:absolute;top:450px;width:430px;height:220px;border:1px solid #c7c7c1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:500;letter-spacing:-.04em;background:#faf9f5}
+.connector{position:absolute;top:559px;width:150px;height:2px;background:var(--blue);transform-origin:0 0}
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="scene dark" id="s0"><div class="cam" id="cam0">
+ <div class="abs wordmark" id="introName" style="left:110px;top:255px">idra-photo</div>
+ <div class="abs" id="introLine" style="left:118px;top:455px;font-size:49px;line-height:1.2;letter-spacing:-.035em">One simple prompt.<br>One consistent direction.</div>
+ <div class="abs" id="introTag" style="left:120px;top:660px;padding:17px 24px;border:1px solid #575a5c;border-radius:6px;font-size:24px;color:#bcbfc1">Skill + MCP · for designers</div>
+ <img class="result introTile" src="../results/product/1.png" style="left:1090px;top:180px;width:330px;height:330px" alt="First accepted skincare product photo">
+ <img class="result introTile" src="../results/ui/1.png" style="left:1445px;top:180px;width:330px;height:330px" alt="Accepted analytics dashboard">
+ <img class="result introTile" src="../results/product/2.png" style="left:1090px;top:535px;width:330px;height:330px" alt="Second matching skincare photo">
+ <img class="result introTile" src="../results/ui/2.png" style="left:1445px;top:535px;width:330px;height:330px" alt="Matching settings concept">
+ <div class="abs label" id="introCaption" style="left:1090px;top:904px;color:#a4a8aa">Real generated results</div>
+</div></section>
+
+<section class="scene" id="s1"><div class="cam" id="cam1">
+ <h1 class="abs head" id="promptHead" style="left:110px;top:240px">Start with<br>one sentence.</h1>
+ <div class="abs sub" id="promptSub" style="left:116px;top:480px;width:660px">You bring the idea.<br>The skill handles the detailed brief.</div>
+ <div class="abs" id="promptPanel" style="left:880px;top:248px;width:920px;height:490px;background:#faf9f6;border:1px solid #d5d4cf;border-radius:12px;padding:58px">
+  <div class="kicker" style="color:#777a7d">Your request</div>
+  <div id="promptText" style="font-size:52px;font-weight:500;line-height:1.25;letter-spacing:-.035em;margin-top:55px;min-height:150px;white-space:pre-wrap"></div>
+  <div id="briefReady" style="position:absolute;left:58px;right:58px;bottom:50px;border-top:1px solid #deded7;padding-top:26px;font-size:25px;color:#3868ed">Short request → strict design brief</div>
+ </div>
+</div></section>
+
+<section class="scene" id="s2"><div class="cam" id="cam2">
+ <h1 class="abs head" id="rulesHead" style="left:110px;top:185px">Set the look.<br>Keep it fixed.</h1>
+ <div class="abs" style="left:116px;top:444px;width:725px" id="rulesList">
+  <div class="rule"><span class="dot" style="background:#d9c6ab"></span><em>Palette</em>Cream + neutrals</div>
+  <div class="rule"><span class="dot" style="background:#e8dfcc"></span><em>Lighting</em>Soft upper left</div>
+  <div class="rule"><span class="dot" style="background:#c9c9bf"></span><em>Finish</em>Matte editorial</div>
+  <div class="rule"><span class="dot" style="background:#3868ed"></span><em>Variation</em>Angle only</div>
+ </div>
+ <img class="result" id="rulePhoto" src="../results/product/1.png" style="left:1010px;top:158px;width:750px;height:750px" alt="Cream editorial skincare photo">
+ <div class="abs label" id="ruleCaption" style="left:1010px;top:936px">The same rules follow every image.</div>
+</div></section>
+
+<section class="scene" id="s3"><div class="cam" id="cam3">
+ <h1 class="abs head" id="pairHead" style="left:110px;top:154px;font-size:74px">The same direction. A new angle.</h1>
+ <img class="result" id="pairOne" src="../results/product/1.png" style="left:300px;top:290px;width:630px;height:630px" alt="Front-view skincare bottle">
+ <img class="result" id="pairTwo" src="../results/product/2.png" style="left:990px;top:290px;width:630px;height:630px" alt="Matching bottle with a foreshortened pump">
+ <div class="abs label" id="pairLabelOne" style="left:300px;top:946px">01 / front view</div>
+ <div class="abs label" id="pairLabelTwo" style="left:990px;top:946px">02 / angle variation</div>
+</div></section>
+
+<section class="scene" id="s4"><div class="cam" id="cam4">
+ <h1 class="abs head" id="reviewHead" style="left:110px;top:184px">Catch the drift.</h1>
+ <div class="abs" id="reviewRule" style="left:116px;top:345px;font-size:36px;display:flex;align-items:center;gap:18px"><i class="dot" style="background:#3868ed"></i>One blue accent.</div>
+ <div class="abs" id="reviewCrop" style="left:116px;top:446px;width:765px;height:234px;overflow:hidden;border:1px solid #c8c9c8;border-radius:8px;background:white">
+  <img src="../results/ui/rejected-1.png" style="position:absolute;width:1560px;height:1560px;max-width:none;left:-325px;top:-175px" alt="Actual rejected green trend marks">
+  <div id="cropCover" style="position:absolute;inset:0;background:#f2f0e9;display:flex;align-items:center;justify-content:center;gap:18px;font-size:36px;color:#3868ed"><span class="check">✓</span>Original rule retained</div>
+ </div>
+ <div class="abs" id="reviewVerdict" style="left:116px;top:728px;font-size:47px;font-weight:500;letter-spacing:-.035em"></div>
+ <div class="abs sub" id="reviewNote" style="left:116px;top:803px;width:765px;font-size:27px">A failed review triggers a correction.<br>The brief stays locked.</div>
+ <div class="abs" id="reviewImage" style="left:1030px;top:172px;width:750px;height:750px;overflow:hidden;border:1px solid #d5d4cf;border-radius:8px">
+  <img src="../results/ui/rejected-1.png" style="position:absolute;inset:0;width:750px;height:750px" alt="Rejected UI output with green accents">
+  <img id="reviewFixed" src="../results/ui/1.png" style="position:absolute;inset:0;width:750px;height:750px" alt="Accepted corrected blue-only UI output">
+ </div>
+ <div class="abs label" id="reviewImageLabel" style="left:1030px;top:946px"></div>
+</div></section>
+
+<section class="scene" id="s5"><div class="cam" id="cam5">
+ <h1 class="abs head" id="uiHead" style="left:110px;top:150px;font-size:76px">Matching UI concepts, too.</h1>
+ <img class="result" id="uiOne" src="../results/ui/1.png" style="left:225px;top:285px;width:680px;height:680px" alt="Accepted analytics dashboard concept">
+ <img class="result" id="uiTwo" src="../results/ui/2.png" style="left:1015px;top:285px;width:680px;height:680px" alt="Matching account settings concept">
+</div></section>
+
+<section class="scene" id="s6"><div class="cam" id="cam6">
+ <h1 class="abs head" id="clientsHead" style="left:0;right:0;top:202px;text-align:center;font-size:86px">Your tools. One saved brief.</h1>
+ <div class="client" id="codexClient" style="left:210px">Codex</div>
+ <div class="connector" id="connectLeft" style="left:640px"></div>
+ <div class="abs" id="sharedBrief" style="left:790px;top:437px;width:340px;height:246px;background:#3868ed;color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:42px;font-weight:500;letter-spacing:-.035em;line-height:1.15">One saved<br>design brief</div>
+ <div class="connector" id="connectRight" style="left:1130px"></div>
+ <div class="client" id="claudeClient" style="left:1280px">Claude</div>
+ <div class="abs" id="clientsLine" style="left:0;right:0;top:758px;text-align:center;font-size:38px;font-weight:500;letter-spacing:-.025em">Skill + local MCP</div>
+ <div class="abs sub" id="clientsNote" style="left:0;right:0;top:843px;text-align:center;font-size:27px">Claude requires a connected image-generation tool.</div>
+</div></section>
+
+<section class="scene dark" id="s7"><div class="cam" id="cam7">
+ <div class="abs wordmark" id="outroName" style="left:0;right:0;top:212px;text-align:center;font-size:170px">idra-photo</div>
+ <div class="abs" id="outroLine" style="left:0;right:0;top:435px;text-align:center;font-size:44px;letter-spacing:-.03em;color:#c6c9c9">Your AI generates. Idra manages the batch.</div>
+ <img class="result outroTile" src="../results/product/1.png" style="left:567px;top:575px;width:180px;height:180px" alt="Product result one">
+ <img class="result outroTile" src="../results/product/2.png" style="left:769px;top:575px;width:180px;height:180px" alt="Product result two">
+ <img class="result outroTile" src="../results/ui/1.png" style="left:971px;top:575px;width:180px;height:180px" alt="Dashboard result">
+ <img class="result outroTile" src="../results/ui/2.png" style="left:1173px;top:575px;width:180px;height:180px" alt="Settings result">
+ <div class="abs" id="outroUrl" style="left:0;right:0;top:861px;text-align:center;font-size:34px;font-weight:500;letter-spacing:-.02em">github.com/bbrainfuckk/idra-photo</div>
+</div></section>
+<div id="header"><b>idra-photo</b><span id="chapter"></span></div>
+<div id="progress"></div>
+<div id="footer"><span>Real generated results · illustrated workflow</span><span>Built with idra-motion</span></div>
+</div>
+<script type="module">
+import { clamp, lerp, seg, ease, easeOut, spring, vis, cam, typed, $, $$ } from "/engine/motion.js";
+import { mix, PROGRESSION } from "/engine/sound.js";
+import { film } from "/engine/stage.js";
+
+const DURATION=36;
+const BEATS=[
+ {at:0,end:3.5,label:"Keep the look"},
+ {at:3.5,end:8,label:"The prompt"},
+ {at:8,end:13,label:"The design brief"},
+ {at:13,end:17.5,label:"Product photos"},
+ {at:17.5,end:23.5,label:"Review + correction"},
+ {at:23.5,end:28.5,label:"UI concepts"},
+ {at:28.5,end:32,label:"Skill + MCP"},
+ {at:32,end:36,label:"Start creating"},
+];
+const PROMPT="Make 2 square skincare photos.";
+const TYPE_AT=4.40, TYPE_CPS=23;
+const RULE_AT=[8.60,8.94,9.28,9.62];
+const CORRECT_AT=20.65;
+const E=Object.fromEntries($$("[id]").map(el=>[el.id,el]));
+const scenes=BEATS.map((_,i)=>E["s"+i]);
+const introTiles=$$(".introTile"),outroTiles=$$(".outroTile"),rules=$$("#rulesList .rule");
+function rise(el,t,at,{dy=36,dx=0,w=13,z=.94}={}){
+ const k=spring(t-at,w,z);
+ vis(el,clamp(k*1.5));
+ el.style.transform="translate("+lerp(dx,0,k)+"px,"+lerp(dy,0,k)+"px)";
+}
+function draw(t){
+ let n=BEATS.findIndex(b=>t>=b.at&&t<b.end);if(n<0)n=t>=36?7:0;
+ scenes.forEach((el,i)=>vis(el,i===n?1:0));
+ const dark=n===0||n===7;
+ E.header.style.color=dark?"#f2f0e9":"#191b1d";
+ E.header.style.borderColor=dark?"#3f4244":"#d5d4cf";
+ E.footer.style.color=dark?"#858b8d":"#818487";
+ E.chapter.textContent=String(n+1).padStart(2,"0")+" / 08 · "+BEATS[n].label;
+ E.progress.style.width=(1748*clamp(t/DURATION))+"px";
+ const b=BEATS[n],local=t-b.at;
+ const c=E["cam"+n];
+ cam(c,960,540,lerp(1.012,1,ease(seg(local,0,b.end-b.at))));
+ if(n===0){
+  rise(E.introName,t,.18,{dy:48});rise(E.introLine,t,.58);rise(E.introTag,t,1.0);
+  introTiles.forEach((el,i)=>rise(el,t,.35+i*.16,{dy:65,dx:18,w:12}));
+  rise(E.introCaption,t,1.2,{dy:12});
+ }
+ if(n===1){
+  rise(E.promptHead,t,3.65);rise(E.promptSub,t,3.90);rise(E.promptPanel,t,3.77,{dy:50,dx:40});
+  typed(E.promptText,PROMPT,t,TYPE_AT,TYPE_CPS);
+  rise(E.briefReady,t,6.12,{dy:14});
+ }
+ if(n===2){
+  rise(E.rulesHead,t,8.08);rise(E.rulePhoto,t,8.20,{dy:44,dx:40});
+  rules.forEach((el,i)=>rise(el,t,RULE_AT[i],{dy:14,dx:-22}));
+  rise(E.ruleCaption,t,10.02,{dy:12});
+ }
+ if(n===3){
+  rise(E.pairHead,t,13.08,{dy:25});
+  rise(E.pairOne,t,13.20,{dy:48,dx:-32});rise(E.pairTwo,t,13.55,{dy:48,dx:32});
+  rise(E.pairLabelOne,t,13.70,{dy:12});rise(E.pairLabelTwo,t,13.90,{dy:12});
+ }
+ if(n===4){
+  rise(E.reviewHead,t,17.58,{dy:30});rise(E.reviewRule,t,17.85,{dy:18});
+  rise(E.reviewCrop,t,18.12,{dy:26});rise(E.reviewImage,t,17.72,{dy:40,dx:30});
+  const k=ease(seg(t,CORRECT_AT,CORRECT_AT+.65));
+  E.reviewFixed.style.clipPath="inset(0 "+(100*(1-k))+"% 0 0)";
+  vis(E.cropCover,easeOut(seg(t,CORRECT_AT+.25,CORRECT_AT+.75)));
+  E.reviewVerdict.textContent=t<CORRECT_AT?"Extra green? Reject.":"Correct. Review again.";
+  E.reviewVerdict.style.color=t<CORRECT_AT?"#191b1d":"#3868ed";
+  rise(E.reviewVerdict,t,18.30,{dy:16});rise(E.reviewNote,t,18.55,{dy:12});
+  E.reviewImageLabel.textContent=t<CORRECT_AT?"Actual rejected attempt":"Accepted corrected attempt";
+  rise(E.reviewImageLabel,t,18.0,{dy:12});
+ }
+ if(n===5){
+  rise(E.uiHead,t,23.58,{dy:25});rise(E.uiOne,t,23.75,{dy:55,dx:-35});rise(E.uiTwo,t,24.05,{dy:55,dx:35});
+ }
+ if(n===6){
+  rise(E.clientsHead,t,28.58,{dy:25});rise(E.sharedBrief,t,28.72,{dy:24});
+  rise(E.codexClient,t,28.80,{dy:25,dx:-25});rise(E.claudeClient,t,28.98,{dy:25,dx:25});
+  E.connectLeft.style.transform="scaleX("+easeOut(seg(t,29.05,29.42))+")";
+  E.connectRight.style.transform="scaleX("+easeOut(seg(t,29.18,29.55))+")";
+  rise(E.clientsLine,t,29.20,{dy:16});rise(E.clientsNote,t,29.50,{dy:12});
+ }
+ if(n===7){
+  rise(E.outroName,t,32.12,{dy:50});rise(E.outroLine,t,32.50,{dy:25});
+  outroTiles.forEach((el,i)=>rise(el,t,32.60+i*.11,{dy:45}));
+  rise(E.outroUrl,t,33.05,{dy:16});
+ }
+}
+async function sound(ctx){
+ const m=mix(ctx,{levels:{vo:.6,sfx:.34,music:.48}});
+ m.pad(0,4,DURATION,PROGRESSION,{pluck:true});
+ // A quiet pulse supports the edit without obscuring the product images.
+ for(let at=0;at<32;at+=2){
+  m.tone({freq:82.41,at,dur:.24,peak:.12,attack:.006,release:.23,cutoff:210});
+ }
+ const cues=[
+  m.sfx("pop",.28,.25,.85),
+  ...BEATS.slice(1).map((b,i)=>m.sfx("whoosh",b.at-.12,.16,i===6?.78:1.08)),
+  m.keys(TYPE_AT,PROMPT.length,TYPE_CPS,.12,11),
+  ...RULE_AT.map((at,i)=>m.sfx("tick",at+.04,.23,.92+i*.08)),
+  m.sfx("pop",13.28,.23,.90),m.sfx("pop",13.63,.23,1.03),
+  m.sfx("click",18.32,.33,.68),
+  m.sfx("click",CORRECT_AT,.48,1.08),m.sfx("pop",CORRECT_AT+.48,.28,1.12),
+  m.sfx("pop",23.83,.23,.96),m.sfx("pop",24.13,.23,1.08),
+  m.sfx("tick",29.20,.24,1),m.sfx("tick",29.40,.24,1.15),
+  m.sfx("impact",32.10,.38,.88),
+ ];
+ await Promise.all(cues);
+}
+film({width:1920,height:1080,duration:DURATION,draw,sound,
+ fonts:["400 40px IDRA","500 40px IDRA","600 40px IDRA","700 40px IDRA"],
+ ready:async()=>{for(const img of document.images)if(!img.naturalWidth)throw new Error("Missing image: "+img.src);}
+});
+</script>
+</body>
+</html>
