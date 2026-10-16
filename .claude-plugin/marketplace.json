@@ -1,0 +1,6 @@
+{
+  "name": "idra-photo",
+  "description": "The Idra Photo design skill and local image-batch MCP.",
+  "owner": { "name": "bbrainfuckk" },
+  "plugins": [{ "name": "idra-photo", "source": "./", "description": "Consistent images from a short brief, with a skill and local MCP." }]
+}

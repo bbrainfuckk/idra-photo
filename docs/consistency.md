@@ -4,7 +4,9 @@ Decide the visual system once and reuse it across a batch. Idra v0.2 stores a na
 
 ## For designers
 
-Give Codex a reference and a brief with three parts:
+Start with a short request such as **“Use Idra Photo: make 2 skincare photos”** or **“Make a matching dashboard and settings screen.”** The portable skill prepares the detailed rules with `idra_design_brief`, states its assumptions, and checks that generation is available. See [Codex/Claude setup](claude.md) and [real results](results/README.md).
+
+For a particular brand or look, add a reference and these details when you have them:
 
 1. What to make, who it is for, and the required aspect ratio.
 2. What stays fixed: palette, medium, lighting, typography, layout, materials, branding, and exclusions that matter to the project.
@@ -28,7 +30,7 @@ The first reviewed, accepted image becomes an additional **style** reference for
 
 ## Review protocol
 
-Inspect the actual result against the references. Compute its SHA-256 with a normal file tool, then submit `idra_step.completed.review`:
+Inspect the actual result against the references. `idra_inspect_image` returns authorized image pixels and their SHA-256; a local viewer plus a file hash also works. Metadata alone is not a visual review. Then submit `idra_step.completed.review`:
 
 ```json
 {
@@ -54,4 +56,4 @@ Accepted reviews and rejected-attempt evidence are exported in `manifest.json`. 
 
 Idra deterministically checks contract identity, review coverage, file identity, automatic variation axes, aspect, image structure, duplicate bytes, and retry limits. **Visual observations are host-supplied judgments. Idra has no vision model and cannot prove that observations are truthful.** A complete checklist is not proof of exact color, geometry, text, identity, or quality. Exact logos, typesetting, and final UI geometry may require real assets, an editor, or UI code.
 
-Automated tests use synthetic images and explicitly synthetic observations. They prove acceptance, persistence, recovery, and retry behavior; they do not benchmark an image model. A real visual smoke test should use a designer-approved reference, reject one drifting result, and check whether the correction improves the next attempt without changing the rules.
+Automated tests use synthetic images and explicitly synthetic observations. They prove acceptance, persistence, recovery, and retry behavior; they do not benchmark an image model. The [real product/UI demonstrations](results/README.md) record actual rejected attempts and corrections. A larger independent designer review and cross-model benchmark remain open.

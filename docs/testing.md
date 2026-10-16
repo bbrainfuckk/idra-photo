@@ -13,12 +13,16 @@ npm test
 | Unit | `tests/unit/validate.test.ts`, `planning.test.ts` | Image decoding and limits, planning modes, duplicate flags, prompt and constraint assembly |
 | Queue and recovery | `tests/unit/queue.test.ts` | Claims, idempotency, the combined step, conflicts, retries, pause/resume/cancel, extend, reconcile, crash points, path security, manifests, migrations |
 | Strict consistency | `tests/unit/consistency.test.ts`, MCP integration | Missing/stale/wrong-file evidence, complete rule coverage, rejected pixels, corrected retries, exhaustion, aspect, recovery, persisted contracts, allowed variation, and anchor availability |
-| MCP integration | `tests/integration/mcp.test.ts` | Protocol-clean stdout, 8 annotated tools, strict review schemas, the 100-job run over stdio, a killed-and-resumed process, concurrent processes, no network, no API clients |
+| Beginner brief | `tests/unit/brief.test.ts` | A short prompt produces a runnable strict request without creating a batch; explicit direction replaces defaults, content checks remain, and counts/aspects are validated |
+| MCP integration | `tests/integration/mcp.test.ts` | Protocol-clean stdout, 10 annotated tools, actual image bytes/hash inspection, strict review schemas, the 100-job run over stdio, a killed-and-resumed process, concurrent processes, no network, no API clients |
+| Client setup | `tests/integration/install.test.ts` | Codex/Claude installers preserve other settings, install the portable skill, are idempotent, and launch the real local MCP |
 | Packaging | `npm run pack:check` | Installs from the packed tarball and runs `doctor` and `simulate` from the installed copy |
 | Overhead | `npm run overhead` | Bytes and calls, see `overhead.md` |
 | Real native generation | manual, below | Not automated, because it uses real image generation |
 
 A simulated 100-job success proves queue behavior. It does not prove 100 real generations.
+
+The v0.2.1 Windows run passes 78 tests. [Real generation results](results/README.md) separately record four accepted product/UI images and two rejected attempts. The Claude CLI connected to the MCP and discovered the skill, but model execution stopped at login; see [compatibility evidence](compatibility.md).
 
 ## Real smoke test: 3 images (needs your OK, uses your Codex plan)
 
@@ -29,7 +33,7 @@ A simulated 100-job success proves queue behavior. It does not prove 100 real ge
    - Did Codex call `idra_create_batch` with the reference and `style: strict`?
    - Did it `view_image` the reference before generating?
    - How did it report each file: an `artifact_path` from `generated_images`, or a copy to `save_to`?
-   - Did it continue to images 2 and 3 on its own, or did you have to say "continue"? This is the key open question.
+   - Did it continue to images 2 and 3 on its own, or did you have to say "continue"? Recheck this for the particular host/model being tested.
    - `outputs/<batch>/` holds 3 files, and `manifest.json` shows 3 completed with distinct hashes.
 5. Put the answers in `docs/compatibility.md`.
 

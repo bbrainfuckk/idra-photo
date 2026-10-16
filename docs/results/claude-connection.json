@@ -1,0 +1,30 @@
+{
+  "checked_on": "2026-10-16",
+  "client": "Claude Code",
+  "client_version": "2.1.296",
+  "transport": "local stdio MCP",
+  "server": {
+    "name": "idra_photo",
+    "status": "connected"
+  },
+  "skill_discovered": "idra-photo",
+  "available_idra_tools": [
+    "mcp__idra_photo__idra_control_batch",
+    "mcp__idra_photo__idra_create_batch",
+    "mcp__idra_photo__idra_design_brief",
+    "mcp__idra_photo__idra_design_library",
+    "mcp__idra_photo__idra_extend",
+    "mcp__idra_photo__idra_inspect_image",
+    "mcp__idra_photo__idra_reconcile",
+    "mcp__idra_photo__idra_report_problem",
+    "mcp__idra_photo__idra_status",
+    "mcp__idra_photo__idra_step"
+  ],
+  "model_test": {
+    "completed": false,
+    "reason": "Not logged in; Claude requested /login.",
+    "tool_calls_performed": false,
+    "images_generated": 0
+  },
+  "limits": "This verifies client connection, tool discovery, and skill discovery. It does not verify model-backed skill behavior or image generation. Private paths, session identifiers, and unrelated configuration were omitted."
+}

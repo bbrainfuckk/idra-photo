@@ -1,0 +1,227 @@
+{
+  "schema": "idra.manifest.v1",
+  "exported_at": "2026-10-16T04:07:15.427Z",
+  "simulated": false,
+  "batch": {
+    "id": "b_f1a217eb3a9a",
+    "slug": "create-one-standalone-image-for-this-bri-2",
+    "created_at": "2026-10-16T03:58:33.687Z",
+    "request": "Make 2 square skincare product photos.",
+    "planning_mode": "variations",
+    "variety": "subtle",
+    "base_prompt": "Create one standalone image for this brief: Make 2 square skincare product photos.\nThis is one output in the requested set; do not combine the set into a collage or grid.",
+    "target_aspect": "1:1",
+    "constraints": {
+      "product": "off",
+      "identity": "off",
+      "text": "off",
+      "composition": "off",
+      "style": "off",
+      "product_details": [],
+      "text_content": [],
+      "avoid": []
+    },
+    "consistency": {
+      "name": "photo starter design",
+      "rules": [
+        {
+          "id": "palette",
+          "instruction": "Use a warm cream backdrop and restrained neutral colors. Keep the same color grading across the set; retain any supplied product colors."
+        },
+        {
+          "id": "lighting",
+          "instruction": "Soft diffused window light from the upper left, gentle contact shadows, and natural exposure throughout the set."
+        },
+        {
+          "id": "finish",
+          "instruction": "Editorial product photography with realistic materials and a matte finish. No glossy CGI, decorative gradients, or floating objects."
+        },
+        {
+          "id": "layout",
+          "instruction": "One clear focal subject, clean background, and generous breathing room. Keep the same visual density across the set."
+        },
+        {
+          "id": "exclusions",
+          "instruction": "Do not invent a real brand, logo, product claims, label text, or watermark. A supplied real product must retain its actual packaging."
+        }
+      ],
+      "allowed_changes": [
+        "angle"
+      ]
+    },
+    "max_retries": 2,
+    "status": "active",
+    "paused": false,
+    "pause_reason": null
+  },
+  "references": [],
+  "counts": {
+    "requested": 2,
+    "completed": 2,
+    "pending": 0,
+    "cooling": 0,
+    "claimed": 0,
+    "failed": 0,
+    "uncertain": 0,
+    "cancelled": 0
+  },
+  "jobs": [
+    {
+      "seq": 1,
+      "concept": "One unbranded matte skincare pump bottle, shown front-on on the cream studio surface.",
+      "prompt": "LOCKED DESIGN CONTRACT: photo starter design\n[palette] Use a warm cream backdrop and restrained neutral colors. Keep the same color grading across the set; retain any supplied product colors.\n[lighting] Soft diffused window light from the upper left, gentle contact shadows, and natural exposure throughout the set.\n[finish] Editorial product photography with realistic materials and a matte finish. No glossy CGI, decorative gradients, or floating objects.\n[layout] One clear focal subject, clean background, and generous breathing room. Keep the same visual density across the set.\n[exclusions] Do not invent a real brand, logo, product claims, label text, or watermark. A supplied real product must retain its actual packaging.\nOnly these dimensions may change between images: angle.\nAll other design decisions remain fixed. If the concept conflicts with a locked rule, resolve the conflict before generation; do not silently weaken the contract.\n\nCreate one standalone image for this brief: Make 2 square skincare product photos.\nThis is one output in the requested set; do not combine the set into a collage or grid.\n\nVariation for this image: One unbranded matte skincare pump bottle, shown front-on on the cream studio surface.\n\nTarget aspect ratio 1:1.",
+      "state": "completed",
+      "attempts": 1,
+      "duplicate_concept_of": null,
+      "error": null,
+      "artifact": {
+        "file": "001-one-unbranded-matte-skincare-pum.png",
+        "sha256": "e2b5c9c5a66b24174e632f26eaf935e6cf4f02d7b0202e7ee02e6bcfe2c17480",
+        "bytes": 1653780,
+        "width": 1254,
+        "height": 1254,
+        "format": "png",
+        "requested_aspect": "1:1",
+        "actual_aspect": "1:1",
+        "aspect_matches": true,
+        "completed_at": "2026-10-16T04:00:08.571Z"
+      },
+      "visual_review": {
+        "performed": true,
+        "passed": true,
+        "contract_hash": "d6207b3c400760c2e21543734f8a6e02913d9da4511b4621f16a61cf07c3c0f2",
+        "artifact_sha256": "e2b5c9c5a66b24174e632f26eaf935e6cf4f02d7b0202e7ee02e6bcfe2c17480",
+        "checks": [
+          {
+            "rule_id": "palette",
+            "passed": true,
+            "observed": "Warm cream bottle, backdrop, and surface; restrained beige shadow tones with no saturated accents."
+          },
+          {
+            "rule_id": "lighting",
+            "passed": true,
+            "observed": "Broad illumination falls from the upper left; the bottle casts a soft contact shadow to the right."
+          },
+          {
+            "rule_id": "finish",
+            "passed": true,
+            "observed": "Bottle and pump have a matte texture and soft highlights; no floating object or glossy CGI treatment is visible."
+          },
+          {
+            "rule_id": "layout",
+            "passed": true,
+            "observed": "One centered bottle is the clear focal subject, with open space around it on a clean surface."
+          },
+          {
+            "rule_id": "exclusions",
+            "passed": true,
+            "observed": "No logo, label text, claims, or watermark is visible. This is a generic product concept, not a real SKU reference."
+          }
+        ]
+      },
+      "rejected_attempts": []
+    },
+    {
+      "seq": 2,
+      "concept": "The same unbranded matte skincare pump bottle, with only a slight three-quarter change of camera angle.",
+      "prompt": "LOCKED DESIGN CONTRACT: photo starter design\n[palette] Use a warm cream backdrop and restrained neutral colors. Keep the same color grading across the set; retain any supplied product colors.\n[lighting] Soft diffused window light from the upper left, gentle contact shadows, and natural exposure throughout the set.\n[finish] Editorial product photography with realistic materials and a matte finish. No glossy CGI, decorative gradients, or floating objects.\n[layout] One clear focal subject, clean background, and generous breathing room. Keep the same visual density across the set.\n[exclusions] Do not invent a real brand, logo, product claims, label text, or watermark. A supplied real product must retain its actual packaging.\nOnly these dimensions may change between images: angle.\nAll other design decisions remain fixed. If the concept conflicts with a locked rule, resolve the conflict before generation; do not silently weaken the contract.\n\nCreate one standalone image for this brief: Make 2 square skincare product photos.\nThis is one output in the requested set; do not combine the set into a collage or grid.\n\nVariation for this image: The same unbranded matte skincare pump bottle, with only a slight three-quarter change of camera angle.\n\nTarget aspect ratio 1:1.",
+      "state": "completed",
+      "attempts": 2,
+      "duplicate_concept_of": null,
+      "error": null,
+      "artifact": {
+        "file": "002-the-same-unbranded-matte-skincar.png",
+        "sha256": "d1149a142418b110d52259173de4da160c8d19bd0ad2fa97cf8a4a1732324c8e",
+        "bytes": 1647250,
+        "width": 1254,
+        "height": 1254,
+        "format": "png",
+        "requested_aspect": "1:1",
+        "actual_aspect": "1:1",
+        "aspect_matches": true,
+        "completed_at": "2026-10-16T04:07:14.218Z"
+      },
+      "visual_review": {
+        "performed": true,
+        "passed": true,
+        "notes": "The pump spout now visibly foreshortens and its opening is visible, so the requested changed viewpoint is distinguishable from the front-on anchor. The overall cream editorial treatment remains coherent; this is not a pixel-exact SKU test.",
+        "contract_hash": "d6207b3c400760c2e21543734f8a6e02913d9da4511b4621f16a61cf07c3c0f2",
+        "artifact_sha256": "d1149a142418b110d52259173de4da160c8d19bd0ad2fa97cf8a4a1732324c8e",
+        "checks": [
+          {
+            "rule_id": "palette",
+            "passed": true,
+            "observed": "The bottle and backdrop retain the warm cream and beige treatment of the anchor."
+          },
+          {
+            "rule_id": "lighting",
+            "passed": true,
+            "observed": "Soft upper-left illumination and rightward contact shadow match the first image."
+          },
+          {
+            "rule_id": "finish",
+            "passed": true,
+            "observed": "The pump bottle remains matte with a realistic textured surface and soft highlights."
+          },
+          {
+            "rule_id": "layout",
+            "passed": true,
+            "observed": "A single centered bottle and surrounding negative space match the anchor's density."
+          },
+          {
+            "rule_id": "exclusions",
+            "passed": true,
+            "observed": "No text, logo, product claims, or watermark is visible."
+          }
+        ]
+      },
+      "rejected_attempts": [
+        {
+          "attempt": 1,
+          "artifact_sha256": "52529c55e822b2215f6be614ccbdddec6bc20787a4432a085c22b054c988fce5",
+          "failures": [
+            "The requested three-quarter camera angle is not clearly distinguishable from the front-on anchor. Turn the viewpoint about 30 degrees around the bottle so the pump spout visibly foreshortens, while preserving the same product, light, background, and framing."
+          ],
+          "review": {
+            "performed": true,
+            "passed": false,
+            "notes": "The requested three-quarter camera angle is not clearly distinguishable from the front-on anchor. Turn the viewpoint about 30 degrees around the bottle so the pump spout visibly foreshortens, while preserving the same product, light, background, and framing.",
+            "contract_hash": "d6207b3c400760c2e21543734f8a6e02913d9da4511b4621f16a61cf07c3c0f2",
+            "artifact_sha256": "52529c55e822b2215f6be614ccbdddec6bc20787a4432a085c22b054c988fce5",
+            "checks": [
+              {
+                "rule_id": "palette",
+                "passed": true,
+                "observed": "The bottle and backdrop retain the warm cream and beige treatment of the anchor."
+              },
+              {
+                "rule_id": "lighting",
+                "passed": true,
+                "observed": "Soft upper-left illumination and rightward contact shadow match the first image."
+              },
+              {
+                "rule_id": "finish",
+                "passed": true,
+                "observed": "The pump bottle remains matte with a realistic textured surface and soft highlights."
+              },
+              {
+                "rule_id": "layout",
+                "passed": true,
+                "observed": "A single centered bottle and surrounding negative space match the anchor's density."
+              },
+              {
+                "rule_id": "exclusions",
+                "passed": true,
+                "observed": "No text, logo, product claims, or watermark is visible."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "A valid file is not proof that the product, face, text, or style was preserved; see visual_review.",
+    "Artifacts were saved by the host agent from its own image tool."
+  ]
+}

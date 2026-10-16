@@ -37,7 +37,7 @@ test('strict contract and image-bound review are enforced through the real MCP s
   } finally { await host.close(); }
 });
 
-test('stdout carries only JSON-RPC; tools/list exposes exactly eight annotated tools', async () => {
+test('stdout carries only JSON-RPC; tools/list exposes exactly ten annotated tools', async () => {
   const ws = tmpWorkspace();
   const child = spawn(process.execPath, [CLI, 'serve', '--workspace', ws], { stdio: ['pipe', 'pipe', 'pipe'] });
   let out = '';
@@ -63,11 +63,29 @@ test('stdout carries only JSON-RPC; tools/list exposes exactly eight annotated t
   const tools = (msgs.find((m) => m.id === 2)!.result!['tools'] as { name: string; annotations: { readOnlyHint?: boolean } }[]).sort((a, b) => a.name.localeCompare(b.name));
   assert.deepEqual(
     tools.map((t) => t.name),
-    ['idra_control_batch', 'idra_create_batch', 'idra_design_library', 'idra_extend', 'idra_reconcile', 'idra_report_problem', 'idra_status', 'idra_step'],
+    ['idra_control_batch', 'idra_create_batch', 'idra_design_brief', 'idra_design_library', 'idra_extend', 'idra_inspect_image', 'idra_reconcile', 'idra_report_problem', 'idra_status', 'idra_step'],
   );
-  for (const t of tools) assert.equal(t.annotations.readOnlyHint, ['idra_status', 'idra_design_library'].includes(t.name));
+  for (const t of tools) assert.equal(t.annotations.readOnlyHint, ['idra_status', 'idra_design_library', 'idra_design_brief', 'idra_inspect_image'].includes(t.name));
   const bad = msgs.find((m) => m.id === 4)!.result! as { isError?: boolean };
   assert.equal(bad.isError, true, 'malformed ids are rejected by schema validation');
+});
+
+test('MCP image inspection returns actual image bytes and their hash within authorized roots only', async () => {
+  const ws = tmpWorkspace();
+  const file = refPng(ws);
+  const outside = refPng(tmpWorkspace());
+  const host = await FakeHost.connect({ cliPath: CLI, workspace: ws });
+  try {
+    const result = await host.client.callTool({ name: 'idra_inspect_image', arguments: { path: file } });
+    const content = result.content as { type: string; text?: string; data?: string; mimeType?: string }[];
+    const metadata = JSON.parse(content.find((c) => c.type === 'text')!.text!);
+    const pixels = content.find((c) => c.type === 'image')!;
+    assert.equal(metadata.artifact_sha256, sha256Hex(fs.readFileSync(file)));
+    assert.equal(metadata.visual_review_performed, false);
+    assert.equal(pixels.mimeType, 'image/png');
+    assert.deepEqual(Buffer.from(pixels.data!, 'base64'), fs.readFileSync(file));
+    assert.equal((await host.call('idra_inspect_image', { path: outside })).isError, true);
+  } finally { await host.close(); }
 });
 
 test('simulated 100-job batch over stdio: 100 distinct validated outputs matching the manifest', async () => {
