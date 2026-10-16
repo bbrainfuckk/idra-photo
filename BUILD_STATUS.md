@@ -1,5 +1,24 @@
 # Build status
 
+## v0.2 — 2026-10-16
+
+Strict consistency contracts, mandatory image-bound review evidence, bounded correction retries, and an offline design library are implemented. The library contains 298 text files from six pinned source repos, including 171 image-style definitions, with upstream licenses and attribution.
+
+Verified locally on Windows with Node 24.20.0:
+
+| Check | Result |
+|---|---|
+| `npm run typecheck` | Pass |
+| `npm test` | 74/74 pass, including strict evidence/rejection/recovery tests and MCP integration |
+| `npm run pack:check` | Pass; installed doctor/simulation work and all six library sources are readable |
+| `npm run clone:check` | Pass from the committed clone without npm install; install, doctor, simulation, uninstall, and library access work |
+| `npm audit` | 0 vulnerabilities after updating the compatible MCP SDK |
+| Bundle freshness | `idra-photo.mjs` and third-party package notices regenerated and committed |
+
+These are fixture and distribution checks. No real v0.2 image batch has been visually benchmarked. Idra validates review structure, hashes, aspect, and retry policy; the host supplies the visual judgments. Next: run the designer-reviewed strict smoke test in `docs/consistency.md`.
+
+## Historical v0.1 record
+
 Updated 2026-09-22. Two separate deliverables, two separate statuses:
 
 | Deliverable | Status |
