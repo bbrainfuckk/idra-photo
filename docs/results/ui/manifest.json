@@ -1,0 +1,245 @@
+{
+  "schema": "idra.manifest.v1",
+  "exported_at": "2026-10-16T04:11:23.251Z",
+  "simulated": false,
+  "batch": {
+    "id": "b_dae3675f03e0",
+    "slug": "create-one-standalone-image-for-this-bri",
+    "created_at": "2026-10-16T04:04:08.395Z",
+    "request": "Make a matching dashboard and settings screen, square.",
+    "planning_mode": "variations",
+    "variety": "subtle",
+    "base_prompt": "Create one standalone image for this brief: Make a matching dashboard and settings screen, square.\nThis is one output in the requested set; do not combine the set into a collage or grid.",
+    "target_aspect": "1:1",
+    "constraints": {
+      "product": "off",
+      "identity": "off",
+      "text": "off",
+      "composition": "off",
+      "style": "off",
+      "product_details": [],
+      "text_content": [],
+      "avoid": []
+    },
+    "consistency": {
+      "name": "ui starter design",
+      "rules": [
+        {
+          "id": "palette",
+          "instruction": "Use a white canvas, charcoal primary text, muted gray borders, and a single blue accent. Keep identical color roles across screens."
+        },
+        {
+          "id": "typography",
+          "instruction": "Use one neutral sans-serif family with regular body text and semibold headings. Keep the same heading/body/caption hierarchy."
+        },
+        {
+          "id": "components",
+          "instruction": "Reuse button, input, icon, corner-radius, and spacing treatments. Keep the same sidebar width and navigation treatment across screens."
+        },
+        {
+          "id": "layout",
+          "instruction": "Use a desktop app layout with a left sidebar, page title, aligned content edges, and restrained density. Avoid nested card stacks, heavy shadows, and decorative gradients."
+        },
+        {
+          "id": "legibility",
+          "instruction": "Use short readable UI labels and clear hierarchy. No invented brand logo or watermarks. This is a visual concept, not a claim of functional code."
+        },
+        {
+          "id": "brief",
+          "instruction": "Verify the requested subject and this job's specific content or variation are actually present. Matching the style alone is insufficient; reject the result if it misses the requested content, screen, product, or change."
+        }
+      ],
+      "allowed_changes": [
+        "subject",
+        "text"
+      ]
+    },
+    "max_retries": 2,
+    "status": "active",
+    "paused": false,
+    "pause_reason": null
+  },
+  "references": [],
+  "counts": {
+    "requested": 2,
+    "completed": 2,
+    "pending": 0,
+    "cooling": 0,
+    "claimed": 0,
+    "failed": 0,
+    "uncertain": 0,
+    "cancelled": 0
+  },
+  "jobs": [
+    {
+      "seq": 1,
+      "concept": "Show the analytics dashboard, with a left sidebar, summary metrics, a simple chart, and a recent activity table.",
+      "prompt": "LOCKED DESIGN CONTRACT: ui starter design\n[palette] Use a white canvas, charcoal primary text, muted gray borders, and a single blue accent. Keep identical color roles across screens.\n[typography] Use one neutral sans-serif family with regular body text and semibold headings. Keep the same heading/body/caption hierarchy.\n[components] Reuse button, input, icon, corner-radius, and spacing treatments. Keep the same sidebar width and navigation treatment across screens.\n[layout] Use a desktop app layout with a left sidebar, page title, aligned content edges, and restrained density. Avoid nested card stacks, heavy shadows, and decorative gradients.\n[legibility] Use short readable UI labels and clear hierarchy. No invented brand logo or watermarks. This is a visual concept, not a claim of functional code.\n[brief] Verify the requested subject and this job's specific content or variation are actually present. Matching the style alone is insufficient; reject the result if it misses the requested content, screen, product, or change.\nOnly these dimensions may change between images: subject, text.\nAll other design decisions remain fixed. If the concept conflicts with a locked rule, resolve the conflict before generation; do not silently weaken the contract.\n\nCreate one standalone image for this brief: Make a matching dashboard and settings screen, square.\nThis is one output in the requested set; do not combine the set into a collage or grid.\n\nVariation for this image: Show the analytics dashboard, with a left sidebar, summary metrics, a simple chart, and a recent activity table.\n\nTarget aspect ratio 1:1.",
+      "state": "completed",
+      "attempts": 2,
+      "duplicate_concept_of": null,
+      "error": null,
+      "artifact": {
+        "file": "001-show-the-analytics-dashboard-wit.png",
+        "sha256": "c99ff45ca3aeec9eb7da985b6d8502189fbbe0e733afb43997a35e1682a5f838",
+        "bytes": 1592928,
+        "width": 1254,
+        "height": 1254,
+        "format": "png",
+        "requested_aspect": "1:1",
+        "actual_aspect": "1:1",
+        "aspect_matches": true,
+        "completed_at": "2026-10-16T04:09:13.755Z"
+      },
+      "visual_review": {
+        "performed": true,
+        "passed": true,
+        "contract_hash": "5e226bc91f8b034b2bc0f560acae972cb80436031f8e0a59fbdc279179edb648",
+        "artifact_sha256": "c99ff45ca3aeec9eb7da985b6d8502189fbbe0e733afb43997a35e1682a5f838",
+        "checks": [
+          {
+            "rule_id": "palette",
+            "passed": true,
+            "observed": "White canvas, charcoal text, muted gray outlines, and blue navigation/chart/trend accents. The previous green percentages and checkmarks have been removed."
+          },
+          {
+            "rule_id": "typography",
+            "passed": true,
+            "observed": "One neutral sans-serif treatment has a bold page heading, smaller section headings, and regular readable body text."
+          },
+          {
+            "rule_id": "components",
+            "passed": true,
+            "observed": "Inputs and outlined panels use consistent small radii, light gray borders, and a shared icon stroke style."
+          },
+          {
+            "rule_id": "layout",
+            "passed": true,
+            "observed": "The desktop composition has a left sidebar, aligned title, summary metrics, chart, and activity table without heavy shadows or decorative background gradients."
+          },
+          {
+            "rule_id": "legibility",
+            "passed": true,
+            "observed": "Dashboard, navigation items, metrics, date filter, and table labels are readable. No invented brand logo or watermark is visible."
+          },
+          {
+            "rule_id": "brief",
+            "passed": true,
+            "observed": "This is the requested analytics dashboard with sidebar, metrics, a simple chart, and a recent activity table."
+          }
+        ]
+      },
+      "rejected_attempts": [
+        {
+          "attempt": 1,
+          "artifact_sha256": "3ac7fc2bd592f486f71578862572cb4bd20708659b8ad7298fbb3e5700141f80",
+          "failures": [
+            "palette: The canvas, text, and blue navigation/chart fit, but green trend percentages, arrows, and completion checkmarks introduce an extra accent. Replace all green with blue or charcoal; the palette permits only one blue accent."
+          ],
+          "review": {
+            "performed": true,
+            "passed": false,
+            "contract_hash": "5e226bc91f8b034b2bc0f560acae972cb80436031f8e0a59fbdc279179edb648",
+            "artifact_sha256": "3ac7fc2bd592f486f71578862572cb4bd20708659b8ad7298fbb3e5700141f80",
+            "checks": [
+              {
+                "rule_id": "palette",
+                "passed": false,
+                "observed": "The canvas, text, and blue navigation/chart fit, but green trend percentages, arrows, and completion checkmarks introduce an extra accent. Replace all green with blue or charcoal; the palette permits only one blue accent."
+              },
+              {
+                "rule_id": "typography",
+                "passed": true,
+                "observed": "One neutral sans-serif treatment has a bold page heading, smaller section headings, and regular readable body text."
+              },
+              {
+                "rule_id": "components",
+                "passed": true,
+                "observed": "Inputs and outlined panels use consistent small radii, light gray borders, and a shared icon stroke style."
+              },
+              {
+                "rule_id": "layout",
+                "passed": true,
+                "observed": "The desktop composition has a left sidebar, aligned title, summary metrics, chart, and activity table without heavy shadows or decorative background gradients."
+              },
+              {
+                "rule_id": "legibility",
+                "passed": true,
+                "observed": "Dashboard, navigation items, metrics, date filter, and table labels are readable. No invented brand logo or watermark is visible."
+              },
+              {
+                "rule_id": "brief",
+                "passed": true,
+                "observed": "This is the requested analytics dashboard with sidebar, metrics, a simple chart, and a recent activity table."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "seq": 2,
+      "concept": "Show the account settings page, with the same sidebar and components, profile fields, and notification preferences.",
+      "prompt": "LOCKED DESIGN CONTRACT: ui starter design\n[palette] Use a white canvas, charcoal primary text, muted gray borders, and a single blue accent. Keep identical color roles across screens.\n[typography] Use one neutral sans-serif family with regular body text and semibold headings. Keep the same heading/body/caption hierarchy.\n[components] Reuse button, input, icon, corner-radius, and spacing treatments. Keep the same sidebar width and navigation treatment across screens.\n[layout] Use a desktop app layout with a left sidebar, page title, aligned content edges, and restrained density. Avoid nested card stacks, heavy shadows, and decorative gradients.\n[legibility] Use short readable UI labels and clear hierarchy. No invented brand logo or watermarks. This is a visual concept, not a claim of functional code.\n[brief] Verify the requested subject and this job's specific content or variation are actually present. Matching the style alone is insufficient; reject the result if it misses the requested content, screen, product, or change.\nOnly these dimensions may change between images: subject, text.\nAll other design decisions remain fixed. If the concept conflicts with a locked rule, resolve the conflict before generation; do not silently weaken the contract.\n\nCreate one standalone image for this brief: Make a matching dashboard and settings screen, square.\nThis is one output in the requested set; do not combine the set into a collage or grid.\n\nVariation for this image: Show the account settings page, with the same sidebar and components, profile fields, and notification preferences.\n\nTarget aspect ratio 1:1.",
+      "state": "completed",
+      "attempts": 1,
+      "duplicate_concept_of": null,
+      "error": null,
+      "artifact": {
+        "file": "002-show-the-account-settings-page-w.png",
+        "sha256": "cce94741ecf7bd60b525fefebec5a8265b4290a380dc12677e8a84862cc28145",
+        "bytes": 1637508,
+        "width": 1254,
+        "height": 1254,
+        "format": "png",
+        "requested_aspect": "1:1",
+        "actual_aspect": "1:1",
+        "aspect_matches": true,
+        "completed_at": "2026-10-16T04:11:22.602Z"
+      },
+      "visual_review": {
+        "performed": true,
+        "passed": true,
+        "contract_hash": "5e226bc91f8b034b2bc0f560acae972cb80436031f8e0a59fbdc279179edb648",
+        "artifact_sha256": "cce94741ecf7bd60b525fefebec5a8265b4290a380dc12677e8a84862cc28145",
+        "checks": [
+          {
+            "rule_id": "palette",
+            "passed": true,
+            "observed": "The settings screen keeps the white canvas, charcoal text, gray borders, and blue-only active controls of the corrected dashboard; no green accent is visible."
+          },
+          {
+            "rule_id": "typography",
+            "passed": true,
+            "observed": "The large semibold page title, section headings, and regular body labels visibly match the dashboard's sans-serif hierarchy."
+          },
+          {
+            "rule_id": "components",
+            "passed": true,
+            "observed": "The sidebar width, navigation spacing, line icons, selected-item treatment, light panel borders, and small-radius controls read as the same component family."
+          },
+          {
+            "rule_id": "layout",
+            "passed": true,
+            "observed": "Left navigation and main content edges align with the dashboard. Profile and notification panels use restrained density and no heavy shadows."
+          },
+          {
+            "rule_id": "legibility",
+            "passed": true,
+            "observed": "Settings, Profile, field labels, Save changes, and notification labels are readable. The image has sample profile text and no brand logo or watermark."
+          },
+          {
+            "rule_id": "brief",
+            "passed": true,
+            "observed": "The image shows the requested account settings screen with profile fields and notification preferences, while keeping the same sidebar and visual system."
+          }
+        ]
+      },
+      "rejected_attempts": []
+    }
+  ],
+  "notes": [
+    "A valid file is not proof that the product, face, text, or style was preserved; see visual_review.",
+    "Artifacts were saved by the host agent from its own image tool."
+  ]
+}

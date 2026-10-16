@@ -1,0 +1,55 @@
+{
+  "user_prompt": "Make a matching dashboard and settings screen, square.",
+  "assumptions": [
+    "Starter visual direction chosen because no custom design_rules were supplied. Replace it when the user or reference specifies a different look.",
+    "Aspect 1:1; 2 images."
+  ],
+  "create_batch": {
+    "idempotency_key": "brief_4e4d4e83f519",
+    "request": "Make a matching dashboard and settings screen, square.",
+    "count": 2,
+    "planning_mode": "variations",
+    "base_prompt": "Create one standalone image for this brief: Make a matching dashboard and settings screen, square.\nThis is one output in the requested set; do not combine the set into a collage or grid.",
+    "target_aspect": "1:1",
+    "variety": "subtle",
+    "consistency": {
+      "name": "ui starter design",
+      "rules": [
+        {
+          "id": "palette",
+          "instruction": "Use a white canvas, charcoal primary text, muted gray borders, and a single blue accent. Keep identical color roles across screens."
+        },
+        {
+          "id": "typography",
+          "instruction": "Use one neutral sans-serif family with regular body text and semibold headings. Keep the same heading/body/caption hierarchy."
+        },
+        {
+          "id": "components",
+          "instruction": "Reuse button, input, icon, corner-radius, and spacing treatments. Keep the same sidebar width and navigation treatment across screens."
+        },
+        {
+          "id": "layout",
+          "instruction": "Use a desktop app layout with a left sidebar, page title, aligned content edges, and restrained density. Avoid nested card stacks, heavy shadows, and decorative gradients."
+        },
+        {
+          "id": "legibility",
+          "instruction": "Use short readable UI labels and clear hierarchy. No invented brand logo or watermarks. This is a visual concept, not a claim of functional code."
+        },
+        {
+          "id": "brief",
+          "instruction": "Verify the requested subject and this job's specific content or variation are actually present. Matching the style alone is insufficient; reject the result if it misses the requested content, screen, product, or change."
+        }
+      ],
+      "allowed_changes": [
+        "subject",
+        "text"
+      ]
+    },
+    "max_retries": 2,
+    "concepts": [
+      "Show the analytics dashboard, with a left sidebar, summary metrics, a simple chart, and a recent activity table.",
+      "Show the account settings page, with the same sidebar and components, profile fields, and notification preferences."
+    ]
+  },
+  "next": "Preserve all user requirements. Adjust any conflicting defaults before creation; add supplied references with their correct roles. Check that this host has image generation AND visual inspection tools, then pass create_batch to idra_create_batch. If no generator is connected, return the brief and explain setup; do not claim images were generated."
+}

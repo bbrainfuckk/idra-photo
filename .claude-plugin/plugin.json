@@ -1,0 +1,13 @@
+{
+  "name": "idra-photo",
+  "version": "0.2.1",
+  "description": "A beginner-friendly design skill and local MCP for consistent image batches. Requires a connected image-generation tool in Claude.",
+  "license": "MIT",
+  "author": { "name": "Idra Photo contributors", "url": "https://github.com/bbrainfuckk/idra-photo" },
+  "mcpServers": {
+    "idra_photo": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/idra-photo.mjs", "serve", "--standard-imports"]
+    }
+  }
+}

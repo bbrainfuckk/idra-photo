@@ -7,6 +7,7 @@ import { isoPlusSeconds, newId, newToken, nowIso, sha256Hex, slugify, stableHash
 import { constraintWarnings, normalizeConstraints, varietyLocks, type Constraints } from './constraints.js';
 import { isAutoConcept, MAX_BATCH_COUNT, planJobs, type PlanningMode, type Variety } from './planning.js';
 import { assemblePrompt } from './prompt.js';
+import { enforceConsistency, normalizeConsistency, reviewSpec, type Consistency, type VisualReview } from './consistency.js';
 import { importReference, referenceAvailable, type ReferenceInput } from './references.js';
 import type { AttemptRow, BatchRow, Counts, JobRow, ReferenceRow } from '../storage/repo.js';
 import { aspectMatches, aspectString, validateImageFile, type ImageInfo } from '../artifacts/validate.js';
@@ -26,6 +27,7 @@ export interface JobPayload {
   aspect: string | null;
   save_to: string;
   note?: string;
+  consistency?: ReturnType<typeof reviewSpec>;
 }
 
 export interface StepResult {
@@ -84,6 +86,7 @@ export interface CreateBatchInput {
   concepts?: ConceptInput[] | undefined;
   references?: ReferenceInput[] | undefined;
   constraints?: unknown;
+  consistency?: unknown;
   target_aspect?: string | undefined;
   name?: string | undefined;
   max_retries?: number | undefined;
@@ -94,7 +97,7 @@ export interface Completion {
   job_id: string;
   attempt_token: string;
   artifact_path?: string | undefined;
-  review?: { performed: boolean; passed?: boolean | undefined; notes?: string | undefined } | undefined;
+  review?: VisualReview | undefined;
 }
 
 export interface StepInput {
@@ -132,6 +135,7 @@ export interface ReconcileInput {
   artifact_path?: string | undefined;
   note?: string | undefined;
   accept_duplicate?: boolean | undefined;
+  review?: VisualReview | undefined;
 }
 
 // ---------------------------------------------------------------- helpers
@@ -140,6 +144,10 @@ function mustBatch(ctx: Ctx, id: string): BatchRow {
   const b = ctx.repo.getBatch(id);
   if (!b) throw new IdraError('BATCH_NOT_FOUND', `no batch ${id}`, { batch_id: id });
   return b;
+}
+
+function batchConsistency(b: BatchRow): Consistency | null {
+  return b.consistency_json ? JSON.parse(b.consistency_json) as Consistency : null;
 }
 
 function mustJob(ctx: Ctx, batchId: string, jobId: string): JobRow {
@@ -202,17 +210,20 @@ export function createBatch(ctx: Ctx, input: CreateBatchInput): Record<string, u
   if (replay) return replay as Record<string, unknown>;
 
   if (!input.request || input.request.length > 8000) throw new IdraError('INVALID_INPUT', 'request must be 1-8000 characters');
-  if (input.target_aspect && !ASPECT_RE.test(input.target_aspect)) throw new IdraError('INVALID_INPUT', 'target_aspect must look like 4:5');
+  if (input.target_aspect && (!ASPECT_RE.test(input.target_aspect) || input.target_aspect.split(':').some((v) => Number(v) <= 0))) {
+    throw new IdraError('INVALID_INPUT', 'target_aspect must contain positive dimensions, e.g. 4:5');
+  }
   const constraints: Constraints = normalizeConstraints(input.constraints ?? {});
+  const consistency = normalizeConsistency(input.consistency, constraints);
   const refsIn = input.references ?? [];
   if (refsIn.length > ctx.limits.maxReferences) throw new IdraError('INVALID_INPUT', `at most ${ctx.limits.maxReferences} references`);
   const basePrompt = input.base_prompt?.trim() || null;
   const variety: Variety = input.variety ?? 'balanced';
   const { texts, perJob } = splitConcepts(input.concepts);
-  const plan = planJobs({ mode, count: input.count, concepts: texts, basePrompt, variety, locks: varietyLocks(constraints) });
+  const plan = planJobs({ mode, count: input.count, concepts: texts, basePrompt, variety, locks: varietyLocks(constraints), allowedChanges: consistency?.allowed_changes });
   const maxRetries = Math.min(Math.max(input.max_retries ?? ctx.limits.maxRetries, 0), 5);
 
-  if (constraints.style !== 'off' && ![...refsIn, ...perJob.flat()].some((r) => r.role === 'style') && constraints.style_details === undefined) {
+  if (!consistency && constraints.style !== 'off' && ![...refsIn, ...perJob.flat()].some((r) => r.role === 'style') && constraints.style_details === undefined) {
     // Style matching with no style reference and no description would be an empty requirement.
     throw new IdraError('CONSTRAINT_CONFLICT', 'style constraint needs a reference with role "style" or style_details');
   }
@@ -249,6 +260,7 @@ export function createBatch(ctx: Ctx, input: CreateBatchInput): Record<string, u
         base_prompt: basePrompt,
         requested_count: plan.length,
         constraints_json: JSON.stringify(constraints),
+        consistency_json: consistency ? JSON.stringify(consistency) : null,
         target_aspect: input.target_aspect ?? null,
         status: 'active',
         paused: 0,
@@ -267,7 +279,7 @@ export function createBatch(ctx: Ctx, input: CreateBatchInput): Record<string, u
           seq: p.seq,
           concept: p.concept,
           normalized_concept: p.normalized,
-          prompt: assemblePrompt({ mode, concept: p.concept, basePrompt, constraints, references: [...refLabels, ...own], targetAspect: input.target_aspect ?? null }),
+          prompt: assemblePrompt({ mode, concept: p.concept, basePrompt, constraints, references: [...refLabels, ...own], targetAspect: input.target_aspect ?? null, consistency }),
           state: 'pending',
           attempts_count: 0,
           retries_used: 0,
@@ -292,6 +304,7 @@ export function createBatch(ctx: Ctx, input: CreateBatchInput): Record<string, u
         mode,
         ...(mode === 'variations' ? { variety, auto_variations: plan.filter((p) => isAutoConcept(p.concept)).length } : {}),
         references: refs.map((r) => `${r.label} (${r.role})`),
+        ...(consistency ? { consistency: reviewSpec(consistency, constraints, input.target_aspect ?? null) } : {}),
         ...(perImage ? { per_image_references: perImage } : {}),
         ...(warnings.length ? { warnings: warnings.map((w) => w.message) } : {}),
         ...(dupes.length ? { duplicate_concepts: dupes } : {}),
@@ -343,6 +356,17 @@ function claimNextLocked(ctx: Ctx, batchId: string): StepResult {
     return { ...head, status: 'done', output_dir: b.output_dir, next: 'All images are saved. Show the user the output folder.' };
   }
   const refs = ctx.repo.refsForJob(b.id, job.id);
+  const consistency = batchConsistency(b);
+  const anchor = consistency ? ctx.repo.listArtifacts(b.id)[0] : undefined;
+  let anchorAvailable = true;
+  if (anchor) {
+    try { anchorAvailable = validateImageFile(anchor.final_path, ctx.limits.image).sha256 === anchor.sha256; }
+    catch { anchorAvailable = false; }
+  }
+  if (!anchorAvailable) {
+    ctx.repo.updateBatch(b.id, { paused: 1, pause_reason: 'consistency_anchor_missing' });
+    return { ...head, status: 'paused', reason: 'consistency_anchor_missing', next: 'Restore the first reviewed batch image; do not silently replace the visual anchor.' };
+  }
   const missing = refs.filter((r) => !referenceAvailable(r));
   if (missing.length > 0) {
     ctx.repo.updateBatch(b.id, { paused: 1, pause_reason: 'reference_missing' });
@@ -377,7 +401,21 @@ function claimNextLocked(ctx: Ctx, batchId: string): StepResult {
     references: refPayload(refs),
     aspect: b.target_aspect,
     save_to: stagingSuggestedPath(attempt.staging_dir),
+    ...(consistency ? { consistency: reviewSpec(consistency, normalizeConstraints(JSON.parse(b.constraints_json)), b.target_aspect) } : {}),
   };
+  if (anchor) {
+    payload.references.push({ label: 'Batch style anchor (first reviewed image)', role: 'style', path: anchor.final_path });
+    payload.prompt += '\n\nUse the first reviewed batch image as an additional style anchor for palette, lighting, texture, and finish only. The requested subject, text, pose, and layout still come from this job and its locked contract.';
+  }
+  if (consistency && job.last_error_json) {
+    const error = JSON.parse(job.last_error_json) as { classification?: string; message?: string };
+    if (error.classification === 'invalid_output') {
+      const rejected = ctx.repo.listAttempts(job.id).reverse().find((a) => a.state === 'failed' && a.evidence_json);
+      const evidence = rejected?.evidence_json ? JSON.parse(rejected.evidence_json) as { consistency_rejection?: { failures?: string[] } } : null;
+      const feedback = evidence?.consistency_rejection?.failures?.join('; ') || error.message;
+      payload.prompt += `\n\nCORRECT THE PREVIOUS REJECTION: ${feedback}. Keep every locked rule intact.`;
+    }
+  }
   if (job.duplicate_of_seq) payload.note = `concept text duplicates #${job.duplicate_of_seq}`;
   if (n > 1) payload.note = `${payload.note ? payload.note + '; ' : ''}retry attempt ${n}`;
   return { batch_id: b.id, progress: `${after.completed}/${after.requested}`, counts: compactCounts(after), status: 'job', job: payload };
@@ -418,7 +456,7 @@ function resolveArtifactSource(ctx: Ctx, attempt: AttemptRow, artifactPath: stri
   return real;
 }
 
-function prepareArtifact(ctx: Ctx, batch: BatchRow, job: JobRow, attempt: AttemptRow, artifactPath: string | undefined, acceptDuplicate: boolean): Prepared {
+function prepareArtifact(ctx: Ctx, batch: BatchRow, job: JobRow, attempt: AttemptRow, artifactPath: string | undefined, acceptDuplicate: boolean, review?: VisualReview): Prepared {
   let src: string;
   if (artifactPath) src = resolveArtifactSource(ctx, attempt, artifactPath);
   else {
@@ -466,6 +504,11 @@ function prepareArtifact(ctx: Ctx, batch: BatchRow, job: JobRow, attempt: Attemp
       resolve: 'generate a new image for this job, or idra_reconcile action=adopt accept_duplicate=true if the user wants it counted',
     });
   }
+  const consistency = batchConsistency(batch);
+  if (consistency && ctx.db.get('SELECT 1 AS found FROM attempts WHERE batch_id = ? AND state = ? AND artifact_sha256 = ? LIMIT 1', [batch.id, 'failed', info.sha256])) {
+    throw new IdraError('CONSISTENCY_FAILED', 'This exact file was already rejected; generate a corrected image instead of changing the review.', { artifact_sha256: info.sha256, review });
+  }
+  enforceConsistency(consistency, normalizeConstraints(JSON.parse(batch.constraints_json)), batch.target_aspect, info, review);
   fault(ctx, 'before_finalize');
   const nameSource = isAutoConcept(job.concept) ? (batch.base_prompt ?? batch.slug) : job.concept;
   const finalPath = finalArtifactPath(batch.output_dir, job.seq, nameSource, info.extension);
@@ -578,6 +621,8 @@ function completeAndNext(ctx: Ctx, batch: BatchRow, c: Completion): StepResult {
     throw new IdraError('ATTEMPT_TOKEN_MISMATCH', 'attempt_token does not belong to this job', { job_id: c.job_id });
   }
   const opKey = `step:${c.attempt_token}`;
+  const rejected = ctx.repo.getOperation(`consistency-rejected:${c.attempt_token}`);
+  if (rejected) return replayStep(ctx, JSON.parse(rejected.response_json) as StepResult, batch.id);
   const prior = ctx.repo.getOperation(opKey);
   if (prior) {
     if (c.artifact_path && attempt.artifact_sha256) {
@@ -595,7 +640,13 @@ function completeAndNext(ctx: Ctx, batch: BatchRow, c: Completion): StepResult {
     throw new IdraError('ATTEMPT_ALREADY_RESOLVED', `this attempt is ${attempt.state}; its result can no longer be reported`, { job_id: c.job_id, state: attempt.state });
   }
   const job = mustJob(ctx, batch.id, attempt.job_id);
-  const prep = prepareArtifact(ctx, batch, job, attempt, c.artifact_path, false);
+  let prep: Prepared;
+  try {
+    prep = prepareArtifact(ctx, batch, job, attempt, c.artifact_path, false, c.review);
+  } catch (err) {
+    if (err instanceof IdraError && err.code === 'CONSISTENCY_FAILED') return rejectConsistency(ctx, batch, job, attempt, err);
+    throw err;
+  }
   const res = ctx.db.transaction((): StepResult => {
     const again = ctx.repo.getOperation(opKey);
     if (again) return replayStep(ctx, JSON.parse(again.response_json) as StepResult, batch.id);
@@ -613,6 +664,26 @@ function completeAndNext(ctx: Ctx, batch: BatchRow, c: Completion): StepResult {
   fault(ctx, 'after_commit');
   afterChange(ctx, batch.id, 'completed');
   return res;
+}
+
+/** Failed images stay in staging. Existing retry limits apply, including during crash recovery. */
+function rejectConsistency(ctx: Ctx, batch: BatchRow, job: JobRow, attempt: AttemptRow, error: IdraError): StepResult {
+  const result = ctx.db.transaction(() => {
+    const reported = reportProblem(ctx, {
+      batch_id: batch.id, job_id: job.id, attempt_token: attempt.token,
+      classification: 'invalid_output', message: `Consistency review failed: ${error.message}`, retryable: true,
+    });
+    const result: StepResult = { ...reported, detail: { ...reported.detail, failures: error.details['failures'] ?? [error.message] } };
+    ctx.repo.updateAttempt(attempt.id, {
+      artifact_sha256: String(error.details['artifact_sha256']),
+      evidence_json: JSON.stringify({ consistency_rejection: error.details }),
+    });
+    ctx.repo.event('consistency_rejected', { batchId: batch.id, jobId: job.id, attemptId: attempt.id }, error.details);
+    ctx.repo.putOperation(`consistency-rejected:${attempt.token}`, 'idra_step', stableHash(error.details), result);
+    return result;
+  });
+  afterChange(ctx, batch.id, 'consistency_rejected');
+  return result;
 }
 
 // ---------------------------------------------------------------- problems
@@ -734,9 +805,10 @@ export function extendBatch(ctx: Ctx, input: ExtendInput): Record<string, unknow
   if (pre.status === 'cancelled') throw new IdraError('BATCH_CANCELLED', 'a cancelled batch cannot be extended');
   const { texts, perJob } = splitConcepts(input.concepts);
   const constraints = JSON.parse(pre.constraints_json) as Constraints;
+  const consistency = batchConsistency(pre);
   const startSeq = ctx.repo.maxSeq(pre.id) + 1;
   const existing = ctx.repo.allJobs(pre.id).map((j) => ({ seq: j.seq, normalized: j.normalized_concept }));
-  const plan = planJobs({ mode: pre.planning_mode, count: input.count, concepts: texts, basePrompt: pre.base_prompt, startSeq, existing, variety: pre.variety, locks: varietyLocks(constraints) });
+  const plan = planJobs({ mode: pre.planning_mode, count: input.count, concepts: texts, basePrompt: pre.base_prompt, startSeq, existing, variety: pre.variety, locks: varietyLocks(constraints), allowedChanges: consistency?.allowed_changes });
   const jobIds = plan.map(() => newId('j'));
   // Reference files are copied before the transaction; a concurrent extension is detected below.
   const jobRefs = importJobRefs(ctx, pre.id, perJob, plan.map((p) => p.seq), jobIds);
@@ -758,7 +830,7 @@ export function extendBatch(ctx: Ctx, input: ExtendInput): Record<string, unknow
         seq: p.seq,
         concept: p.concept,
         normalized_concept: p.normalized,
-        prompt: assemblePrompt({ mode: b.planning_mode, concept: p.concept, basePrompt: b.base_prompt, constraints, references: [...refs, ...own], targetAspect: b.target_aspect }),
+        prompt: assemblePrompt({ mode: b.planning_mode, concept: p.concept, basePrompt: b.base_prompt, constraints, references: [...refs, ...own], targetAspect: b.target_aspect, consistency }),
         state: 'pending',
         attempts_count: 0,
         retries_used: 0,
@@ -802,8 +874,9 @@ export function reconcile(ctx: Ctx, input: ReconcileInput): Record<string, unkno
     if (input.action === 'adopt' && !input.artifact_path) throw new IdraError('INVALID_INPUT', 'adopt needs artifact_path');
     let prep: Prepared;
     try {
-      prep = prepareArtifact(ctx, batch, job, attempt, input.action === 'adopt' ? input.artifact_path : undefined, input.accept_duplicate === true);
+      prep = prepareArtifact(ctx, batch, job, attempt, input.action === 'adopt' ? input.artifact_path : undefined, input.accept_duplicate === true, input.review);
     } catch (err) {
+      if (err instanceof IdraError && err.code === 'CONSISTENCY_FAILED') return { ...rejectConsistency(ctx, batch, job, attempt, err) };
       if (!(err instanceof IdraError) || !['ARTIFACT_INVALID', 'ARTIFACT_CONFLICT'].includes(err.code)) throw err;
       ctx.db.transaction(() => {
         ctx.repo.updateAttempt(attempt.id, { state: 'uncertain' });
@@ -828,7 +901,7 @@ export function reconcile(ctx: Ctx, input: ReconcileInput): Record<string, unkno
     ctx.db.transaction(() => {
       const fresh = ctx.repo.getAttempt(attempt.id)!;
       if (fresh.state !== 'claimed' && fresh.state !== 'uncertain') throw new IdraError('ATTEMPT_ALREADY_RESOLVED', `attempt is ${fresh.state}`);
-      recordCompletionLocked(ctx, batch, mustJob(ctx, batch.id, job.id), fresh, prep, { via: `reconcile_${input.action}`, note: input.note ?? null, accept_duplicate: input.accept_duplicate === true }, undefined);
+      recordCompletionLocked(ctx, batch, mustJob(ctx, batch.id, job.id), fresh, prep, { via: `reconcile_${input.action}`, note: input.note ?? null, accept_duplicate: input.accept_duplicate === true }, input.review);
     });
     afterChange(ctx, batch.id, 'reconcile');
     return { ...base(ctx, mustBatch(ctx, batch.id)), job: job.seq, state: 'completed', file: path.basename(prep.finalPath), next: 'Call idra_step to continue.' };
@@ -900,6 +973,7 @@ export function status(ctx: Ctx, input: StatusInput): Record<string, unknown> {
     progress: `${c.completed}/${c.requested}`,
     counts: compactCounts(c),
     output_dir: b.output_dir,
+    ...(batchConsistency(b) ? { consistency: reviewSpec(batchConsistency(b)!, normalizeConstraints(JSON.parse(b.constraints_json)), b.target_aspect) } : {}),
     ...(activeAtt && active ? { active: { seq: active.seq, job_id: active.id, claimed_at: activeAtt.claimed_at, stale: Date.now() - Date.parse(activeAtt.claimed_at) > ctx.staleClaimMs } } : {}),
     ...(problems.length
       ? {

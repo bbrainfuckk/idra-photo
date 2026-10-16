@@ -1,0 +1,18 @@
+{
+  "idempotency_key": "replace-with-a-fresh-key",
+  "request": "Generate matching image concepts for a dashboard and settings screen. Keep one design system.",
+  "count": 2,
+  "planning_mode": "diversified",
+  "concepts": ["A desktop analytics dashboard with metrics and a table.", "A desktop account settings screen with profile fields and notification preferences."],
+  "target_aspect": "16:9",
+  "consistency": {
+    "name": "Calm workspace UI concepts",
+    "rules": [
+      {"id": "palette", "instruction": "White page background, charcoal text, muted gray borders, and one blue accent. Match those roles across screens."},
+      {"id": "typography", "instruction": "One neutral sans-serif family, regular body, semibold headings, and a consistent heading/body/caption hierarchy."},
+      {"id": "components", "instruction": "Reuse the same buttons, inputs, small corner radii, icon stroke weight, and spacing rhythm across screens."},
+      {"id": "layout", "instruction": "Keep a left sidebar, top page title, aligned edges, and restrained density. No decorative gradients, nested card stacks, or heavy shadows."}
+    ],
+    "allowed_changes": ["subject", "text"]
+  }
+}

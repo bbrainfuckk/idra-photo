@@ -1,6 +1,20 @@
 # Compatibility
 
-Recorded 2026-09-22 on Windows 11 Home Single Language 10.0.26200 (x64).
+## Current v0.2.1 evidence — 2026-10-16
+
+Verified locally on Windows with Node 24.20.0 and MCP SDK 1.32.1:
+
+| Check | Evidence and limit |
+|---|---|
+| Strict queue and MCP | 78 automated tests pass, including real stdio clients, review enforcement, image pixels/hash inspection, recovery, and Codex/Claude project installers. These use synthetic images. |
+| Real generation | Four accepted product/UI images from six native Codex `image_gen` calls. Two mismatches were rejected and corrected. A manual host drove the real queue API; this is a qualitative demo, not an autonomous skill benchmark. [Images, prompts, and reviews](results/README.md). |
+| Claude Code | CLI 2.1.296 reported `idra_photo: connected` and discovered the `idra-photo` skill. Its model-backed test stopped at “Not logged in · Please run /login”; autonomous skill execution and Claude generation are untested. [Sanitized record](results/claude-connection.json). |
+| Claude plugin and portable skill | Both plugin/marketplace manifests pass `claude plugin validate`; the skill passes the Codex skill validator. No claim of a completed live Claude Desktop UI test. |
+| Claude image capability | A connected generator returning a local artifact is required. Skill upload alone does not connect a local MCP to claude.ai. [Setup and official references](claude.md). |
+
+## Historical v0.1 evidence — 2026-09-22
+
+The remainder records the original Windows 11 Home Single Language 10.0.26200 (x64) run; versions and limitations here describe that run.
 
 | Item | Value |
 |---|---|

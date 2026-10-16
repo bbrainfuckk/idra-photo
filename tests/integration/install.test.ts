@@ -36,10 +36,38 @@ test('install-codex without a Codex CLI edits config.toml safely, idempotently, 
   assert.equal(text.match(/^\[mcp_servers\.idra_photo\]$/gm)?.length, 1, 'exactly one entry after two installs');
   assert.match(text, /IDRA_WORKSPACE = ".*Idra Photo"/);
   assert.ok(fs.existsSync(path.join(ws, 'references')));
+  assert.ok(fs.existsSync(path.join(home, 'skills', 'idra-photo', 'SKILL.md')), 'installs the portable skill with the MCP');
   assert.ok(fs.readdirSync(home).some((f) => f.startsWith('config.toml.bak-idra-')), 'a backup is written before editing');
   const u = run(['uninstall-codex', '--codex', 'none'], home);
   assert.equal(u.status, 0, u.stderr);
   assert.equal(fs.readFileSync(cfg, 'utf8').trimEnd(), EXISTING.trimEnd());
+});
+
+test('Claude project install preserves other MCPs, installs the skill, and can launch the server', async () => {
+  const project = tmpWorkspace('idra-claude-');
+  const ws = path.join(project, 'images');
+  const config = path.join(project, '.mcp.json');
+  fs.writeFileSync(config, JSON.stringify({ extra: true, mcpServers: { other: { command: 'keep-me' } } }));
+  for (let i = 0; i < 2; i++) {
+    const r = run(['install-claude', '--project', project, '--workspace', ws], path.join(project, 'codex-unused'));
+    assert.equal(r.status, 0, r.stderr);
+  }
+  const saved = JSON.parse(fs.readFileSync(config, 'utf8'));
+  assert.equal(saved.extra, true);
+  assert.equal(saved.mcpServers.other.command, 'keep-me');
+  assert.equal(saved.mcpServers.idra_photo.type, 'stdio');
+  assert.ok(fs.existsSync(path.join(project, '.claude', 'skills', 'idra-photo', 'SKILL.md')));
+  const { FakeHost } = await import('../../src/sim/fakeHost.js');
+  const spec = saved.mcpServers.idra_photo;
+  const host = await FakeHost.connect({ cliPath: CLI, command: spec.command, args: spec.args, env: spec.env });
+  try {
+    const brief = await host.call('idra_design_brief', { request: 'Make 2 skincare photos.' });
+    assert.equal(brief.isError, false);
+    assert.equal((brief.data['create_batch'] as { count: number }).count, 2);
+  } finally { await host.close(); }
+  const u = run(['uninstall-claude', '--project', project], path.join(project, 'codex-unused'));
+  assert.equal(u.status, 0, u.stderr);
+  assert.deepEqual(JSON.parse(fs.readFileSync(config, 'utf8')).mcpServers, { other: { command: 'keep-me' } });
 });
 
 test('removeTomlServer only removes its own tables', () => {

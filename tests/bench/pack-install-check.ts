@@ -7,6 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { REPO_ROOT } from '../helpers.js';
+import { FakeHost } from '../../src/sim/fakeHost.js';
 
 const npmCli = process.env['npm_execpath'];
 function npm(args: string[], cwd: string): string {
@@ -24,7 +25,7 @@ type PackInfo = { filename: string; files: { path: string }[] };
 const info = (Array.isArray(parsed) ? parsed[0] : Object.values(parsed as Record<string, PackInfo>)[0]) as PackInfo;
 const tarball = path.join(tmp, info.filename);
 const packed = info.files.map((f) => f.path.replace(/\\/g, '/'));
-const required = ['dist/src/cli.js', 'dist/src/main.js', 'dist/src/server.js', 'README.md', 'LICENSE'];
+const required = ['dist/src/cli.js', 'dist/src/main.js', 'dist/src/server.js', 'idra-photo.mjs', 'README.md', 'LICENSE', 'design-library/sources.json', 'examples/consistency/product-photo.json', 'skills/idra-photo/SKILL.md', 'skills/idra-photo/agents/openai.yaml', '.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', 'docs/results/README.md'];
 const missing = required.filter((f) => !packed.includes(f));
 const leaked = packed.filter((f) => /^(dist\/tests|tests|src)\/|\.idra|outputs\/|\.sqlite$|\.env/.test(f));
 if (missing.length || leaked.length) {
@@ -36,10 +37,17 @@ const prefix = path.join(tmp, 'install');
 fs.mkdirSync(prefix);
 fs.writeFileSync(path.join(prefix, 'package.json'), '{"name":"idra-pack-check","private":true}');
 npm(['install', '--no-audit', '--no-fund', tarball], prefix);
-const cli = path.join(prefix, 'node_modules', 'idra-photo', 'dist', 'src', 'cli.js');
+const installed = path.join(prefix, 'node_modules', 'idra-photo');
+const cli = path.join(installed, 'dist', 'src', 'cli.js');
 const ws = path.join(tmp, 'workspace');
 const doctor = spawnSync(process.execPath, [cli, 'doctor', '--workspace', ws], { encoding: 'utf8' });
 const sim = spawnSync(process.execPath, [cli, 'simulate', '--workspace', path.join(tmp, 'sim'), '--count', '3'], { encoding: 'utf8' });
+const claudeProject = path.join(tmp, 'claude-project');
+const claude = spawnSync(process.execPath, [cli, 'install-claude', '--project', claudeProject, '--workspace', path.join(tmp, 'claude-images')], { encoding: 'utf8' });
+const host = await FakeHost.connect({ cliPath: path.join(installed, 'idra-photo.mjs'), workspace: path.join(tmp, 'library') });
+const library = await host.call('idra_design_library', {});
+await host.close();
+const librarySources = (library.data['sources'] as unknown[] | undefined)?.length ?? 0;
 const binName = process.platform === 'win32' ? 'idra-photo.cmd' : 'idra-photo';
 const report = {
   tarball: path.basename(tarball),
@@ -49,6 +57,9 @@ const report = {
   doctor_output: doctor.stdout.trim().split('\n'),
   simulate_exit: sim.status,
   simulate_tail: sim.stdout.trim().split('\n').slice(-6),
+  design_library_sources: librarySources,
+  claude_install_exit: claude.status,
+  claude_skill_present: fs.existsSync(path.join(claudeProject, '.claude', 'skills', 'idra-photo', 'SKILL.md')),
 };
 console.log(JSON.stringify(report, null, 2));
-process.exit(report.doctor_exit === 0 && report.simulate_exit === 0 && report.bin_shim_present ? 0 : 1);
+process.exit(report.doctor_exit === 0 && report.simulate_exit === 0 && report.bin_shim_present && librarySources === 6 && report.claude_install_exit === 0 && report.claude_skill_present ? 0 : 1);

@@ -153,4 +153,9 @@ ALTER TABLE batch_references_v2 RENAME TO batch_references;
 CREATE INDEX IF NOT EXISTS batch_references_batch ON batch_references(batch_id);
 CREATE INDEX IF NOT EXISTS batch_references_job ON batch_references(job_id);`,
   },
+  {
+    version: 3,
+    name: '003_consistency_contract',
+    sql: 'ALTER TABLE batches ADD COLUMN consistency_json TEXT;',
+  },
 ];

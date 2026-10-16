@@ -1,0 +1,167 @@
+{
+  "style_version": "1.0.0",
+  "style_name": "Portrait as Terrain",
+  "style_slug": "portrait-as-terrain",
+  "style_summary": "Monochrome human fragments become monumental single-color landscapes inhabited by tiny figures.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Prioritized visual anchors",
+    "SOURCE_CONTENT_TO_AVOID": "Original identities and story content to replace",
+    "SUBJECT": "Invented human portrait and carrier",
+    "METAPHOR": "Continuous material and landscape transformation",
+    "COLOR": "Single saturated spot hue",
+    "MAIN_TEXT": "Exact title",
+    "SECONDARY_TEXT": "Exact subtitle",
+    "DESIGN_DIRECTION": "Meaningful layout intention for each ratio",
+    "SUBJECT_ACTION": "How the human fragment becomes a landscape and hosts a tiny figure",
+    "PRODUCT_OR_PROP": "The transformed carrier that reads as terrain",
+    "LOCATION": "Monumental single-color landscape field",
+    "BACKGROUND_ELEMENTS": "Broad saturated negative space around the contour",
+    "ACCENT_SYMBOL": "Tiny inhabitant of the terrain",
+    "WARDROBE_STYLE": "Photographic clothing, hair or body surface of the carrier"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] A high-contrast black-and-white photographic human fragment merges into one oversized tangible form that also reads as a landscape; both readings must be visible.",
+    "[CORE] A tiny legible traveler or participant inhabits that landscape, creating a dramatic human-scale contradiction.",
+    "[CORE] One saturated spot color dominates broad negative space and the transformed terrain, against deep black and paper-white portrait tones.",
+    "[CORE] Spare editorial typography uses light or regular clean sans serif, with a large readable title and very small supporting line; typography leaves the visual metaphor clear.",
+    "[FLEX] Choose crop, direction and placement from the story; face visibility is optional and the carrier may be body, garment or hair.",
+    "[FLEX] Recompose portrait and landscape formats independently, keeping spacious fields and one dominant contour rather than squeezing one layout.",
+    "[FLEX] Spot hue may vary by theme; surface detail must explain the material-to-terrain transformation."
+  ],
+  "source_content_to_avoid": [
+    "The Fall title and source film credits",
+    "Original actor likenesses and named cast",
+    "Wide-brim cowboy hat becoming orange desert dunes",
+    "Horse rider and original adventure premise"
+  ],
+  "visual_deconstruction": {
+    "hierarchy": "Expansive color field, elegant large title, monumental transformed carrier, high-contrast human crop, tiny narrative figure.",
+    "source_observation": "The original orange hat reads as sand dune, with a small rider on its crest; the black-white face is heavily shadowed beneath."
+  },
+  "composition": {
+    "principle": "One continuous double-reading silhouette with purposeful empty space.",
+    "ratios": "Tall format emphasizes depth or descent; wide format can emphasize a contour crossing the field, preserving the tiny figure."
+  },
+  "typography": {
+    "title": "Large regular/light grotesk sans, readable and spare.",
+    "support": "One small sans-serif subtitle; no billing blocks."
+  },
+  "color_palette": {
+    "structure": "One saturated ink hue with black and white.",
+    "distribution": "Color occupies roughly half or more of image; black and white retain human photographic presence."
+  },
+  "image_treatment": {
+    "texture": "Fine dry print grain across color fields and coarse photographic contrast in human regions; material-specific striations in terrain, medium visible intensity. No torn paper, heavy stains or artificial blur.",
+    "lighting": "Hard directional monochrome light sculpts the human carrier; terrain shading shares the same light."
+  },
+  "design_rules": [
+    "Make carrier and terrain one physical surface, not separate pasted pictures.",
+    "Keep the miniature participant readable as a small silhouette.",
+    "Use the exact two text strings only.",
+    "Give each case a distinct structural metaphor and ratio-specific visual hierarchy."
+  ],
+  "do": [
+    "Keep ample single-color negative space.",
+    "Retain plausible human anatomy.",
+    "Let surface detail connect ordinary material to monumental terrain."
+  ],
+  "avoid": [
+    "Transparent double exposures or unrelated floating scenery.",
+    "Same frontal head layout in every case.",
+    "Dense credits, invented text or copied source identities."
+  ],
+  "negative_prompt": "No cowboy hats, horses, film credits, logos, watermarks, extra words, collage boxes, multiple spot colors, glossy 3D lettering, impossible fingers, disembodied extra limbs or generic double exposure.",
+  "prompt_template": "Create a finished art-film poster in {ASPECT_RATIO}. Visual language: monumental human landscape illusion, spare sophisticated editorial design.\n{STYLE_FIDELITY_ANCHORS}\nInvented subject: {SUBJECT}\nSingle continuous visual metaphor: {METAPHOR}\nSpot ink: {COLOR}\nTitle exactly: {MAIN_TEXT}\nSmall subtitle exactly: {SECONDARY_TEXT}\nDesign intention and format adaptation: {DESIGN_DIRECTION}\nTexture: fine dry print grain in color fields, coarse high-contrast black-white photographic human tones; moderate material-specific striations in transformed region, not dirty paper. Hard coherent directional light. Only the two requested text strings. Exclude source content: {SOURCE_CONTENT_TO_AVOID}. No separate picture windows, no transparent double exposure, no unrelated floating scenery, no credits, no logos.",
+  "examples": [
+    {
+      "case_name": "quiet-harbor",
+      "values": {
+        "SUBJECT": "Black-white side profile of an invented older woman wearing a broad sculptural folded coat collar.",
+        "METAPHOR": "The upturned collar is simultaneously woven fabric and a steep coastal bay, curved seam becoming shoreline; one tiny sailboat floats within the collar-bay. Keep cloth edge joining her neck visibly.",
+        "COLOR": "saturated cobalt blue",
+        "MAIN_TEXT": "A Quiet Harbor",
+        "SECONDARY_TEXT": "Somewhere to return.",
+        "DESIGN_DIRECTION": "Portrait: profile low right, collar curves broadly left into empty blue; title upper left. Landscape: head cropped at right, collar-bay extends left across lower two thirds, title above the bay."
+      }
+    },
+    {
+      "case_name": "the-long-way",
+      "values": {
+        "SUBJECT": "Black-white rear three-quarter portrait of an invented woman with one thick long braided plait.",
+        "METAPHOR": "Her continuous braid becomes a switchback mountain ridge; interwoven locks form traversable terraces, with one tiny lone hiker on a hair-ridge path. Retain clearly recognizable braided construction and attachment to head.",
+        "COLOR": "burnt vermilion orange",
+        "MAIN_TEXT": "The Long Way",
+        "SECONDARY_TEXT": "We carry the distance.",
+        "DESIGN_DIRECTION": "Portrait: small back of head at top-right of image field, braid descends diagonally toward bottom-left; spacious title upper-left. Landscape: large cropped rear head left, braid extends diagonally toward right as a long ridge, title in upper-right empty field."
+      }
+    },
+    {
+      "case_name": "river-in-hand",
+      "values": {
+        "SUBJECT": "Photographic black-white cropped wrist and one open cupped human hand, anatomically correct with five fingers; no face.",
+        "METAPHOR": "The broad palm is also a monumental river basin, palm creases becoming branching etched river channels; a single tiny canoe follows the main crease. The yellow palm remains recognizably a hand bounded by fingers and wrist, not a scenery rectangle.",
+        "COLOR": "saturated golden yellow",
+        "MAIN_TEXT": "What We Hold",
+        "SECONDARY_TEXT": "Nothing stays still.",
+        "DESIGN_DIRECTION": "Portrait: wrist enters from bottom, cupped palm rises through middle, fingers curl gently toward top-right, title in upper left free field. Landscape: wrist enters left and palm stretches right, fingers frame the far right, title sits in upper-left space above wrist."
+      }
+    },
+    {
+      "case_name": "last-performance",
+      "values": {
+        "SUBJECT": "Black-white cropped female dancer seen from behind, upper back and shoulders visible, wearing a wide pleated skirt.",
+        "METAPHOR": "Her spreading skirt is also a monumental circular amphitheater: pleat ridges become concentric seating terraces around a small opening, containing one tiny standing performer. Continuous fabric joins waist and the terraces; no separate building.",
+        "COLOR": "saturated magenta red",
+        "MAIN_TEXT": "The Last Echo",
+        "SECONDARY_TEXT": "A room remembers.",
+        "DESIGN_DIRECTION": "Portrait: dancer upper torso offset left, skirt blooms downward into circular bowl with miniature performer low right; title above. Landscape: torso cropped near left, enormous skirt-theater opens right, title occupies upper right negative space."
+      }
+    },
+    {
+      "case_name": "across-the-silence",
+      "values": {
+        "SUBJECT": "Black-white three-quarter portrait of an invented middle-aged woman wearing one long woven scarf draped around her neck, its loose end sweeping into foreground.",
+        "METAPHOR": "One suspended stretch of scarf is also a monumental narrow suspension footbridge: its two woven selvedges become parapets, longitudinal fibers become the walkable deck, visibly joining the scarf loop at her neck. One tiny traveler walks across the scarf-bridge toward the portrait. No separate bridge pasted onto fabric.",
+        "COLOR": "saturated deep turquoise",
+        "MAIN_TEXT": "Across the Silence",
+        "SECONDARY_TEXT": "Every thread leads somewhere.",
+        "DESIGN_DIRECTION": "Portrait: woman upper right, scarf-bridge descends in a long S curve toward lower left, large turquoise field and light title upper left. Landscape: portrait at right, scarf-bridge crosses open turquoise space from lower left to her neck, title upper left. Keep face monochrome and scarf richly turquoise with black shadows."
+      }
+    },
+    {
+      "case_name": "a-world-within",
+      "values": {
+        "SUBJECT": "Black-white extreme side crop of an invented adult man, featuring one anatomically recognizable outer ear and a small adjacent portion of cheek and jaw; no full face.",
+        "METAPHOR": "The ridges of the outer ear become a violet rock canyon with a narrow winding stepped path following the antihelix toward the concha. One tiny backpacked explorer stands on the visible ear-canyon path. Ear silhouette, tragus and lobe remain natural and continuous with monochrome skin; the canyon is the ear surface itself, not a tunnel into the brain.",
+        "COLOR": "saturated violet",
+        "MAIN_TEXT": "A World Within",
+        "SECONDARY_TEXT": "Listen a little longer.",
+        "DESIGN_DIRECTION": "Portrait: immense ear fills lower right two-thirds, violet canyon curves inward; open violet field upper left holds fine light title. Landscape: cropped ear and jaw anchored right, terrain has a broad inward sweep toward center, left third remains violet negative space. Make the explorer small but identifiable against a lit ledge."
+      }
+    },
+    {
+      "case_name": "let-it-flow",
+      "values": {
+        "SUBJECT": "Black-white cropped forearm and relaxed natural hand extending diagonally downward from a loose rolled woven shirt sleeve; one hand, five digits, fingers held together in a simple side view.",
+        "METAPHOR": "The open rolled sleeve cuff becomes a monumental horseshoe waterfall: fabric ribs become emerald vertical water streams dropping from the curved cuff lip, with one tiny kayaker in an emerald pool at the base. Wrist continues visibly from the cuff on the right so the sleeve remains readable. Water is a localized transformation of cloth, not a hand made of water.",
+        "COLOR": "saturated emerald green",
+        "MAIN_TEXT": "Let It Flow",
+        "SECONDARY_TEXT": "There is another way down.",
+        "DESIGN_DIRECTION": "Portrait: monochrome arm enters upper right, large curved cuff-waterfall dominates central lower frame, miniature kayak low left, title upper left green field. Landscape: cropped arm right, cuff waterfall spreads centrally left with pool foreground, title upper left. Distinguish this sheer vertical drop from a flat river basin."
+      }
+    },
+    {
+      "case_name": "back-to-tomorrow",
+      "values": {
+        "SUBJECT": "Black-white cropped torso and lower face of an invented adult man wearing an open textured zip-front jacket, head turned slightly away; avoid hands.",
+        "METAPHOR": "One side of the jacket zipper is also a monumental railway corridor: the two parallel rows of zipper teeth become rails and sleepers along the jacket fold, and the zipper slider becomes one tiny red locomotive traveling toward the collar. The railway stays visibly integrated in the zipper seam, not a separate track pasted over a portrait.",
+        "COLOR": "saturated scarlet red",
+        "MAIN_TEXT": "Back to Tomorrow",
+        "SECONDARY_TEXT": "Follow what holds us together.",
+        "DESIGN_DIRECTION": "Portrait: lower face high left with open scarlet field upper right for thin title, zipper railway climbs from near bottom right toward collar at upper left, locomotive small at mid-seam. Landscape: face cropped upper left, zipper track sweeps diagonally across broad foreground right, title in open scarlet upper right. Retain visible cloth stitching and recognizable zipper teeth at foreground scale."
+      }
+    }
+  ],
+  "category": "Editorial + Minimal"
+}

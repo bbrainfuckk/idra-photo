@@ -1,0 +1,121 @@
+{
+  "style_version": "1.0.0",
+  "style_name": "Vector Process Study",
+  "style_slug": "vector-process-study",
+  "style_summary": "Premium footwear process boards explain load, flex, fit and construction through sequential image panels, tactile material macros, sparse micro-labels and a distinct sculptural shoe architecture.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Prioritized process-board and product-design system",
+    "SOURCE_CONTENT_TO_AVOID": "Reference-specific shoe, outsole, pose and branding to replace",
+    "SUBJECT": "Footwear process stages, cross-section, gesture and product close-up",
+    "SCENE": "Premium material setting, panel sequence, light and palette",
+    "MAIN_TEXT": "Only tiny process numbers and short stage labels",
+    "DESIGN_DIRECTION": "Step-by-step functional story and ratio-specific sequence",
+    "SUBJECT_ACTION": "Physical change visible between sequential process stages",
+    "PRODUCT_OR_PROP": "Sculptural unbranded trainer architecture for this study",
+    "LOCATION": "Premium material setting for the process board",
+    "BACKGROUND_ELEMENTS": "Panel sequence, cross-sections and studio contact shadows",
+    "SECONDARY_TEXT": "Tiny process numbers and short stage labels",
+    "ACCENT_SYMBOL": "Understated arrows marking the functional change",
+    "WARDROBE_STYLE": "Any human gesture kept secondary to the shoe process"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] Tell one clear product process from left to right or top to bottom using three or four sequential panels; physical change between stages must be visible.",
+    "[CORE] Use a distinct unbranded trainer: pearl-bone knit upper, open heel cage, brushed-titanium floating arch bridge, one continuous smoked-ceramic rocker with three long carved channels and a smooth integrated forefoot.",
+    "[CORE] Make the process legible with side views, cross-sections, material macros, understated arrows and consistent stage spacing; prioritize explanation over a heroic portrait.",
+    "[CORE] Premium material realism: individual knit fibers, brushed titanium grain, satin ceramic, soft stone and accurate contact shadows under sculptural studio light.",
+    "[CORE] Keep typography exceptionally sparse and small: only hairline step numbers and short process labels, aligned to panel edges; no large display title or decorative headline.",
+    "[CORE] Use obsidian, warm bone, brushed titanium and pearl gray; glacial-cyan appears only as a fine directional mark or state-change highlight.",
+    "[FLEX] Vary stage sequence and panel geometry by process while keeping the footwear construction, material palette and micro-label scale consistent.",
+    "[FLEX] Compose portrait and landscape independently so the stages remain legible and in correct order; never solve one ratio by cropping the other."
+  ],
+  "source_content_to_avoid": [
+    "The exact reference shoe silhouette, sole geometry, repeated circular cushioning parts, bright red outsole, athlete pose or collage arrangement",
+    "Oversized typography, large poster headlines, decorative slogans or dense body copy",
+    "Nike, Reebok or any brand names, logos, swooshes, trademarks or copied campaign copy",
+    "Direct recreation of any reference image or product"
+  ],
+  "visual_deconstruction": {
+    "source": "The references use modular image panels, athletic action, product macros, high contrast and motion. Extract their editorial sequencing and image rhythm, then redirect the design toward process explanation and original footwear construction.",
+    "hierarchy": "Sequential process imagery leads: contact, deformation and recovery; material transitions; or component assembly. Small stage numbers and labels support the sequence. Product construction stays original."
+  },
+  "composition": {
+    "principle": "A premium process board with three or four sequential frames, alternating full shoe, cross-section and tactile material macro. Use clean gutters, fine connectors and enough space around each transformation.",
+    "adaptation": "Portrait stacks stages vertically with a clear numbered path; landscape flows horizontally with stages connected across the frame. Both formats reserve a large, quiet product detail panel."
+  },
+  "typography": {
+    "form": "Very small neutral grotesk or monospaced step numbers and short labels only, such as LOAD, FLEX, RELEASE. Hairline rules and tiny unit marks may support them.",
+    "hierarchy": "Do not use a large title, slogan or display type. Text occupies a tiny fraction of the frame and never competes with the process imagery."
+  },
+  "color_palette": {
+    "frame": "Warm bone, pearl gray, obsidian and brushed titanium; restrained glacial-cyan accent limited to subtle arrows or state-change cues.",
+    "photo": "Natural skin and neutral wardrobe, soft stone or graphite surfaces, precise metal highlights and deep clean shadows. No bright red or loud gradients."
+  },
+  "photographic_direction": {
+    "camera": "Use consistent product angles across sequential frames, plus precise construction macros and only occasional partial-body context; show cause and effect clearly.",
+    "texture": "Tactile high-end product photography with knit fibers, satin titanium grain, smoked ceramic, smooth composite channels and clean shadow detail.",
+    "light": "Controlled studio or gallery light with premium soft falloff; small glints reveal material transitions without glowing effects."
+  },
+  "design_rules": [
+    "Every board must read as a process with an ordered start, transformation and result.",
+    "Keep the distinct open heel, titanium bridge and continuous channeled rocker consistent in all cases.",
+    "Show state change in the product or material across at least three panels.",
+    "Use only tiny step numbers and short process labels; never add oversized headline text.",
+    "Build premium texture and spacing through photography, lighting and layout rather than typography or decoration."
+  ],
+  "do": [
+    "Show the same product at comparable angles when depicting before, during and after states.",
+    "Use one or two restrained arrows or fine connectors to clarify process direction.",
+    "Make the product's material and structural changes visible at macro scale."
+  ],
+  "avoid": [
+    "Hero portraits that occupy most of the board while the process is hidden.",
+    "Large headlines, large slogans, chunky numbers, crowded labels or fake paragraphs.",
+    "Copied reference shoe, repeated round sole pods, red outsole, brand marks or loud neon."
+  ],
+  "negative_prompt": "No large typography, oversized headline, decorative slogan, dense paragraphs, copied source shoe, repeated circular pods, bright-red outsole, logos, swooshes, trademarks, exact reference collage, giant athlete portrait, crowded HUD, glowing sci-fi circuits, loud neon, malformed anatomy, duplicate shoes, unreadable process order, inaccurate cutaway, plasticky knit, low-resolution texture.",
+  "prompt_template": "Create a premium footwear process board in {ASPECT_RATIO}.\n{STYLE_FIDELITY_ANCHORS}\nProcess and subject: {SUBJECT}\nMaterial setting, panels and palette: {SCENE}\nTiny stage labels only: {MAIN_TEXT}. Keep step numbers and short labels hairline-small and aligned to panel edges. No title, slogan, or large typography.\nProcess direction: {DESIGN_DIRECTION}\nShow three or four ordered frames that make the start state, physical transformation and result immediately understandable. Use consistent shoe angles where useful, accurate cross-sections, macro material texture, and one restrained connector between stages. The footwear is an original unbranded design: pearl-bone knit upper, open heel cage, brushed-titanium floating arch bridge, a continuous smoked-ceramic rocker with three long channels, and a smooth integrated forefoot. It must not resemble the source shoe or use separate rounded pods.\nPremium tactile photography, deliberate negative space, disciplined panel gutters, warm bone and obsidian with brushed-metal detail and tiny glacial-cyan process marks. The process itself is the visual hero; keep human presence partial and secondary. Recompose explicitly for the requested aspect ratio. Exclude: {SOURCE_CONTENT_TO_AVOID}.",
+  "examples": [
+    {
+      "case_name": "impact-damping",
+      "values": {
+        "SUBJECT": "A shoe meets the floor heel-first; a matching cutaway shows the open titanium arch flexing slightly under load; the final stage shows the bridge returning to neutral. Include only three minimal process states.",
+        "SCENE": "Warm bone floor with a deep obsidian cross-section panel; low side camera, exact same shoe angle across stages, quiet cyan force-vector mark.",
+        "MAIN_TEXT": "01 CONTACT · 02 COMPRESS · 03 RELEASE",
+        "DESIGN_DIRECTION": "Make impact absorption a visible mechanical sequence: initial heel contact, controlled bridge deformation, and a clean recovered shape. Keep the athlete cropped to feet and lower legs; emphasize accurate structure and contact shadows.",
+        "PRODUCT_OR_PROP": "Pearl-bone knit trainer with an open titanium arch that flexes under heel load"
+      }
+    },
+    {
+      "case_name": "energy-transfer",
+      "values": {
+        "SUBJECT": "A runner foot rolls from midfoot to toe-off; three shoe side views show the continuous rocker bending and returning energy toward the forefoot.",
+        "SCENE": "Graphite track lab with long warm-bone lane bars, floating product macro strip and fine cyan direction arrows.",
+        "MAIN_TEXT": "01 LOAD · 02 FLEX · 03 DRIVE",
+        "DESIGN_DIRECTION": "Show the center of pressure moving forward, the arch bridge flexing, then the smooth forefoot releasing. Use a low lateral camera, ordered panels and very small stage labels; no speed headline.",
+        "PRODUCT_OR_PROP": "The same sculptural trainer showing a continuous smoked-ceramic rocker bending toward the forefoot"
+      }
+    },
+    {
+      "case_name": "adaptive-fit",
+      "values": {
+        "SUBJECT": "A foot slides into the pearl-knit trainer; a close view shows the upper tensioning around the midfoot; a final view shows the open heel cage stabilizing the fit.",
+        "SCENE": "Soft-lit bone studio with charcoal shadow panels; detailed knit weave, subtle tension lines and one cyan registration tick.",
+        "MAIN_TEXT": "01 ENTRY · 02 TENSION · 03 LOCK",
+        "DESIGN_DIRECTION": "Present fit as a material process, not a portrait: entry, knit and bridge adaptation, stable heel. Use macro transitions from fiber to whole shoe and keep skin/body secondary.",
+        "PRODUCT_OR_PROP": "Pearl-knit trainer whose upper tensions around the midfoot while the open heel cage stabilizes fit"
+      }
+    },
+    {
+      "case_name": "precision-assembly",
+      "values": {
+        "SUBJECT": "The pearl-knit upper, titanium arch bridge and smoked-ceramic rocker appear as separate aligned components, then resolve into one finished shoe in the final panel.",
+        "SCENE": "Obsidian assembly studio with warm-bone light plane, floating components and restrained technical alignment marks.",
+        "MAIN_TEXT": "01 KNIT · 02 BRIDGE · 03 JOIN",
+        "DESIGN_DIRECTION": "Explain construction through a precise exploded-view sequence. Components should align to the final silhouette, with consistent scale, clean spacing, realistic material grain and tiny labels only.",
+        "PRODUCT_OR_PROP": "Pearl-knit upper, titanium arch bridge and smoked-ceramic rocker joining into one finished shoe"
+      }
+    }
+  ],
+  "category": "Product + Campaign"
+}

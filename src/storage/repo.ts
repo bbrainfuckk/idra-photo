@@ -17,6 +17,7 @@ export interface BatchRow {
   base_prompt: string | null;
   requested_count: number;
   constraints_json: string;
+  consistency_json: string | null;
   target_aspect: string | null;
   status: BatchStatus;
   paused: number;
@@ -114,8 +115,8 @@ export class Repo {
   insertBatch(b: BatchRow): void {
     this.db.run(
       `INSERT INTO batches (id, slug, idempotency_key, created_at, updated_at, request_text, planning_mode, base_prompt, requested_count,
-        constraints_json, target_aspect, status, paused, pause_reason, output_dir, max_retries, simulated, variety)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        constraints_json, target_aspect, status, paused, pause_reason, output_dir, max_retries, simulated, variety, consistency_json)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         b.id,
         b.slug,
@@ -135,6 +136,7 @@ export class Repo {
         b.max_retries,
         b.simulated,
         b.variety,
+        b.consistency_json,
       ],
     );
   }
@@ -363,7 +365,7 @@ export class Repo {
   }
 
   listArtifacts(batchId: string): ArtifactRow[] {
-    return this.db.all<ArtifactRow>('SELECT * FROM artifacts WHERE batch_id = ? ORDER BY created_at', [batchId]);
+    return this.db.all<ArtifactRow>('SELECT * FROM artifacts WHERE batch_id = ? ORDER BY created_at, rowid', [batchId]);
   }
 
   // ---- operations (idempotency) ----

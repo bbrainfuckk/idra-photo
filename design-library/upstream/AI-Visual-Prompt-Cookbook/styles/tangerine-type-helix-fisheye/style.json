@@ -1,0 +1,135 @@
+{
+  "style_version": "2.1",
+  "style_name": "Sculptural Type Helix — Refined",
+  "style_slug": "tangerine-type-helix-fisheye",
+  "style_summary": "Refinement of the existing four helix portraits: retain subjects, props, palette and material families; improve close camera impact, letter hierarchy and scene integration without introducing new concepts.",
+  "category": "Type Posters",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Prioritized fixed CORE and bounded FLEX rules",
+    "SOURCE_CONTENT_TO_AVOID": "Original reference content that must be replaced",
+    "SUBJECT": "One new adult protagonist",
+    "ACTION": "Pose and single salient handheld prop",
+    "WARDROBE": "Clothing supporting the case-specific art direction",
+    "LOCATION": "Theme-specific environment",
+    "MAIN_TEXT": "Exact uppercase word repeated around the sculptural helix",
+    "ART_DIRECTION": "Coherent palette, type personality, material texture, lighting and design rationale",
+    "REFINEMENT": "Case-specific correction of the existing image",
+    "SUBJECT_ACTION": "Pose and single salient handheld prop",
+    "PRODUCT_OR_PROP": "one salient handheld prop",
+    "BACKGROUND_ELEMENTS": "secondary scene details that support the location",
+    "SECONDARY_TEXT": "optional supporting text; leave unused if not needed",
+    "ACCENT_SYMBOL": "optional decorative mark; leave unused if not needed",
+    "WARDROBE_STYLE": "Clothing supporting the case-specific art direction"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] Oversized three-dimensional letters form a continuous descending helix of approximately three turns around one person, visibly passing behind the shoulders and in front of the torso.",
+    "[CORE] Strong near/far scale contrast makes the lower foreground lettering dramatically larger than the distant upper arch.",
+    "[CORE] Close wide-angle perspective exaggerates the face and foreground and compresses the distant body and environment.",
+    "[CORE] Keep the face unobstructed, framed by the upper arch; coherent occlusion and scene lighting integrate the letters into the physical space.",
+    "[FLEX] Palette, sculptural letter material, uppercase typeface personality and light mood follow each case art direction; retain thick readable letter volumes and subject/type separation.",
+    "[FLEX] Portrait stacks the turns vertically; landscape broadens their elliptical sweep, preserving upper and lower arcs and front/back depth.",
+    "[FLEX] Clothing, location and props support each theme with one protagonist and one salient prop; settings may be daytime, dusk or night without losing photographic realism."
+  ],
+  "source_content_to_avoid": [
+    "The original blond male face and hairstyle",
+    "The basketball held at the left hip and basketball story",
+    "The original blue T-shirt with white athletic shorts outfit",
+    "The exact basketball court and its painted markings",
+    "The literal SUMMERTIME wording",
+    "All top-left creator signatures, AI labels, logos and watermarks"
+  ],
+  "visual_deconstruction": {
+    "hierarchy": "Clear expressive face and sculptural helix share dominance; near arc creates depth without hiding the prop or filling the entire lower half.",
+    "depth": "Alternating rear segments, subject occlusion and enlarged front segments construct a corkscrew.",
+    "negative_space": "Uncluttered space inside the upper arch keeps the face readable."
+  },
+  "composition": {
+    "camera": "Close slightly elevated 16–20mm-equivalent wide-angle camera; clear direct eye contact, expressive forward-leaning pose, large face with natural features and diminished lower body.",
+    "portrait": "Face near upper-middle, top arch with safe margin, rear shoulder section and oblique near arc; variable pitch prevents evenly spaced stacked rings.",
+    "landscape": "Close face stays large near center, tilted spiral sweeps through lateral depth with breathing room; avoid a solid horizontal fence of letters across the bottom."
+  },
+  "typography": {
+    "family": "Thick sculptural uppercase letters; rounded, condensed or softly slabbed personality is selected by the case.",
+    "layout": "Repeat only the case word on the continuous helix; complete readable front-facing word instances, with natural partial rear occlusion.",
+    "hierarchy": "One complete upper or middle word with at least 5 percent canvas edge margin; foreground arc is large but controlled, with openings revealing torso and prop."
+  },
+  "color_palette": {
+    "principle": "Case-specific hue relationships selected for the theme, not the source colors.",
+    "contrast": "Separate the lettering from clothing and background through hue or luminance.",
+    "restriction": "Do not default every case to orange letters, blue clothes and green ground."
+  },
+  "image_treatment": {
+    "texture": "Material-specific small-scale surface detail described by ART_DIRECTION; never transfer foam pores to every material.",
+    "photography": "Natural skin and fabric; clear eyes with gentle distant optical softness.",
+    "lighting": "Case-specific illumination must consistently affect skin, letters, reflections and cast shadows."
+  },
+  "design_rules": [
+    "Keep the face clear while type wraps both behind and in front.",
+    "Preserve one continuous spiral rather than separate floating slogans.",
+    "Adapt layout to each aspect ratio without stretching people or glyphs.",
+    "Repeat the exact case word with correct spelling wherever front-facing and readable."
+  ],
+  "do": [
+    "Integrate lettering into scene depth and the chosen lighting.",
+    "Maintain strong near/far scale contrast.",
+    "Replace reference content while preserving its visual relationships."
+  ],
+  "avoid": [
+    "Flat text overlays or a plain circular border.",
+    "Automatically copying the original orange/blue/green palette and foam material.",
+    "Duplicated faces, hands, props, watermark or tiny filler copy."
+  ],
+  "prompt_template": "Refine the supplied edit-target image into a stronger finished editorial photograph in {ASPECT_RATIO}. Preserve its person identity, wardrobe, prop, lettering word, palette, material family and spatial typography concept. The second reference image is the original source used ONLY to judge close-camera impact and spatial depth; do not copy its face, basketball, colors or text. CORE overrides FLEX. {STYLE_FIDELITY_ANCHORS}\nSubject: {SUBJECT}, {ACTION}. Wardrobe: {WARDROBE}. Location: {LOCATION}. Art direction: {ART_DIRECTION}. Specific refinement: {REFINEMENT}. Only lettering: {MAIN_TEXT}, correctly spelled with one complete readable instance at least 5 percent away from all edges. Keep a continuous descending typographic helix with alternating front/back occlusion; make its pitch and tilt dynamic rather than equally spaced separate rings. Use a slightly elevated close wide-angle view, direct expressive eye contact and forward-leaning shoulders; face must be a primary focal point. Keep the salient prop visible. Foreground letters should create depth with generous openings, not a solid bottom wall. Crisp natural skin, carefully modeled materials and coherent directional light; no excessive bloom or global blur. Maintain requested aspect ratio and recompose within the same design. No new visual metaphors, tape trails, shadow words, swimming action, new captions or logos. Source content to avoid: {SOURCE_CONTENT_TO_AVOID}.",
+  "negative_prompt": "Watermarks, logos, SUMMERTIME, basketball, original face, flat overlay lettering, disconnected rings, separate support rails, lettering covering eyes, misspelled front-facing words, malformed anatomy, default orange-blue-green styling.",
+  "examples": [
+    {
+      "case_name": "roller-day",
+      "values": {
+        "SUBJECT": "an adult East Asian woman with a short black bob",
+        "ACTION": "leaning toward the camera with a pair of cream roller skates held against her left hip",
+        "WARDROBE": "a plum cropped athletic top and ivory cycling shorts",
+        "LOCATION": "a lavender seaside skate plaza with pale concrete and sparse distant palms at late afternoon",
+        "MAIN_TEXT": "PLAYTIME",
+        "ART_DIRECTION": "Electric lilac and acid yellow: opaque lemon-yellow inflated rubber letters, very fine satin microtexture and generous rounded glyphs; plum clothing and lavender ground, warm low sidelight. The lively complementary tension expresses playful roller energy.",
+        "REFINEMENT": "Strengthen the skater portrait proximity and confident playful expression. Keep yellow rubber and purple plaza but add richer plum shadows, controlled lemon highlights and a stronger cool/warm separation. Slightly tilt the near spiral and reduce its footprint so the cream skates remain clearly visible. Avoid balloon seams or overglossy plastic."
+      }
+    },
+    {
+      "case_name": "sound-garden",
+      "values": {
+        "SUBJECT": "an adult Black man with close-cropped hair",
+        "ACTION": "holding a compact silver portable cassette player at his right hip and leaning forward with relaxed confidence",
+        "WARDROBE": "a charcoal mesh overshirt and dark aubergine trousers",
+        "LOCATION": "a sparse open-air rooftop listening party after dark with distant city lights",
+        "MAIN_TEXT": "GOODVIBES",
+        "ART_DIRECTION": "Ultraviolet and magenta against near-black: thick translucent violet acrylic uppercase letters with restrained pink edge emission, smooth surfaces and subtle internal haze; condensed rounded grotesk letterforms. Violet rim light and a soft neutral face key preserve natural skin. The glowing helix visualizes sound moving through night.",
+        "REFINEMENT": "Bring the face closer and brighten its neutral key light so eyes and skin stay expressive against violet type. Retain translucent acrylic with crisp luminous edges, reduce broad glow, simplify background people, keep silver player visible. Tilt and vary spiral spacing; do not turn the image into evenly stacked neon rings."
+      }
+    },
+    {
+      "case_name": "flower-break",
+      "values": {
+        "SUBJECT": "an adult woman with curly auburn hair and freckles",
+        "ACTION": "cradling a small bunch of white daisies wrapped in pale lavender paper at her left waist",
+        "WARDROBE": "a sage linen workwear jumpsuit",
+        "LOCATION": "a quiet pale blush courtyard garden with muted sage foliage in soft morning light",
+        "MAIN_TEXT": "DAYDREAM",
+        "ART_DIRECTION": "Cream and dusty rose with sage: warm ivory matte ceramic letters with softly rounded slab-like uppercase shapes, very fine clay grain and subtle handmade edge softness. Diffuse morning light and gentle contact shadows; the tactile material and quiet palette express flower arranging.",
+        "REFINEMENT": "Bring the freckled face and bouquet closer with forward-leaning direct gaze. Preserve warm ivory ceramic and sage/blush palette, but make ceramic rounded, finely finished and about one-third shallower rather than heavy stone blocks. Darken the sage foliage behind pale type for separation. Keep flowers visible between arcs; stronger sculpted sidelight gives depth while retaining gentle mood."
+      }
+    },
+    {
+      "case_name": "wave-club",
+      "values": {
+        "SUBJECT": "an adult tan-skinned man with shoulder-length dark curls",
+        "ACTION": "holding a short pale yellow swim fin pair against his right hip",
+        "WARDROBE": "a white rash guard and dark teal board shorts",
+        "LOCATION": "a minimal coastal lido with turquoise water, off-white stone deck and pale sky",
+        "MAIN_TEXT": "FREESTYLE",
+        "ART_DIRECTION": "Sea-glass mint and off-white with deep teal accents: thick frosted pale mint glass letters, rounded geometric uppercase forms, fine etched surface and translucent edges; clear coastal sunlight, faint caustics and believable shadows. The cool mineral finish expresses swimming and sea air.",
+        "REFINEMENT": "Bring the face closer and establish direct eye contact with a slightly elevated wide-angle camera. Preserve mint glass, white clothes, fins and pool. Glass should have smooth frosted faces with clear bevels, controlled transparency and no crystalline fractures or ice chunks. Darken far pool turquoise to separate pale letters, use bright coastal rim light and a restrained warm face key. Avoid a heavy solid lower letter wall."
+      }
+    }
+  ]
+}

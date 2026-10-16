@@ -1,0 +1,4 @@
+interface:
+  display_name: "Idra Photo"
+  short_description: "Consistent image sets from a short design brief"
+  default_prompt: "Use $idra-photo to make a consistent image set from my short brief and references."

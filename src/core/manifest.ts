@@ -25,6 +25,7 @@ export function buildManifest(ctx: Ctx, batchId: string): Record<string, unknown
       base_prompt: b.base_prompt,
       target_aspect: b.target_aspect,
       constraints: JSON.parse(b.constraints_json),
+      consistency: b.consistency_json ? JSON.parse(b.consistency_json) : null,
       max_retries: b.max_retries,
       status: b.status,
       paused: b.paused === 1,
@@ -68,6 +69,11 @@ export function buildManifest(ctx: Ctx, batchId: string): Record<string, unknown
             }
           : null,
         visual_review: a?.review_json ? JSON.parse(a.review_json) : { performed: false },
+        ...(b.consistency_json ? {
+          rejected_attempts: ctx.repo.listAttempts(j.id)
+            .filter((attempt) => attempt.evidence_json && JSON.parse(attempt.evidence_json)['consistency_rejection'])
+            .map((attempt) => ({ attempt: attempt.n, ...JSON.parse(attempt.evidence_json!)['consistency_rejection'] })),
+        } : {}),
       };
     }),
     notes: [

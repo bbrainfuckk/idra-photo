@@ -1,0 +1,124 @@
+{
+  "style_version": "2.0",
+  "style_name": "Skyward Condensed Action",
+  "style_slug": "skyward-condensed-action",
+  "style_summary": "Worm-eye airborne sports photography against expansive cool blue sky, with monumental ultra-condensed fluorescent uppercase type occluded by a sharply foreshortened human silhouette.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Essential and flexible style relationships",
+    "SOURCE_CONTENT_TO_AVOID": "Original identities and composition to replace",
+    "SUBJECT": "Photographic action and environment",
+    "MAIN_TEXT": "Exact large headline",
+    "SMALL_TEXT": "Single small supporting line",
+    "ACCENT": "Shared graphic and type ink",
+    "DIRECTION": "Product/action-specific design intention",
+    "WIDE_DIRECTION": "Independent landscape layout",
+    "SUBJECT_ACTION": "an airborne athletic movement seen from directly below at its apex",
+    "PRODUCT_OR_PROP": "the sport implement carried through the airborne moment",
+    "LOCATION": "expansive cool blue open sky with almost no ground visible",
+    "BACKGROUND_ELEMENTS": "uninterrupted sky and the monumental fluorescent type partly occluded by the figure",
+    "SECONDARY_TEXT": "the compact supporting label sitting near the headline",
+    "ACCENT_SYMBOL": "the fluorescent color accent carried by the condensed type",
+    "WARDROBE_STYLE": "athletic kit that silhouettes cleanly against bright sky"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] Monumental EXTRA-BOLD ULTRA-CONDENSED upright uppercase sans lettering forms a dense graphic wall behind the photographic figure; very tall narrow glyphs with narrow counters, not wide geometric or lean italic lettering.",
+    "[CORE] Dramatic camera from below captures a believable airborne adult and near/far foreshortening against an expansive cool cyan-to-petrol blue sky with fine white clouds; one connected figure, natural body proportions under perspective.",
+    "[CORE] One flat electric lime-green ink makes the headline and tiny supporting text; skin, pale neutral and deep navy clothing remain photographic. The figure overlaps part of the headline while its full wording stays inferable.",
+    "[FLEX] Airborne gesture and object relationships follow the activity: reaching, folding, rotating or clearing an obstacle. Do not reuse the source high kick.",
+    "[FLEX] Arrange the towering condensed headline around the action and integrate it through readable silhouette overlap. Choose line breaks and placement by subject shape; avoid a detached text column or two text walls squeezing the figure.",
+    "[FLEX] Vary camera distance, roll, cloud concentration and subject scale so the airborne action organizes the canvas. Sky forms useful breathing spaces around movement, not an accidental empty lower band. Do not fill space with decoration or oversized type alone."
+  ],
+  "source_content_to_avoid": [
+    "Original JUST DO IT slogan and Nike swoosh",
+    "Original named athlete, likeness and name caption",
+    "Original football uniform, number 88 and team marks",
+    "Exact high-kick pose, football grip and source limb arrangement"
+  ],
+  "visual_deconstruction": {
+    "observation": "A football player photographed from far below hangs across blue sky; one extended cleated leg interrupts enormous lime condensed type across top. Tiny lime name lower left and brand lower right.",
+    "transfer": "Retain vertical mass of condensed glyphs, below-body perspective, sky breathing room and depth through overlap. Replace person, activity and copy; omit brand lockup."
+  },
+  "composition": {
+    "portrait": "Use the subject and relevant near object as the primary visual mass through the canvas. Connect condensed title to the silhouette with deliberate overlap; distribute sky around movement rather than leave a large unused lower field. Choose cropping only when anatomy, action and equipment remain clear.",
+    "landscape": "Recompose the action across width with a strong near/far relationship. Integrate title into the same spatial composition; avoid a default left-text/right-photo split, flanking type walls, or horizontal title/person/prop bands. Preserve purposeful breathing room."
+  },
+  "typography": {
+    "headline": "Extra-bold ultra-condensed uppercase upright sans, very tall narrow letters, dense monolithic strokes. No lean italic, outline or small slogan.",
+    "secondary": "One small bold sans activity line near an edge with breathing room."
+  },
+  "color_palette": {
+    "system": "Electric lime-green typography against cool blue sky, pale/cloud whites and navy photographic accents; no extra graphic accent palette."
+  },
+  "image_treatment": {
+    "texture": "Fine restrained grain in photo and faint sky softness; crisp flat typography. No distressed paper, scratches, posterization or artificial crunchy HDR.",
+    "light": "Natural daylight with believable shaded undersides, realistic material detail and soft atmospheric clouds."
+  },
+  "design_rules": [
+    "Type is behind the figure, with deliberate limited overlap and recognizable wording.",
+    "Keep body and equipment connected and physically plausible.",
+    "Let each activity change the silhouette, hierarchy and negative-space pattern.",
+    "Use sky, photo and type only; no starburst, stickers, speed lines or repeated decorative panels.",
+    "Review subject scale, visual center and the shape of remaining sky together; technical correctness alone does not establish a successful composition.",
+    "Use framing and subject-title relationships to resolve empty space; do not impose a universal fill percentage or enlarge every element."
+  ],
+  "do": [
+    "Use towering narrow bold glyphs to balance photo scale.",
+    "Keep one dominant airborne action.",
+    "Adapt title-body relationships separately for both ratios."
+  ],
+  "avoid": [
+    "Source high kick with only new clothing.",
+    "Prior style acid burst or diagonal light-weight text.",
+    "Invented equipment connections, extra limbs, unreadable title or brand signatures."
+  ],
+  "negative_prompt": "No Nike swoosh, logos, team marks, watermark, celebrity identity, football uniform, extra people, extra limbs, detached hands, illegible title, starbursts, text boxes, wide fonts, italic lettering, distressed paper.",
+  "prompt_template": "Create one full-bleed photographic poster at {ASPECT_RATIO}. {STYLE_FIDELITY_ANCHORS} Scene and action: {SUBJECT}. Headline exactly \"{MAIN_TEXT}\". Supporting text exactly \"{SMALL_TEXT}\". Ink: {ACCENT}. For portrait: {DIRECTION}. For landscape instead: {WIDE_DIRECTION}. Make the action the primary visual mass, with the headline integrated behind its silhouette. Shape remaining sky around the movement; avoid an unused bottom band, detached text/photo zones and horizontal three-tier stacks. Use purposeful breathing room and selective framing, not decoration or enlarged text alone, to balance the image. Natural daylight, restrained fine photographic grain and shaded undersides; clean flat type. Keep full anatomy and equipment physically coherent, main wording readable with partial foreground occlusion and all letters within canvas. Exclude {SOURCE_CONTENT_TO_AVOID}.",
+  "examples": [
+    {
+      "case_name": "volley-reach",
+      "values": {
+        "SUBJECT": "An adult female beach volleyball athlete in plain ivory and navy kit, jumping for a one-handed spike. Camera directly below and slightly ahead: raised right palm close below a single volleyball, torso twisting, other arm counterbalances and both knees bend behind her. Blue sky and delicate clouds only; no court or net required. Hands and ball separate with a small air gap.",
+        "MAIN_TEXT": "RISE ABOVE",
+        "SMALL_TEXT": "VOLLEY / 01",
+        "ACCENT": "Electric lime-green, approximately #9CFF00",
+        "DIRECTION": "Use a full-height diagonal reach: large bent knees in the lower foreground, central torso and reaching hand with complete volleyball toward upper right. Stack RISE ABOVE behind the upper figure so arm and hair connect photo and lettering, keeping wording inferable. Keep caption subordinate near an edge and sky distributed around the reach.",
+        "WIDE_DIRECTION": "Carry the reach diagonally across the wide canvas, with near bent legs anchoring one lower region and hand/ball extending toward the opposite upper region. Nest RISE ABOVE behind shoulder and reaching arm in the sky opening, rather than reserve an isolated left text panel. Keep complete ball and legible wording."
+      }
+    },
+    {
+      "case_name": "bmx-tabletop",
+      "values": {
+        "SUBJECT": "An adult BMX rider in a plain navy helmet and ivory long-sleeve top, performing a sideways tabletop jump photographed from underneath. One intact unbranded bicycle with exactly two wheels, continuous frame and fork; both hands grip bar and both feet remain on pedals, compact tucked body above bike. Wide blue sky with subtle white clouds.",
+        "MAIN_TEXT": "TURN THE AIR",
+        "SMALL_TEXT": "BMX / 02",
+        "ACCENT": "Electric lime-green, approximately #9CFF00",
+        "DIRECTION": "Bring camera close and low. Enlarge banked BMX and rider into a continuous full-height diagonal with a massive near front wheel in lower-left foreground and rear wheel receding right. Keep two recognizable wheel structures and coherent grips/pedals. Put TURN THE AIR behind helmet and shoulders; prevent the old empty lower third. Selective wheel-edge crop is allowed if bicycle geometry remains clear.",
+        "WIDE_DIRECTION": "Let the near front wheel and banked frame drive a broad diagonal across the canvas, rider occupying the opposing upper region. Integrate TURN THE AIR into sky behind helmet and shoulder, with controlled wheel/letter overlap. Keep both wheels recognizable; avoid a detached left title column or an empty bottom strip."
+      }
+    },
+    {
+      "case_name": "dance-suspension",
+      "values": {
+        "SUBJECT": "An adult male contemporary dancer in loose ivory trousers and a fitted navy shirt, in a compact sideways airborne tuck, knees gathered toward torso, one arm curved overhead and the other extended outward. View from low below sees the torso, bent legs and bare feet at different depths. No equipment, no stage, just cool blue clouded sky.",
+        "MAIN_TEXT": "HOLD THE SKY",
+        "SMALL_TEXT": "MOVEMENT / 03",
+        "ACCENT": "Electric lime-green, approximately #9CFF00",
+        "DIRECTION": "Expand the curled dancer through middle and lower canvas: raised arm toward upper left, head upper-middle and foreshortened tucked knees and feet toward lower-right. HOLD THE SKY forms a stepped upper backdrop crossed by arm and shoulder; SKY may nest beside the head. No detached side column. Keep complete hands and feet and readable wording.",
+        "WIDE_DIRECTION": "Compose the large curled body on a broad diagonal, using bent knees and extended arm as counterweights. Place HOLD THE SKY as one stepped title group behind the upper body, fitting the opening above and beside the head. Avoid separate title walls on both sides; keep hands, feet and wording clear."
+      }
+    },
+    {
+      "case_name": "hurdle-clear",
+      "values": {
+        "SUBJECT": "An adult female track athlete wearing plain navy shorts and ivory top clearing one minimal white hurdle. Low camera from just beyond the hurdle looks upward: lead leg extends forward nearly horizontally, trail knee bent outward, arms counterbalance, both shoes visible. The white hurdle bar sits low in frame; the athlete passes clearly above it. Blue sky with wispy white clouds; no arena crowd.",
+        "MAIN_TEXT": "CLEAR NEXT",
+        "SMALL_TEXT": "TRACK / 04",
+        "ACCENT": "Electric lime-green, approximately #9CFF00",
+        "DIRECTION": "Use a close low camera with a gently diagonal hurdle, large near lead shoe and central torso; fold trail leg away to create depth. Let head and forearm cross CLEAR NEXT while preserving readability. Keep a clear air gap above the bar and avoid isolating title, body and hurdle into three horizontal layers.",
+        "WIDE_DIRECTION": "Use the hurdle on an oblique lower edge and the athlete crossing above it into the opposite foreground. Balance the near shoe with torso and trail leg; let CLEAR NEXT sit behind upper body with deliberate overlap. Avoid a full-width flat bottom bar paired with a separate top headline band."
+      }
+    }
+  ],
+  "category": "Type Posters"
+}

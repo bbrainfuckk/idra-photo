@@ -1,0 +1,50 @@
+{
+  "user_prompt": "Make 2 square skincare product photos.",
+  "assumptions": [
+    "Starter visual direction chosen because no custom design_rules were supplied. Replace it when the user or reference specifies a different look.",
+    "Aspect 1:1; 2 images."
+  ],
+  "create_batch": {
+    "idempotency_key": "brief_27ef02abacac",
+    "request": "Make 2 square skincare product photos.",
+    "count": 2,
+    "planning_mode": "variations",
+    "base_prompt": "Create one standalone image for this brief: Make 2 square skincare product photos.\nThis is one output in the requested set; do not combine the set into a collage or grid.",
+    "target_aspect": "1:1",
+    "variety": "subtle",
+    "consistency": {
+      "name": "photo starter design",
+      "rules": [
+        {
+          "id": "palette",
+          "instruction": "Use a warm cream backdrop and restrained neutral colors. Keep the same color grading across the set; retain any supplied product colors."
+        },
+        {
+          "id": "lighting",
+          "instruction": "Soft diffused window light from the upper left, gentle contact shadows, and natural exposure throughout the set."
+        },
+        {
+          "id": "finish",
+          "instruction": "Editorial product photography with realistic materials and a matte finish. No glossy CGI, decorative gradients, or floating objects."
+        },
+        {
+          "id": "layout",
+          "instruction": "One clear focal subject, clean background, and generous breathing room. Keep the same visual density across the set."
+        },
+        {
+          "id": "exclusions",
+          "instruction": "Do not invent a real brand, logo, product claims, label text, or watermark. A supplied real product must retain its actual packaging."
+        }
+      ],
+      "allowed_changes": [
+        "angle"
+      ]
+    },
+    "max_retries": 2,
+    "concepts": [
+      "One unbranded matte skincare pump bottle, shown front-on on the cream studio surface.",
+      "The same unbranded matte skincare pump bottle, with only a slight three-quarter change of camera angle."
+    ]
+  },
+  "next": "Preserve all user requirements. Adjust any conflicting defaults before creation; add supplied references with their correct roles. Check that this host has image generation AND visual inspection tools, then pass create_batch to idra_create_batch. If no generator is connected, return the brief and explain setup; do not claim images were generated."
+}

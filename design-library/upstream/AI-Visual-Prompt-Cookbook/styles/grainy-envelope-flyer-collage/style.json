@@ -1,0 +1,131 @@
+{
+  "style_version": "1.2",
+  "style_name": "Grainy Envelope Flyer Collage",
+  "style_slug": "grainy-envelope-flyer-collage",
+  "style_summary": "A tactile event poster built around repeated photocopied flyers emerging from a saturated paper envelope, framed by cutout icons and spare black type.",
+  "category": "Zine + Collage",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Priority rules supplied at runtime",
+    "SOURCE_CONTENT_TO_AVOID": "Source identity exclusions supplied at runtime",
+    "MASTHEAD": "Invented event collective name",
+    "MAIN_TEXT": "Exact repeated flyer headline",
+    "DATE_TEXT": "Exact short date and time",
+    "FOOTER": "Exact footer line",
+    "PALETTE": "Bounded thematic print colors",
+    "ILLUSTRATION": "Monochrome flyer drawing",
+    "STICKERS": "Orbiting graphic cutouts",
+    "SUBJECT": "three tilted photocopied flyers emerging from a large open paper envelope",
+    "SUBJECT_ACTION": "flyers fanning upward out of the envelope at different angles",
+    "PRODUCT_OR_PROP": "the saturated open paper envelope with visible triangular side folds",
+    "LOCATION": "a flat saturated cut-paper poster field with no realistic scene",
+    "BACKGROUND_ELEMENTS": "orbiting cutout sticker icons and coarse print grain around the envelope",
+    "SECONDARY_TEXT": "the cut-paper masthead, the short date line and the footer line",
+    "ACCENT_SYMBOL": "the cutout sticker icons orbiting the envelope",
+    "WARDROBE_STYLE": "not applicable; any figures appear only inside the monochrome flyer drawing"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] An open colored paper envelope holds three overlapping cool white event flyers, fanning upward at different small angles; visible triangular envelope folds anchor the lower collage.",
+    "[CORE] Each flyer repeats the same bold black condensed headline and rough monochrome line illustration; at least one headline is fully visible.",
+    "[CORE] A compact irregular cut-paper masthead and small factual text occupy open background outside the central stack.",
+    "[CORE] Several theme-specific cutout stickers orbit the stack with selective white borders, varied scale and shallow overlaps.",
+    "[CORE] Flat printed collage with fine paper grain and rough ink lines, not a dimensional product photograph.",
+    "[FLEX] Background and envelope colors may change by theme but retain strong chromatic contrast against cool white sheets and black ink.",
+    "[FLEX] Sticker subjects and line drawings change with the event while retaining handmade graphic character.",
+    "[FLEX] Portrait stacks rise vertically; landscape shifts the stack right and gives the left masthead space, retaining an unmistakable open-envelope silhouette."
+  ],
+  "source_content_to_avoid": [
+    "CLASSICO PENINSULA identity and source wordmark",
+    "THURSDAY 13TH event text and source reservation numbers",
+    "Jacob Elordi bath-water label and celebrity references",
+    "Source elephant sticker, alcohol brands and sponsor logos"
+  ],
+  "visual_deconstruction": {
+    "structure": "Large open envelope, three offset flyers, orbiting stickers, open top and footer information zones.",
+    "rhythm": "Repeated headline baselines alternate shallow rotations; irregular cutout shapes counter rectangular sheets."
+  },
+  "composition": {
+    "portrait": "Compact masthead in upper fifth, flyers span middle, envelope anchors lower third, clear footer.",
+    "landscape": "Masthead and event details on left quarter; three sheets and envelope form an expansive right-centered fan; stickers bridge areas without covering primary headline."
+  },
+  "typography": {
+    "headline": "Bold tightly spaced condensed black grotesk, large on every sheet.",
+    "masthead": "Playful irregular angular cut-paper uppercase, legible.",
+    "details": "Small restrained black sans serif."
+  },
+  "color_palette": {
+    "system": "High-purity vivid color fields against cool white papers and near-solid black ink. Maintain crisp luminance contrast, no gray-yellow aging veil.",
+    "variation": "Four event-specific combinations stored in case values."
+  },
+  "image_treatment": {
+    "texture": "Fine light neutral ink speckle, chiefly on saturated color fields; cool white flyer paper and white cutout borders without yellow tint, fibers, mottling or worn ink. Solid black typography. Handmade line contours retained. No sepia wash, antique paper or dark vignette."
+  },
+  "design_rules": [
+    "Keep the open envelope legible as folded paper.",
+    "Show three repeated flyers with at least one complete headline.",
+    "Limit cutouts to four intentional thematic accents.",
+    "Use short accurate text with visible background breathing room."
+  ],
+  "do": [
+    "Preserve flat cut-and-paste rhythm.",
+    "Adapt the wide layout deliberately.",
+    "Keep intentional ink irregularity."
+  ],
+  "avoid": [
+    "Photorealistic tabletop staging.",
+    "Extra slogans and invented contact data.",
+    "Unreadable overlaid headline letters."
+  ],
+  "negative_prompt": "No source logos, no watermarks, no photographic mockup, no glossy 3D rendering, no extra paragraphs, no arbitrary grunge damage, no cropped primary headline.",
+  "prompt_template": "Create one finished event poster, aspect ratio {ASPECT_RATIO}. Flat tactile cut-paper editorial collage. Follow these priorities: {STYLE_FIDELITY_ANCHORS}. CORE takes precedence over bounded FLEX. Palette: {PALETTE}. Exact masthead: \"{MASTHEAD}\" in angular handmade cut-paper black letters. Exact bold condensed headline on each of three white flyers: \"{MAIN_TEXT}\". Flyers repeat this same rough black line drawing: {ILLUSTRATION}. Put the exact small date \"{DATE_TEXT}\" outside the flyers and the exact footer \"{FOOTER}\" at the bottom. Central construction: three differently tilted rectangular photocopied sheets emerge from a large open colored envelope with visible triangular side folds and pale inner flap. Large paper overlaps and asymmetric cutouts, no deep drop shadows. Surrounding cutouts: {STICKERS}. Portrait: compact upper masthead with generous red or case-colored background breathing room, rising central paper fan and broad lower envelope. Landscape: generous left quarter masthead and date block, larger right-centered low wide envelope and upward fan, footer on lower left; do not merely crop the portrait. At least one whole flyer headline must be large and unobstructed; other copies may partly overlap. Fine light neutral print speckle across flat colors and paper; rough ink-line edges, one coarse halftone sticker, restrained white cutout borders. Keep the paper whites clean enough for legibility. Exclude: {SOURCE_CONTENT_TO_AVOID}. No photography, no 3D product mockup, no extra slogans or microtext. Generate as a 4K ultra-high-resolution raster image. Preserve the specified reference-style texture, edge character and intentional softness at their described scale, intensity and locations. Avoid artifacts that are absent from the intended style; do not automatically denoise, sharpen, polish or distress the image. Execution precision: this is a FLAT printed graphic, with no visible paper thickness, no lifted sticker shadows and no beige cardboard simulation. Masthead is black letters directly on the colored background, occupying only about one tenth of image height; no white masthead label. Exactly four specified cutouts, no added starburst. Paper fan and drawings remain the main focus. Envelope front includes a pale cool white triangular panel contrasting with colored side folds. Leave a generous open background band around the small masthead. Color fidelity is essential: fresh contemporary printed graphic, cool bright white flyers and sticker borders, pale neutral-gray envelope front, high-purity saturated background and envelope colors. Solid black type without eroded holes; keep handmade contour art but remove antique fiber, sepia tint, mottled aging and vignette. Fine neutral ink speckle only, never coarse paper grain. Preserve strong white-versus-color contrast.",
+  "examples": [
+    {
+      "case_name": "print-social",
+      "values": {
+        "MASTHEAD": "PAPER CLUB",
+        "MAIN_TEXT": "PRINT FAIR",
+        "DATE_TEXT": "SAT 19 SEP / 12–6 PM",
+        "FOOTER": "OPEN STUDIO / FREE ENTRY",
+        "PALETTE": "saturated vermilion background, deep cobalt envelope, cool white papers, small yellow and pink accents",
+        "ILLUSTRATION": "two artists pulling a print together across a worktable, expressive rough black contour drawing",
+        "STICKERS": "a yellow ink roller at upper left, a pink cut-paper hand at upper right, a halftone ink tin at right, a black-and-yellow scissors sticker at bottom right"
+      }
+    },
+    {
+      "case_name": "record-exchange",
+      "values": {
+        "MASTHEAD": "SIDE B",
+        "MAIN_TEXT": "RECORD SWAP",
+        "DATE_TEXT": "SUN 20 SEP / 2–8 PM",
+        "FOOTER": "LISTEN / TRADE / REPEAT",
+        "PALETTE": "acid yellow background, deep violet envelope, cool white papers, small cyan and hot pink accents",
+        "ILLUSTRATION": "two collectors passing a vinyl record across a turntable, playful rough black contour drawing",
+        "STICKERS": "a cyan cassette at upper left, a hot pink lightning cutout at upper right, a halftone vinyl disc at right, oversized black-and-pink headphones sticker at bottom right"
+      }
+    },
+    {
+      "case_name": "flower-post",
+      "values": {
+        "MASTHEAD": "STEM CLUB",
+        "MAIN_TEXT": "FLOWER MART",
+        "DATE_TEXT": "SAT 26 SEP / 9–3 PM",
+        "FOOTER": "FRESH STEMS / LOCAL GROWERS",
+        "PALETTE": "vivid coral-pink background, vivid emerald-green envelope, cool white papers, bright lemon-yellow and lilac accents",
+        "ILLUSTRATION": "two florists tying an abundant bouquet together, lyrical rough black contour drawing",
+        "STICKERS": "bright lemon-yellow watering can at upper left, lilac cut-paper leaf at upper right, halftone seed packet at right, oversized green-and-white flower shears sticker at bottom right"
+      }
+    },
+    {
+      "case_name": "skate-mail",
+      "values": {
+        "MASTHEAD": "CURB CLUB",
+        "MAIN_TEXT": "SKATE JAM",
+        "DATE_TEXT": "SUN 27 SEP / 3–7 PM",
+        "FOOTER": "OPEN SESSION / ALL LEVELS",
+        "PALETTE": "bright cyan background, orange-red envelope, cool cool white papers, small lime and violet accents",
+        "ILLUSTRATION": "two skaters in different crouching tricks with clearly drawn boards and wheels, kinetic rough black contour drawing",
+        "STICKERS": "a violet skate wheel at upper left, lime zigzag cutout at upper right, halftone helmet at right, large black-and-orange sneaker sticker at bottom right"
+      }
+    }
+  ]
+}

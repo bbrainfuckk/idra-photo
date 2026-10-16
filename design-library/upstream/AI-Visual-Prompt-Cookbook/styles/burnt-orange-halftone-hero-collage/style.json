@@ -1,0 +1,174 @@
+{
+  "style_name": "Burnt Orange Halftone Hero Collage",
+  "style_slug": "burnt-orange-halftone-hero-collage",
+  "style_version": "2.1.0",
+  "style_summary": "A dense celebratory editorial poster system that combines one warm, flash-lit photographic hero cutout with burnt-orange screenprint panels, monumental condensed headline type, coarse halftone diagrams, dry-brush lettering, a looping foreground flourish, a monochrome base strip, and disciplined magazine microtype on aged cream paper.",
+  "category": "Zine + Collage",
+  "environment_variables": {
+    "SUBJECT": "anonymous fictional hero subject and portrait crop",
+    "SUBJECT_ACTION": "clear gesture or craft action",
+    "PRODUCT_OR_PROP": "one distinctive unbranded object or visual anchor",
+    "LOCATION": "setting that can be abstracted into shallow poster layers",
+    "BACKGROUND_ELEMENTS": "subject-specific diagrams, silhouettes, marks, and scene cues",
+    "MAIN_TEXT": "short two-to-four-word uppercase headline",
+    "SECONDARY_TEXT": "brief factual-style kicker and footer caption",
+    "ACCENT_SYMBOL": "original unbranded emblem or decorative glyph",
+    "WARDROBE_STYLE": "logo-free clothing and styling direction",
+    "STYLE_FIDELITY_ANCHORS": "observable style traits that must remain visible in every sample",
+    "SOURCE_CONTENT_TO_AVOID": "literal source content that every sample must replace",
+    "ASPECT_RATIO": "4:5 or 5:4"
+  },
+  "style_fidelity_anchors": [
+    "Warm uncoated cream paper ground with a restricted burnt-tangerine, near-black, cream, and white graphic palette around a selectively colorful photographic subject.",
+    "One enormous extra-heavy condensed uppercase headline spans almost the full width behind the subject and is partly hidden by the head and shoulders.",
+    "One dominant waist-up or chest-up photographic hero cutout occupies roughly two-thirds of the canvas and sits near center with a slight right bias.",
+    "The hero and major prop use irregular pasted-sticker edging: a broad cream contour plus a thin black or orange keyline.",
+    "Dense shallow editorial layering follows a fixed stack of paper ground, giant type, orange diagram panel, hero cutout, brush lettering, prop, foreground flourish, monochrome base strip, and caption footer.",
+    "A smaller subject-specific prop overlaps the lower-left quadrant and remains clearly secondary to the hero.",
+    "Expressive black dry-brush lettering crosses the upper middle while an independent oversized looping orange line with black keyline sweeps across the foreground and exits the frame.",
+    "Coarse controlled Ben-Day dots, white-on-orange silhouettes, photocopy grain, dry ink, and subtle screenprint misregistration appear throughout without obscuring the subject.",
+    "A high-contrast black-and-cream halftone silhouette strip runs edge to edge along the bottom as a graphic plinth beneath the color collage.",
+    "The photographic cutout uses direct warm frontal flash, saturated color, bright highlights, crisp deep shadows, and mild posterization rather than cinematic depth.",
+    "Tiny upper-left kicker text and a narrow cream footer with italic editorial caption are the only microtype zones, balanced by one sparse original emblem or number-like accent."
+  ],
+  "source_content_to_avoid": [
+    "Oscar Piastri or any identifiable real racing driver, including the source face, smile, pose, silhouette, name, biography, or statistics.",
+    "Formula 1, McLaren, Pirelli, Hilton, Monster, DP World, Cisco, Nike, or any visible sponsor, team, platform, or brand identity.",
+    "Papaya racing suit, branded racing cap, winner medal, motorsport uniform, or copied garment patches.",
+    "The ornate trophy, Formula racing car, racetrack map, racing cockpit, or any motorsport-centered prop and setting.",
+    "The words OSCAR or PIASTRI, the original tribute sentence, the source biography caption, the number 81, or any other source wording.",
+    "The original autograph or a line flourish that traces its distinctive letterforms.",
+    "The Formula 1 mark, trophy crests, sponsor badges, track diagrams, vehicle number, or exact decorative icon arrangement.",
+    "A near-copy of the original portrait, trophy, headline, autograph, car-strip, and footer placement as a complete composition.",
+    "Watermarks, usernames, creator signatures, QR codes, app marks, and invented sponsor labels."
+  ],
+  "visual_deconstruction": {
+    "overall_style_category": "Retro-future editorial tribute collage with photographic cutout, screenprint graphics, magazine typography, and scrapbook linework.",
+    "composition_and_layout": "A dense edge-to-edge shallow collage inside a thin cream margin. Monumental type is the rear layer; the large central portrait, overlapping prop, brush script, outlined looping stroke, technical orange panels, monochrome base strip, and narrow footer stack forward through occlusion.",
+    "subject_placement": "The hero is waist-up or chest-up, centered with a slight right bias, roughly 60 to 70 percent of canvas height. The head interrupts the headline and the torso overlaps the bottom halftone strip.",
+    "camera_or_perspective": "Mostly frontal portrait logic with direct flash. Depth is created by paper-like overlap and outline weight, not realistic spatial recession.",
+    "typography_style": "An extra-heavy condensed geometric sans headline dominates the upper half; rough dry-brush lettering provides an emotional counter-rhythm; micro italic sans copy is confined to the top-left and footer.",
+    "color_palette_behavior": "Cream and burnt orange carry most of the page, near-black supplies structure, white creates knockout diagrams, and the photographic hero may retain a few controlled saturated colors.",
+    "graphic_elements": "Rectangular orange panels, coarse halftone silhouettes, simplified technical diagrams, dotted fields, clipped archival symbols, an original emblem, brush lettering, and one huge outlined loop.",
+    "texture_and_finish": "Warm fibrous paper, Ben-Day dots, photocopy grit, dry ink, lightly worn edges, mild misregistration, and posterized photo shadows; distressed but still crisp and legible.",
+    "lighting": "Hard warm frontal flash on the subject with bright face and object highlights, compact deep shadows, and no atmospheric light effects.",
+    "mood": "Celebratory, youthful, kinetic, affectionate, handmade, and magazine-editorial rather than polished corporate advertising."
+  },
+  "composition": {
+    "layer_stack": "Cream paper; monumental headline; burnt-orange diagram panel; dominant photographic hero; dry-brush word; secondary prop; looping foreground line; monochrome halftone base strip; cream caption footer.",
+    "primary_subject_scale": "Approximately 60 to 70 percent of the canvas height, centered or slightly right, with the head overlapping the headline.",
+    "secondary_prop_scale": "Approximately 25 to 35 percent of the canvas, anchored in the lower-left quadrant and overlapping the hero.",
+    "layout_density": "High and deliberate. Most layers overlap, but the face, main prop, headline silhouette, and footer remain readable.",
+    "margin": "Retain a thin warm-cream outer margin and a narrow footer band; avoid broad empty borders.",
+    "ratio_adaptation": "For 4:5, stack the hero above the full-width base strip. For 5:4, widen the headline and diagram panel, keep the hero near center-right, and let the prop and line flourish extend farther left and right without changing the layer order.",
+    "depth": "Flat pasted-paper overlap with outline separation; no cinematic vanishing point or deep environment."
+  },
+  "typography": {
+    "headline": "Exact supplied text in extra-heavy condensed uppercase geometric sans, tight tracking, burnt-orange fill, and a thin dark keyline; span nearly the full width behind the hero.",
+    "brush_layer": "A short original rough black dry-brush fragment, diagonal across the upper middle and partly occluded; expressive but never copied from a name or signature.",
+    "microtype": "Use the supplied secondary copy only in a tiny upper-left kicker and a narrow italic footer caption.",
+    "hierarchy": "Headline first as shape, hero first as content, brush word second, microtype last.",
+    "legibility": "Spell supplied headline and caption text exactly; do not invent brand labels, sponsor patches, numbers, or filler copy."
+  },
+  "color_palette": {
+    "paper_cream": ["#F0DFC1", "#F6E8CF"],
+    "burnt_tangerine": ["#E66D22", "#D95A17"],
+    "near_black": ["#211B1A", "#0E0C0B"],
+    "knockout_white": ["#FFF9ED", "#FFFFFF"],
+    "proportions": "Approximately 55 percent cream, 30 percent burnt orange, and 15 percent near-black across the graphic system.",
+    "photo_accents": "Allow controlled saturated color inside the hero and prop only, with no neon, rainbow, chrome, or cyan-magenta dominance."
+  },
+  "image_treatment": {
+    "rendering_mode": "Full-color photographic cutout integrated into flat screenprint and photocopy graphic layers.",
+    "subject_lighting": "Direct warm frontal flash with bright highlights, deep crisp shadows, saturated mids, and slight posterization.",
+    "edge_quality": "Irregular hand-cut cream contour plus a thin dark or orange keyline around the hero and major prop.",
+    "print_texture": "Controlled coarse halftone, dry ink, warm paper grain, subtle one-to-two-pixel color misregistration, and light edge wear.",
+    "finish": "High-resolution finished editorial poster with crisp focal detail; texture must look intentional, never like low-quality compression or random noise."
+  },
+  "design_rules": [
+    "Preserve the fixed shallow layer stack and aggressive overlap before adapting content.",
+    "Keep exactly one dominant photographic hero and one clearly secondary prop.",
+    "Use the giant condensed headline as a partially hidden architectural backdrop, not a floating title card.",
+    "Confine microtype to the top-left kicker and bottom cream footer.",
+    "Build background meaning from white-on-orange diagrams and halftone silhouettes related to the new subject.",
+    "Use one dry-brush text gesture and one separate oversized outlined loop as cross-layer motion devices.",
+    "Anchor every composition with a black-and-cream halftone strip along the bottom.",
+    "Keep all people fictional and all garments, props, emblems, and text free of brands."
+  ],
+  "do": [
+    "Make the subject feel like a pasted editorial photograph inside a tactile printed scrapbook poster.",
+    "Retain the cream-orange-black palette ratio, coarse halftone, high density, and celebratory handmade energy.",
+    "Let the head, prop, brush lettering, and looping line interrupt adjacent layers through controlled occlusion.",
+    "Use subject-specific diagrams and silhouettes so each case changes content without changing the graphic grammar.",
+    "Keep the face or primary object crisp even while surrounding layers show print wear and grain."
+  ],
+  "avoid": [
+    "Do not depict motorsport, a racing driver, racing suit, cap, medal, trophy, race car, racetrack, copied autograph, or source wording.",
+    "Do not use any real logo, sponsor patch, brand mark, watermark, username, QR code, app mark, or invented sponsor label.",
+    "Do not drift into cinematic advertising, deep perspective, bokeh, lens flare, dramatic sky, volumetric light, or glossy 3D rendering.",
+    "Do not drift into clean vector minimalism, spacious Swiss grids, polished gradients, anime, comic painting, or airbrushed illustration.",
+    "Do not use a small isolated subject, broad empty margins, evenly distributed elements, or more than one competing hero.",
+    "Do not bury the image in torn-paper clutter, random dirt, heavy glitch, illegible noise, or low-resolution artifacts.",
+    "Do not use serif, bubble, extruded, chrome, or rainbow headline treatments, and do not invent extra copy."
+  ],
+  "prompt_template": "Create a {ASPECT_RATIO} finished raster editorial poster in the \"Burnt Orange Halftone Hero Collage\" visual style.\n\nSTYLE FIDELITY IS THE FIRST PRIORITY. Make every one of these anchors visibly present: {STYLE_FIDELITY_ANCHORS}\n\nSOURCE CONTENT MUST CHANGE. Do not recreate any of the following literal content: {SOURCE_CONTENT_TO_AVOID}\n\nNew content:\n- Hero subject: {SUBJECT}\n- Action: {SUBJECT_ACTION}\n- Secondary prop: {PRODUCT_OR_PROP}\n- Setting: {LOCATION}\n- Background diagram and silhouette material: {BACKGROUND_ELEMENTS}\n- Exact giant headline text: {MAIN_TEXT}\n- Exact small kicker and footer text: {SECONDARY_TEXT}\n- Original accent emblem: {ACCENT_SYMBOL}\n- Wardrobe and styling: {WARDROBE_STYLE}\n\nBuild a dense edge-to-edge editorial collage in shallow planar layers, not a realistic scene. Use this back-to-front stack: warm uncoated cream paper; one enormous extra-heavy condensed uppercase headline in burnt orange spanning nearly the full width; a burnt-orange rectangular panel with white halftone diagrams; one dominant warm flash-lit full-color photographic hero cutout centered with a slight right bias and occupying 60 to 70 percent of the canvas height; one smaller overlapping prop in the lower-left quadrant; one rough black dry-brush word sweep across the upper middle; one newly invented oversized looping orange line with a black keyline across the foreground; one edge-to-edge black-and-cream halftone silhouette strip along the bottom; and one narrow cream caption footer. Overlap the layers aggressively while preserving a thin outer margin and clear face, prop, headline shape, and footer.\n\nGive the hero and prop irregular pasted-sticker edges with a broad cream contour and thin dark or orange keyline. Use direct warm frontal flash, bright highlights, saturated mids, deep crisp shadows, and mild posterization. Keep depth flat and collage-like.\n\nUse approximately 55 percent warm cream #F0DFC1, 30 percent burnt tangerine #E66D22, and 15 percent near-black #211B1A in the graphic system, with white knockout marks and only controlled saturated accents inside the photographic cutout. Add intentional coarse Ben-Day dots, photocopy grain, dry ink, mild edge wear, subtle screenprint misregistration, simplified technical diagrams, dotted fields, and clipped archival marks. Preserve crisp focal detail.\n\nRender {MAIN_TEXT} exactly as supplied in extra-heavy condensed uppercase sans, tightly tracked and partly hidden behind the hero. Render {SECONDARY_TEXT} exactly as supplied only in a tiny upper-left kicker and italic footer. Use {ACCENT_SYMBOL} once as a sparse original emblem. Invent no other labels, numbers, logos, or copy. The black brush fragment and orange loop must be original abstract gestures and must not resemble a real signature.\n\nFor 4:5, stack the hero above the full-width base strip. For 5:4, widen the headline and diagram field, retain the hero near center-right, and extend the prop and loop laterally while keeping the same hierarchy. The result must feel celebratory, youthful, kinetic, handmade, and magazine-editorial. Match this visual system first, then make the new subject, action, prop, setting, text, and story unmistakably different.",
+  "negative_prompt": "No Oscar Piastri, no identifiable racing driver, no motorsport, no racing suit, no cap, no medal, no trophy, no Formula car, no racetrack, no source headline, no source biography, no copied autograph, no number 81, no real logo, no sponsor patch, no brand mark, no watermark, no username, no QR code, no platform mark, no invented sponsor label, no cinematic sports advertising, no deep perspective, no bokeh, no lens flare, no volumetric light, no dramatic sky, no glossy 3D render, no clean vector minimalism, no Swiss grid, no spacious layout, no smooth gradient, no chrome, no neon rainbow palette, no anime, no comic-book painting, no airbrushed portrait, no serif headline, no bubble type, no extruded type, no gibberish, no excessive copy, no random dirt, no heavy glitch, no JPEG artifacts, no blurred face, no low-resolution output.",
+  "examples": [
+    {
+      "case_name": "kiln-notes",
+      "values": {
+        "SUBJECT": "an anonymous fictional ceramic artist in a warm waist-up portrait",
+        "SUBJECT_ACTION": "smiling while shaping the rim of a large coil-built vessel",
+        "PRODUCT_OR_PROP": "a matte terracotta vessel without handles and one wooden modeling tool",
+        "LOCATION": "a sunlit community pottery studio abstracted as printed collage layers",
+        "BACKGROUND_ELEMENTS": "concentric wheel rings, shelf silhouettes, clay-splash marks, measurement ticks, and simplified kiln diagrams",
+        "MAIN_TEXT": "FORM BY HAND",
+        "SECONDARY_TEXT": "EARTH / WATER / HEAT — STUDIO NOTES",
+        "ACCENT_SYMBOL": "an original spiral-and-flame seal",
+        "WARDROBE_STYLE": "an indigo work apron over a cream short-sleeve shirt, lightly clay-marked and completely logo-free"
+      }
+    },
+    {
+      "case_name": "rooftop-harvest",
+      "values": {
+        "SUBJECT": "an anonymous fictional urban gardener in a three-quarter portrait",
+        "SUBJECT_ACTION": "lifting a tray of young seedlings toward the viewer",
+        "PRODUCT_OR_PROP": "an unbranded seedling tray and compact metal watering can",
+        "LOCATION": "a rooftop greenhouse above a dense city, reduced to shallow graphic layers",
+        "BACKGROUND_ELEMENTS": "leaf silhouettes, greenhouse grid lines, simplified skyline blocks, plant labels without words, and sun-ray arcs",
+        "MAIN_TEXT": "GROW ABOVE",
+        "SECONDARY_TEXT": "CITY GARDEN FIELD NOTES / SEASON ONE",
+        "ACCENT_SYMBOL": "an original geometric sprout-and-sun glyph",
+        "WARDROBE_STYLE": "a rust canvas utility overshirt with rolled sleeves and plain work gloves, no logos"
+      }
+    },
+    {
+      "case_name": "sweet-structure",
+      "values": {
+        "SUBJECT": "an anonymous fictional pastry designer in a confident waist-up portrait",
+        "SUBJECT_ACTION": "adding one final curved icing detail to a sculptural layer cake",
+        "PRODUCT_OR_PROP": "an asymmetrical frosted cake on a plain low turntable",
+        "LOCATION": "a compact tiled neighborhood bakery abstracted into graphic panels",
+        "BACKGROUND_ELEMENTS": "piping curves, checkerboard fragments, ingredient measurement marks, flour-like halftone bursts, and oven dial diagrams",
+        "MAIN_TEXT": "SWEET STRUCTURE",
+        "SECONDARY_TEXT": "LAYERS / LINES / CELEBRATION",
+        "ACCENT_SYMBOL": "an original whisk-and-starburst emblem",
+        "WARDROBE_STYLE": "a cream double-breasted chef jacket with a burnt-orange striped neckerchief, no embroidery or branding"
+      }
+    },
+    {
+      "case_name": "after-dark",
+      "values": {
+        "SUBJECT": "an anonymous fictional amateur astronomer in a seated three-quarter portrait",
+        "SUBJECT_ACTION": "looking upward while adjusting a compact portable telescope",
+        "PRODUCT_OR_PROP": "an unbranded tabletop telescope and a folded paper star chart",
+        "LOCATION": "a quiet desert observation camp at night, flattened into printed poster layers",
+        "BACKGROUND_ELEMENTS": "lunar phases, constellation dots, telescope schematics, topographic contour lines, and a broad horizon arc",
+        "MAIN_TEXT": "AFTER DARK",
+        "SECONDARY_TEXT": "A FIELD GUIDE TO THE OPEN SKY",
+        "ACCENT_SYMBOL": "an original crescent-and-compass glyph",
+        "WARDROBE_STYLE": "a rust quilted field jacket, plain knit cap, and cream utility scarf, all logo-free"
+      }
+    }
+  ]
+}

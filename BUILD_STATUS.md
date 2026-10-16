@@ -1,5 +1,31 @@
 # Build status
 
+## v0.2.1 — 2026-10-16
+
+Strict consistency contracts, mandatory image-bound review evidence, bounded correction retries, and an offline design library are implemented. The library contains 298 text files from six pinned source repos, including 171 image-style definitions, with upstream licenses and attribution. A portable skill, short-prompt brief tool, image-inspection tool, Claude project installer, and Claude plugin now support the same workflow.
+
+Verified locally on Windows with Node 24.20.0:
+
+| Check | Result |
+|---|---|
+| `npm run typecheck` | Pass |
+| `npm test` | 78/78 pass, including strict evidence/rejection/recovery, brief preparation, actual MCP image inspection, and Codex/Claude installer tests |
+| `npm run pack:check` | Pass; installed doctor/simulation work and all six library sources are readable |
+| `npm run clone:check` | Pass from the committed clone without npm install; install, doctor, simulation, uninstall, and library access work |
+| `npm audit` | 0 vulnerabilities after updating the compatible MCP SDK |
+| Bundle freshness | `idra-photo.mjs` and third-party package notices regenerated and committed |
+| Portable skill | Codex skill validator passes |
+| Claude manifests | Both plugin and marketplace pass `claude plugin validate` |
+| Real generation | Four accepted product/UI images from six native image generations; two rejected attempts preserved with reviews and corrective prompts |
+| Result evidence | Accepted/rejected PNG hashes match saved manifest evidence; published JSON contains no private local paths or attempt tokens |
+| Claude Code 2.1.296 | MCP connected, ten tools discovered, skill discovered; model-backed execution stopped at login |
+
+The [real results](docs/results/README.md) are a small manual Codex-host demonstration using the real queue API. They are separate from fixture tests. Idra validates review structure, hashes, aspect, and retry policy; the host supplies the visual judgments. No independent designer benchmark, autonomous Claude image-generation run, or live Claude Desktop UI test is claimed. See [Claude setup and evidence](docs/claude.md).
+
+Remaining validation: a logged-in Claude session with a connected image-generation tool, independent designer review on supplied brand references, and the longer real-image interruption/endurance procedures. The historical record below describes earlier work and is not the current task list.
+
+## Historical v0.1 record
+
 Updated 2026-09-22. Two separate deliverables, two separate statuses:
 
 | Deliverable | Status |
@@ -33,7 +59,7 @@ Updated 2026-09-22. Two separate deliverables, two separate statuses:
 
 Lint: no separate linter is configured. Strict TypeScript is the static check.
 
-## Open items
+## Historical v0.1 open items
 
 1. **Variety.** Fixed in schema 2: look-only style references, variation hints plus an automatic variety deck, and per-image `design` references. The per-image feature was tested live with 4 Anichess counterparts, which came out distinct and matched to their sources. The look-only fix has not been re-run on the Renaissance painting.
 2. Run the 10-image interruption procedure in `docs/testing.md` for real.
@@ -41,6 +67,6 @@ Lint: no separate linter is configured. Strict TypeScript is the static check.
 4. Delete the duplicate staged copy of each image after it is recorded. Real images are about 2.4 MB, and each currently exists three times: Codex's copy, the staging copy, and the output.
 5. Run the macOS/Linux launcher on a real Mac (CI will cover it once hosted).
 
-## Next action
+## Historical v0.1 next action
 
 Fix variety (item 1), then re-run the 3-image smoke test with the same painting to compare.

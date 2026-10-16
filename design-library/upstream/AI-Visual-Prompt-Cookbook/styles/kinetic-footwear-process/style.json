@@ -1,0 +1,125 @@
+{
+  "style_version": "1.1.0",
+  "style_name": "Kinetic Footwear Process",
+  "style_slug": "kinetic-footwear-process",
+  "style_summary": "A premium, motion-led footwear campaign turns athletic movement into a compact visual process story: a newly invented shoe mechanism is shown through action, sequential states and tactile engineering close-ups, with restrained micro-labels.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Prioritized kinetic sports-campaign and engineering-story visual system",
+    "SOURCE_CONTENT_TO_AVOID": "Reference-specific shoe silhouette, outsole structure, branding and layout",
+    "CASE_DIRECTION": "Sport, action, camera energy and visual narrative for this case",
+    "SHOE_MECHANISM": "Original footwear architecture and visible material behavior for this case",
+    "PROCESS_BEATS": "Three ordered visual states showing a functional change",
+    "MICRO_LABELS": "Only short stage labels, rendered very small",
+    "SUBJECT": "Athlete, foot or shoe carrying the campaign action",
+    "SUBJECT_ACTION": "Decisive athletic movement that reveals the mechanism",
+    "PRODUCT_OR_PROP": "Original footwear architecture for this case",
+    "LOCATION": "Premium athletic environment serving the process story",
+    "BACKGROUND_ELEMENTS": "Motion traces, cutaways and tactile material close-ups",
+    "MAIN_TEXT": "Restrained campaign title if lettering appears",
+    "SECONDARY_TEXT": "Only short stage labels, rendered very small",
+    "ACCENT_SYMBOL": "Warm vermilion confined to a functional shoe part or process cue",
+    "WARDROBE_STYLE": "Performance kit that keeps the shoe readable"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] Fuse high-end athletic campaign photography with precise footwear product imagery; show movement and engineering as one connected story.",
+    "[CORE] Let an athlete, foot or shoe move through a decisive action; use close crops, low camera angles and strong perspective to make the product feel physical and immediate.",
+    "[CORE] Explain the shoe through three ordered visual states, a cutaway, an exploded construction or tactile material details; the functional change must be visible without long copy.",
+    "[CORE] Use a controlled palette of obsidian, warm bone and deep vermilion; confine the warm accent to a functional shoe component, motion trace or small process cue.",
+    "[CORE] Build premium depth with sculpted directional light, precise contact shadows, tactile knit/rubber/carbon surfaces and fine restrained grain.",
+    "[CORE] Typography is sparse and very small: tiny stage numbers and short labels only, subordinate to the imagery; no hero headline, slogan or large wordmark.",
+    "[FLEX] Choose an asymmetric split, a short sequence, a diagonal motion path or an exploded view according to the case; avoid repeating one fixed panel template.",
+    "[FLEX] Invent a distinct shoe silhouette and mechanism for each case while keeping the material realism, motion energy and small-type discipline consistent.",
+    "[FLEX] Recompose each ratio independently so the action and process order stay legible; portrait and landscape are companions, not crops of one layout."
+  ],
+  "source_content_to_avoid": [
+    "The exact Nike Pegasus or Reebok shoe, upper paneling, side profile, sole outline or campaign composition in the supplied references",
+    "Repeated round pod cushioning, a long row of orange or red circular outsole cells, or any close copy of the praised MIND 001 shoe",
+    "Nike, Reebok or other brand names, swooshes, logos, slogans, trademarks or copied promotional copy",
+    "Oversized headlines, giant display lettering, large slogans, dense body copy or fake paragraph text",
+    "A browser/gallery screenshot, UI frame, repeated thumbnail rail or a static single-product beauty shot with no process story"
+  ],
+  "visual_deconstruction": {
+    "source": "The admired footwear concept combines sports motion, an unusually large shoe perspective, red structural accents and a modular story board. Carry forward its kinetic image rhythm and engineered sole focus, then refine it with smaller typography, clearer process storytelling and original shoe architecture.",
+    "hierarchy": "The athlete's motion and the shoe's functional state change lead. Three process beats and material close-ups support the story. Small numbered labels are secondary."
+  },
+  "composition": {
+    "principle": "Create a finished campaign board that connects one vivid athletic moment to a three-state footwear mechanism story. Use a flexible asymmetric layout with a hero action, sequential detail frames and purposeful negative space.",
+    "adaptation": "For 9:16, create a vertical reading path from the action into three tightly composed process states. For 16:9, let the action occupy one side while the mechanism sequence advances across the remaining width. Recompose per case; do not crop one ratio to make the other."
+  },
+  "typography": {
+    "form": "A restrained neutral grotesk, set only as tiny uppercase process words and 01/02/03 counters beside hairline rules.",
+    "hierarchy": "Typography occupies at most a small supporting area, never becomes the focal point, and never includes a headline, slogan, wordmark or paragraph."
+  },
+  "color_palette": {
+    "frame": "Obsidian and charcoal shadows balanced with warm bone-white light; deep vermilion or ember red appears only in a functional component or a precise motion cue.",
+    "photo": "Natural skin and neutral athletic fabric, muted graphite environments, tactile highlights on rubber, knit and carbon. Avoid candy-colored plastics and broad saturated gradients."
+  },
+  "photographic_direction": {
+    "camera": "Editorial sports photography with forceful low angles, close cropping and controlled motion blur; pair it with clean, high-detail product macro imagery and readable process states.",
+    "texture": "Tactile knit, dense rubber, satin composite and carbon-fiber surfaces; preserve believable grain and material separation without plastic gloss.",
+    "light": "Premium studio or night-court lighting with deep but detailed shadows, narrow warm highlights and deliberate reflected light on the shoe structure."
+  },
+  "design_rules": [
+    "Every board must show a readable three-state process, not merely a finished shoe beside decorative details.",
+    "Invent a new shoe mechanism and silhouette for each case; no repeated circular outsole pods or copied reference shoe.",
+    "Keep process labels short, accurate and very small; imagery carries the explanation.",
+    "Use the vermilion accent to identify the working mechanism or motion path, never as a large background wash.",
+    "Vary the composition to fit each mechanism while retaining the shared campaign lighting, material quality and palette."
+  ],
+  "do": [
+    "Connect the athlete's movement to the shoe's visible state change.",
+    "Use macro cutaways, exploded components or restrained force traces when they clarify the sequence.",
+    "Keep the stage numbers and labels aligned, crisp and secondary."
+  ],
+  "avoid": [
+    "Large titles or wordmarks competing with the athlete and product.",
+    "A fixed shoe shape repeated across all cases or copied round cushioning pods.",
+    "Static catalogue layouts, cluttered technical HUDs, unnecessary paragraphs or decorative arrows without a clear function."
+  ],
+  "negative_prompt": "No oversized headline, giant typography, slogan, brand mark, swoosh, trademark, copied source shoe, repeated circular pod outsole, exact Pegasus or Reebok silhouette, broad red gradient, candy-plastic material, generic catalogue product pose, crowded HUD, fake paragraphs, browser UI, gallery thumbnails, meaningless arrows, unreadable process order, distorted joints, malformed feet, duplicate shoes, floating unrelated objects or low-resolution texture.",
+  "prompt_template": "Create one finished premium footwear campaign board in {ASPECT_RATIO}.\\n{STYLE_FIDELITY_ANCHORS}\\nCase story: {CASE_DIRECTION}\\nOriginal shoe mechanism: {SHOE_MECHANISM}\\nProcess order: {PROCESS_BEATS}\\nExact micro-labels: {MICRO_LABELS}. Render only these tiny labels and 01/02/03 counters in a restrained clean uppercase grotesk; text must remain small and crisp, never larger than a discreet annotation. No headline, brand or paragraph.\\nShow the process visually across three ordered states with clear cause and effect, connecting athletic action to a visible change in the shoe. Use a fresh composition suited to this mechanism; integrate one high-impact action image with purposeful sequential process frames or close-ups. In portrait, let the eye travel from action into the three states; in landscape, recompose the action and sequence across the width. Keep generous breathing room and thin panel divisions.\\nUse premium, believable footwear materials, natural anatomy, sculpted shadow, charcoal/obsidian and warm bone light with restrained deep vermilion on the working structure. Do not recreate or edit the references. Exclude: {SOURCE_CONTENT_TO_AVOID}.",
+  "examples": [
+    {
+      "case_name": "impact-window",
+      "values": {
+        "CASE_DIRECTION": "A male track sprinter lands hard in a low, forward-driving pose; the shoe fills the near foreground, with the runner and track falling into a dark studio-night background.",
+        "SHOE_MECHANISM": "A newly designed off-white road racer with a deep charcoal sole and one sculpted crescent-shaped vermilion flex window in the heel sidewall; a single hollow membrane deforms under load. No pods.",
+        "PROCESS_BEATS": "01 heel touch; 02 crescent membrane folds inward; 03 the membrane springs back and lifts the runner forward.",
+        "MICRO_LABELS": "01 TOUCH · 02 FOLD · 03 RELEASE",
+        "SUBJECT": "A male track sprinter landing hard in a low forward-driving pose, shoe filling the near foreground"
+      }
+    },
+    {
+      "case_name": "torsion-spine",
+      "values": {
+        "CASE_DIRECTION": "A female court athlete cuts sharply across a dark court; use a low rear three-quarter view that shows the planted shoe twisting and the torso counter-rotating.",
+        "SHOE_MECHANISM": "A low-profile graphite court shoe with a continuous exposed vermilion carbon ribbon shaped like a narrow S through the midfoot, linking a split heel and forefoot chassis; slim blade traction, no pods.",
+        "PROCESS_BEATS": "01 edge load; 02 the carbon ribbon twists through the midfoot; 03 the forefoot releases into the next step.",
+        "MICRO_LABELS": "01 LOAD · 02 TWIST · 03 DRIVE",
+        "SUBJECT": "A female court athlete cutting sharply, planted shoe twisting as the torso counter-rotates"
+      }
+    },
+    {
+      "case_name": "adaptive-weave",
+      "values": {
+        "CASE_DIRECTION": "A female trail runner pivots onto a dark rock shelf at dawn; frame the shoe and lower leg close, with the upper in sharp focus and the background in deep shadow.",
+        "SHOE_MECHANISM": "An original mid-cut trail shoe with a charcoal woven upper and three fine vermilion tension cords that travel diagonally across the instep into a molded heel wrap; no oversized sole pods.",
+        "PROCESS_BEATS": "01 foot enters loose; 02 woven cords draw across the instep; 03 the heel wrap settles into a secure locked fit.",
+        "MICRO_LABELS": "01 ENTER · 02 WRAP · 03 LOCK",
+        "SUBJECT": "A female trail runner pivoting onto a dark rock shelf, shoe and lower leg close to camera"
+      }
+    },
+    {
+      "case_name": "layered-assembly",
+      "values": {
+        "CASE_DIRECTION": "A quiet engineering stage shows an original lightweight trainer being assembled in mid-air, then worn at toe-off by an athlete whose body is only partly visible.",
+        "SHOE_MECHANISM": "A distinct low-cut shoe built from a pearl knit shell, a thin vermilion tension lattice and one continuous dark outsole sheet with angular cut-through channels; no separate cushioning pods.",
+        "PROCESS_BEATS": "01 knit shell; 02 tension lattice bonds to the chassis; 03 the unified shoe drives into a clean toe-off.",
+        "MICRO_LABELS": "01 KNIT · 02 BOND · 03 RUN",
+        "SUBJECT": "A lightweight trainer assembled in mid-air, then worn at toe-off by a partly visible athlete"
+      }
+    }
+  ],
+  "category": "Product + Campaign"
+}

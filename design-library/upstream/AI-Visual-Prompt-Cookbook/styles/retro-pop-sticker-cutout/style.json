@@ -1,0 +1,125 @@
+{
+  "style_name": "Retro Pop Sticker Cutout",
+  "style_slug": "retro-pop-sticker-cutout",
+  "style_version": "custom-16x9-9x16-1.0",
+  "style_summary": "A loud retro-pop scrapbook poster system that layers an oversized yellow display headline, red offset print shadows, a central natural-color portrait cutout with a thick irregular white die-cut border, cobalt-blue paper texture, and small playful sticker marks. The result feels handmade, glossy-magazine inspired, and high-energy without copying any character, celebrity, or source design.",
+  "category": "Zine + Collage",
+  "environment_variables": {
+    "SUBJECT": "main subject",
+    "SUBJECT_ACTION": "main action",
+    "PRODUCT_OR_PROP": "object, product, or prop",
+    "LOCATION": "environment or setting",
+    "BACKGROUND_ELEMENTS": "secondary scene details",
+    "MAIN_TEXT": "main headline or graphic text",
+    "SECONDARY_TEXT": "supporting text",
+    "ACCENT_SYMBOL": "decorative symbol",
+    "WARDROBE_STYLE": "styling direction",
+    "STYLE_FIDELITY_ANCHORS": "top-level style constants injected at render time",
+    "SOURCE_CONTENT_TO_AVOID": "top-level content exclusions injected at render time",
+    "ASPECT_RATIO": "16:9 or 9:16 injected at render time"
+  },
+  "style_fidelity_anchors": [
+    "Use a full-bleed saturated cobalt-blue paper background with visible fine grain, photocopy speckle, and lightly uneven ink texture.",
+    "Set a huge two-word uppercase display headline in warm sunflower yellow, partially concealed behind the main portrait and cropped at the canvas edges.",
+    "Add a misregistered scarlet-red duplicate shadow or offset behind selected yellow headline letterforms, producing a simple two-ink print effect.",
+    "Use one large chest-up or waist-up photographic adult subject in the center or slightly off-center, treated as a paper cutout with an irregular thick white die-cut outline.",
+    "Give the cutout a narrow dark drop shadow or red rim offset that makes it lift above the blue paper and headline layers.",
+    "Place three to five small generic sticker-like accents around the portrait, such as starbursts, tiny cherries, an orange slice, a daisy, or a swirl badge; do not use protected characters or branded iconography.",
+    "Add one or two loose red hand-drawn marker loops, arrows, or abstract scribbles that cross the headline without imitating a signature or writing a name.",
+    "Use a small unbranded ticket-stub, price-tag, or pixel-stamp graphic near a lower corner rather than a scannable barcode.",
+    "Keep the palette limited to cobalt blue, sunflower yellow, scarlet red, white outline, dark brown-black shadow, and the natural colors of the new portrait only.",
+    "The mood is flirty, energetic, youthful-adult, playful, and tactile, combining mid-century print grain with modern sticker collage rather than polished minimalism."
+  ],
+  "source_content_to_avoid": [
+    "The source woman's recognizable face, black retro bob hairstyle, makeup, pose, skin marks, leopard-print outfit, and individual identity.",
+    "The pink cartoon bow, cat character reference, candy-swirled sticker, and any protected or branded character iconography.",
+    "The source headline, its original words, letter arrangement, source handwritten inscription, designer credit, and all copied small text.",
+    "The exact three heart stickers, exact barcode, exact bottom-right signature, and precise sticker placements from the source.",
+    "The source narrative of a retro beauty portrait with a cartoon bow and leopard jacket.",
+    "Any source logo, watermark, username, QR code, artist signature, or brand identity.",
+    "The exact portrait crop, face direction, yellow-red headline placement, or hand-drawn line shapes from the reference."
+  ],
+  "visual_deconstruction": "The reference stacks five visible print layers: grainy blue paper at the base; an enormous yellow headline with a red registration offset; a clean photographic portrait cut out by a chunky white edge; small collectible-style stickers; and loose marker scribbles. The hierarchy works because the portrait is almost as large as the type but its white outline keeps it legible against the yellow and blue. The stickers do not form an information system—they create bursts of personality in the unused pockets around the portrait. Granular texture keeps every flat color from looking digitally sterile.",
+  "composition": "For 16:9, let the large yellow headline run broadly across the full width in two tiers, with the central chest-up adult cutout interrupting the middle of the letters. Keep the portrait about 35–45% of the canvas height. Place small generic stickers in open upper and lower corners, and use one loose red abstract marker loop around, but not across, the face. For 9:16, stack the two giant words vertically behind a centered waist-up cutout; maintain blue border pockets for stickers and a small ticket-stub near the base. In both ratios, use new word order, new sticker positions, and a new portrait pose so the work is not a reconstruction of the source layout.",
+  "typography": "Use ultra-bold rounded or blocky uppercase sans-serif display letters in sunflower yellow. The headline is intentionally oversized, close-set, and cropped by the frame. Print a slightly displaced scarlet-red shadow layer behind selective characters. Keep supporting text to one short uppercase line or none; never use the source wording, source signature, long handwriting, brand names, or very dense type.",
+  "color_palette": "Use roughly 55% cobalt-blue background, 20% sunflower-yellow headline, 10% scarlet-red offset shadows and scribble accents, 10% white cutout and sticker borders, and 5% natural portrait/prop tones. The blue should be saturated and textured, the yellow slightly warm, and the red vivid but limited to accent layers.",
+  "image_treatment": "Combine a sharp but lightly grainy editorial photo cutout with printed-paper collage. The portrait must have a thick irregular white sticker edge and a very subtle dark or red offset shadow. Flat blue, yellow, and red regions carry halftone-like grain, tiny fiber specks, and mild ink unevenness. Avoid airbrushed beauty retouching, smooth gradients, plastic 3D stickers, or overly realistic studio backgrounds.",
+  "design_rules": [
+    "Keep the blue paper, oversized yellow headline, white cutout outline, and scarlet offset shadow as the primary four-layer system.",
+    "Use a new adult subject, new hairstyle, new wardrobe, new prop, new narrative, and new headline rather than merely renaming source content.",
+    "Use only generic sticker shapes and abstract scribbles; do not include protected characters, cartoon bows, logos, signatures, scannable codes, or copied stickers.",
+    "Let the portrait overlap the lettering, but preserve face and headline legibility through the white border and clear layer separation.",
+    "Place no more than five small accent stickers and no more than two loose scribble strokes.",
+    "Recompose the hierarchy natively for 16:9 and 9:16 instead of cropping one arrangement into the other."
+  ],
+  "do": [
+    "Use saturated blue-yellow-red print contrast, tactile grain, and bold overlapping layers.",
+    "Frame a large natural-color adult portrait with an irregular white die-cut border.",
+    "Use short invented headline text, generic stickers, and non-signature abstract marker motion."
+  ],
+  "avoid": [
+    "Do not reproduce the source person's face, leopard print, cartoon bow, original phrase, hearts, barcode, signature, or exact composition.",
+    "Do not use protected characters, branded stickers, logos, watermarks, QR codes, or readable artist signatures.",
+    "Do not use muted corporate palettes, clean vector flatness, thin typography, busy backgrounds, glossy 3D decals, or excessive text."
+  ],
+  "prompt_template": "Create a finished {ASPECT_RATIO} editorial poster in the literal Retro Pop Sticker Cutout visual system. Subject: {SUBJECT}. Action: {SUBJECT_ACTION}. Prop/product: {PRODUCT_OR_PROP}. Location: {LOCATION}. Background: {BACKGROUND_ELEMENTS}. Main text: {MAIN_TEXT}. Secondary text: {SECONDARY_TEXT}. Accent symbol: {ACCENT_SYMBOL}. Wardrobe/styling: {WARDROBE_STYLE}. Preserve these observable style anchors: {STYLE_FIDELITY_ANCHORS}. Do not recreate these source-specific elements: {SOURCE_CONTENT_TO_AVOID}. Use full-bleed cobalt-blue textured paper, two-tier giant sunflower-yellow uppercase display lettering with selective scarlet offset shadows, and a central natural-color adult portrait paper cutout bordered by a thick irregular white die-cut edge. Layer a few generic sticker accents, an abstract red marker loop or arrow, and one tiny non-scannable ticket-stub or pixel-stamp graphic around the cutout. Ensure the face, prop, and headline remain legible. Apply analog grain, print speckle, paper fibers, and slightly imperfect ink. Use a fully new subject, story, outfit, prop, headline, and arrangement. Avoid all protected characters, source likeness, source hairstyle, leopard pattern, cartoon bow, source wording, hearts arranged like the source, barcode, signature, watermark, logo, QR code, smooth gradients, glossy 3D decals, thin type, busy scenery, distorted anatomy, malformed hands, or unreadable text.",
+  "negative_prompt": "No source woman's likeness, black retro bob, leopard jacket, cartoon bow, cat icon, candy swirl, three-heart source sticker row, source headline, source handwritten credit, source barcode, source signature, logo, watermark, username, QR code, branded sticker, protected character, full-color background scene, muted palette, clean corporate style, gradient, glossy 3D, thin typography, too many stickers, distorted face, malformed hands, or unreadable headline.",
+  "examples": [
+    {
+      "case_name": "zine-maker",
+      "values": {
+        "SUBJECT": "an adult zine maker with copper curly hair and a confident three-quarter gaze",
+        "SUBJECT_ACTION": "holding up a folded handmade mini-publication beside one shoulder",
+        "PRODUCT_OR_PROP": "an unbranded stapled zine with abstract geometric cover art",
+        "LOCATION": "an implied independent print studio with no detailed scenery",
+        "BACKGROUND_ELEMENTS": "blue paper texture, yellow word blocks, red print offsets, small generic star and orange-slice stickers",
+        "MAIN_TEXT": "MAKE\nNOISE",
+        "SECONDARY_TEXT": "SMALL EDITIONS, BIG IDEAS",
+        "ACCENT_SYMBOL": "BLACK STARBURST",
+        "WARDROBE_STYLE": "cobalt cardigan over a plain cream T-shirt, small silver earrings"
+      }
+    },
+    {
+      "case_name": "night-florist",
+      "values": {
+        "SUBJECT": "an adult night florist with short auburn hair and a playful half-smile",
+        "SUBJECT_ACTION": "presenting a single bright gerbera stem across the chest",
+        "PRODUCT_OR_PROP": "one unbranded orange gerbera flower wrapped in plain tissue",
+        "LOCATION": "an implied flower stall after closing, with no realistic background scene",
+        "BACKGROUND_ELEMENTS": "blue grain paper, yellow title layers, red offset shadows, generic daisy and cherry stickers",
+        "MAIN_TEXT": "BLOOM\nLATE",
+        "SECONDARY_TEXT": "SAVE SOME COLOR FOR MIDNIGHT",
+        "ACCENT_SYMBOL": "TINY DAISY STICKER",
+        "WARDROBE_STYLE": "mustard utility shirt with simple denim overalls, no leopard print"
+      }
+    },
+    {
+      "case_name": "film-club-host",
+      "values": {
+        "SUBJECT": "an adult film-club host with dark cropped curls and warm expressive eyes",
+        "SUBJECT_ACTION": "holding an unmarked cardboard film canister at the waist",
+        "PRODUCT_OR_PROP": "a plain vintage-style film canister with no labels or brands",
+        "LOCATION": "an implied community cinema lobby with no detailed theater imagery",
+        "BACKGROUND_ELEMENTS": "cobalt texture, huge yellow headline, red ghost-print offset, generic sparkle and orange-slice stickers",
+        "MAIN_TEXT": "REWIND\nTHIS",
+        "SECONDARY_TEXT": "ONE MORE SCENE, PLEASE",
+        "ACCENT_SYMBOL": "TINY FILM FRAME ICON",
+        "WARDROBE_STYLE": "soft red collared blouse under a deep blue work jacket, no animal pattern"
+      }
+    },
+    {
+      "case_name": "skate-repairer",
+      "values": {
+        "SUBJECT": "an adult roller-skate repairer with long dark braids and an intent side glance",
+        "SUBJECT_ACTION": "holding one generic white skate wheel close to the shoulder",
+        "PRODUCT_OR_PROP": "a plain white roller-skate wheel and small silver bearing tool",
+        "LOCATION": "an implied neighborhood repair counter with no shop scene",
+        "BACKGROUND_ELEMENTS": "grainy blue paper, giant yellow type, red registration shadow, generic lightning and cherry stickers",
+        "MAIN_TEXT": "ROLL\nBRIGHT",
+        "SECONDARY_TEXT": "FIX IT, WEAR IT, GO AGAIN",
+        "ACCENT_SYMBOL": "SMALL LIGHTNING BOLT",
+        "WARDROBE_STYLE": "bright yellow sleeveless work vest over a simple navy shirt, no leopard print"
+      }
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "style_version": "1.0",
+  "style_name": "Halftone Chroma Fragment Editorial",
+  "style_slug": "halftone-chroma-fragment-editorial",
+  "style_summary": "High-contrast editorial collage in which monumental coarse black-and-white photographic halftones interact with selective crisp color fragments, heavy display typography and sparse handwritten interventions.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Essential identity and open design choices",
+    "SOURCE_CONTENT_TO_AVOID": "Reference identity and content exclusions",
+    "SUBJECT": "Fictional adult subject and photographic activity",
+    "MAIN_TEXT": "Required main title",
+    "SECONDARY_TEXT": "Required small editorial line",
+    "ANNOTATION": "Required short handwritten note",
+    "PALETTE": "Limited color photography and annotation accents",
+    "DESIGN_DIRECTION": "Case-specific intention with open execution",
+    "PORTRAIT_DIRECTION": "Portrait-specific spatial idea",
+    "LANDSCAPE_DIRECTION": "Landscape-specific spatial idea",
+    "SUBJECT_ACTION": "a charged gesture rendered as a monumental coarse halftone",
+    "PRODUCT_OR_PROP": "the isolated crisp color fragment cut into the halftone field",
+    "LOCATION": "a flat high-contrast collage field rather than a real setting",
+    "BACKGROUND_ELEMENTS": "coarse black-and-white halftone texture, torn edges and sparse handwritten interventions",
+    "ACCENT_SYMBOL": "the handwritten annotation mark",
+    "WARDROBE_STYLE": "simple clothing whose shapes survive heavy halftone posterization"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] A monumental photographic image rendered in coarse high-contrast black-and-white halftone forms the dominant visual field, with recognizable silhouette and intentional cropped scale.",
+    "[CORE] A small set of crisp full-color photographic fragments contrasts with the monochrome image; fragments reveal, reconnect or interrupt the main subject rather than acting as unrelated decorations.",
+    "[CORE] Heavy graphic display type and restrained editorial text contrast with sparse hand-drawn annotations; readable hierarchy remains clear amid image overlap.",
+    "[FLEX] Recompose the visual field for each theme: placement, image-window geometry, fragment count and negative-space rhythm are open, while retaining monochrome dominance and selective color.",
+    "[FLEX] Choose theme-led accent colors and photo lighting; preserve clean tonal separation, with no automatic beige aging or compulsory reference red.",
+    "[FLEX] Display type can anchor an edge, cross a silhouette or enter a split; keep the full required title readable, without repeating the source masthead arrangement.",
+    "[FLEX] Use a few meaningful marks such as gesture arcs, cut lines or underlines where they connect to the subject; exact handwriting, stars and source decorations are not mandatory."
+  ],
+  "source_content_to_avoid": [
+    "AESPA, Ningning and any recognizable source performer identity",
+    "Dirty Work and the reference's quoted lyrics or handwritten slogans",
+    "Birthday, biographical data and source fan-page content",
+    "Exact source collage arrangement, eye/lip crop placement and distinctive star sticker"
+  ],
+  "visual_deconstruction": {
+    "source_observations": "Huge face extends diagonally across a white/black field with visible dot pattern. Several rectangular color crops puncture it; black sans masthead, white serif small text and scribbles overlap. Positions and number of windows are source observations, not template requirements.",
+    "reusable_logic": "Scale and texture contrast create a primary image and selective secondary readings; typography negotiates black and white zones."
+  },
+  "composition": {
+    "portrait": "Develop the case's portrait direction as a full-bleed editorial poster. Choose hierarchy and negative space purposefully rather than copying reference window positions.",
+    "landscape": "Recompose the same case across the full horizontal field with its own visual path, new crop and fragment relations; do not place a miniature portrait layout in a wide frame."
+  },
+  "typography": {
+    "display": "Very heavy clean grotesk or condensed grotesk, chosen to express the case, complete readable title.",
+    "secondary": "Small editorial serif or compact sans text with generous enough contrast to read.",
+    "annotation": "Sparse tactile handwriting with one short note, integrated with a relevant image action."
+  },
+  "color_palette": {
+    "base": "Opaque neutral white and dense black dominate. Paper remains visually clean; texture is chiefly photographic halftone.",
+    "accents": "Theme-specific crisp color photos with natural skin tones; restrained matched annotation accents."
+  },
+  "image_treatment": {
+    "halftone": "Coarse high-contrast visible dot/threshold texture only on the dominant photographic image; retain recognizable face/body/objects and intentionally soft photographic edges.",
+    "fragments": "Sharp contemporary full-color photographs of the same fictional subject and related details; deliberate seams, flat editorial compositing, no mockup shadows."
+  },
+  "design_rules": [
+    "Keep exact required title and short text legible.",
+    "Let the large monochrome image dominate; color fragments have an intelligible relationship to it.",
+    "Choose composition and fragment interaction to express the case instead of reusing one fixed layout.",
+    "Use sparse handwriting as an editorial intervention without covering crucial information."
+  ],
+  "do": [
+    "Design meaningful connections between image fragments and the dominant image.",
+    "Keep contrast between coarse monochrome reproduction and crisp color photography.",
+    "Adapt the composition separately for portrait and landscape."
+  ],
+  "avoid": [
+    "Source celebrity identity, source brands and fan-biography content.",
+    "One repeated rectangular-window template with only text and subjects replaced.",
+    "Global vintage yellowing, uniform distress, fake paper mockup shadows and decorative clutter."
+  ],
+  "negative_prompt": "No source brand or identity, watermarks, mockup frame, beige aging, all-over coarse paper grain, unreadable required title, duplicated limbs, irrelevant stickers, random contact-sheet grid or identical layout across cases.",
+  "prompt_template": "Create a finished full-bleed photographic editorial collage poster in {ASPECT_RATIO}. Visual language: monumental coarse black-and-white halftone image, selective crisp color photographic fragments, heavy display lettering, sparse handwritten editorial marks. This is a new design, not a reference-layout copy. Essential identity and design freedoms: {STYLE_FIDELITY_ANCHORS}. Subject: {SUBJECT}. Main title exactly \"{MAIN_TEXT}\". Small editorial line exactly \"{SECONDARY_TEXT}\". One brief handwritten note exactly \"{ANNOTATION}\". Color direction: {PALETTE}. Design intention: {DESIGN_DIRECTION}. Choose inventive but coherent execution rather than adding arbitrary complexity. For 9:16 use this direction: {PORTRAIT_DIRECTION}. For 16:9 instead use: {LANDSCAPE_DIRECTION}. Keep one clearly dominant halftone image with a few intelligently placed full-color photo fragments; same fictional subject and related details across the photographs. Type can intersect images but all required text must remain complete and readable. Crisp neutral white and deep black, fully opaque rectangular canvas, coarse dots confined primarily to monochrome photography; color photos remain clear. Avoid {SOURCE_CONTENT_TO_AVOID}. No watermark, celebrity likeness, irrelevant stickers, fake paper shadows, beige aging, noisy global texture or extra filler text.",
+  "examples": [
+    {
+      "case_name": "afterimage",
+      "values": {
+        "SUBJECT": "Fictional adult contemporary dancer with short dark hair wearing a sculptural coral practice top, caught in a long twisting arm gesture; expressive clean studio photography",
+        "MAIN_TEXT": "AFTERIMAGE",
+        "SECONDARY_TEXT": "STUDIES IN MOTION / 01",
+        "ANNOTATION": "leave a trace",
+        "PALETTE": "Coral and natural warm skin in color fragments; otherwise black and white",
+        "DESIGN_DIRECTION": "Make the color photographs carry the time delay of a gesture: offset segments of the reaching arm form a loose delayed echo across the giant halftone body. The eye travels with the movement, not through isolated portrait boxes.",
+        "PORTRAIT_DIRECTION": "A tall winding torso and lifted arm create an ascending S path; color arm/shoulder slices break and reconnect the gesture. Title may break naturally into AFTER and IMAGE while reading as AFTERIMAGE.",
+        "LANDSCAPE_DIRECTION": "Stretch the gesture across the width with large halftone torso on one side, delayed colored arm segments moving toward open white space; integrate complete title into that open area."
+      }
+    },
+    {
+      "case_name": "redline",
+      "values": {
+        "SUBJECT": "Fictional adult female track rider with short silver hair in a black technical jacket, holding a vivid cyan motorcycle helmet; expressive close-up editorial photographs, no visible brand",
+        "MAIN_TEXT": "REDLINE",
+        "SECONDARY_TEXT": "BEYOND THE APEX / 02",
+        "ANNOTATION": "hold the line",
+        "PALETTE": "Electric cyan helmet and cool natural skin photographs, a tiny cyan annotation accent",
+        "DESIGN_DIRECTION": "Use the visor curve as a visual cut through an oversized halftone rider portrait; a crisp color visor strip aligns across the monochrome eyes while a displaced helmet or gloved-hand fragment introduces speed and tension. This is a portrait editorial, not a technical diagram.",
+        "PORTRAIT_DIRECTION": "Giant tightly cropped head with a slanted visor cut and a lower color glove/helmet detail; use type against a vertical black/white divide, avoiding a column of rectangular portraits.",
+        "LANDSCAPE_DIRECTION": "A panoramic visor-color band intersects the wide halftone head crop; the helmet detail is displaced toward one edge and the headline acts as a counterweight across a clean strip."
+      }
+    },
+    {
+      "case_name": "soft-force",
+      "values": {
+        "SUBJECT": "Fictional adult ceramic artist with curly dark hair and a cobalt work shirt shaping a chalk-white sculptural vessel; expressive clay-covered hands and tactile white clay, no product labels",
+        "MAIN_TEXT": "SOFT FORCE",
+        "SECONDARY_TEXT": "FORM UNDER PRESSURE / 03",
+        "ANNOTATION": "made by touch",
+        "PALETTE": "Cobalt work shirt, natural warm skin, neutral white clay within crisp color fragments",
+        "DESIGN_DIRECTION": "Hands and the hollow vessel become the composition's architecture. A large monochrome hand-and-shoulder image wraps around an open vessel-shaped space, with color clay-contact details inserted at the pressure points. Give the craft physical presence without a scrapbook of unrelated tools.",
+        "PORTRAIT_DIRECTION": "A towering halftone hand arcs down toward a central hollow vessel shape; small crisp color fragments at the clay-contact seams and an editorial title nested into the open shape.",
+        "LANDSCAPE_DIRECTION": "Two large halftone hands enter from opposite sides to cradle an off-center vessel; crisp color contact patches and a large open middle for readable title create a different broad, sheltered silhouette."
+      }
+    },
+    {
+      "case_name": "feedback",
+      "values": {
+        "SUBJECT": "Fictional adult electronic musician with shaved head and amber glasses leaning over a compact analog synthesizer; expressive stage-studio portrait, natural hands on controls, no device logos",
+        "MAIN_TEXT": "FEEDBACK",
+        "SECONDARY_TEXT": "LISTEN TO THE CIRCUIT / 04",
+        "ANNOTATION": "noise becomes shape",
+        "PALETTE": "Acid lime stage light and amber glasses in selective color photographs, black and neutral white field",
+        "DESIGN_DIRECTION": "Build a loop between the performer's listening face and the hand operating a control: a sparing cable-like handwritten line connects color photo fragments to a monumental halftone face. Composition suggests a signal returning to its source, without literal infographic boxes.",
+        "PORTRAIT_DIRECTION": "Off-center giant halftone face angles downward toward a bottom color control-hand strip; a second compact color face detail and one loop mark carry the eye back upward. Headline can run vertically if clearly readable.",
+        "LANDSCAPE_DIRECTION": "Halftone face enlarged and cropped along the lower field, a long color synth-hand strip across the opposite zone, with a single looping cable line and broad typography joining the two."
+      }
+    }
+  ],
+  "category": "Zine + Collage"
+}

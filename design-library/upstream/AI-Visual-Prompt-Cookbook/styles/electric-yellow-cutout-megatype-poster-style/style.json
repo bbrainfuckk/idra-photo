@@ -1,0 +1,173 @@
+{
+  "style_name": "Electric Yellow Cutout Megatype Poster Style",
+  "style_slug": "electric-yellow-cutout-megatype-poster-style",
+  "style_version": "2.1",
+  "style_summary": "A high-impact pop advertising poster system that places one oversized photoreal cutout subject over monumental warped display lettering, using an electric-yellow field, black upper type, cobalt-blue lower type, severe cropping, and tiny editorial metadata for scale contrast.",
+  "category": "Type Posters",
+  "environment_variables": {
+    "SUBJECT": "single photoreal person, body fragment, fashion item, tool, plant, or consumer object isolated as the central cutout",
+    "SUBJECT_ACTION": "clear graphic action such as stepping, turning, pressing, carrying, listening, opening, or balancing",
+    "PRODUCT_OR_PROP": "one visually bold prop or product integrated with the main subject",
+    "LOCATION": "seamless electric-yellow studio field or flat poster environment with no literal scenery",
+    "BACKGROUND_ELEMENTS": "two stacked bands of monumental cropped lettering plus sparse corner metadata",
+    "MAIN_TEXT": "one short uppercase headline split into a black upper word and cobalt-blue lower word",
+    "SECONDARY_TEXT": "tiny date, edition line, event note, or compact editorial caption",
+    "ACCENT_SYMBOL": "one minimal outlined stamp, vertical label, numeral block, or small geometric mark",
+    "WARDROBE_STYLE": "one-color contemporary styling with clean silhouette and no visible branding",
+    "STYLE_FIDELITY_ANCHORS": "observable style traits that must remain visible",
+    "SOURCE_CONTENT_TO_AVOID": "literal source content that generated samples must not recreate",
+    "ASPECT_RATIO": "4:5 or 5:4"
+  },
+  "style_fidelity_anchors": [
+    "One enormous photoreal cutout subject occupies the center and overlaps both typographic bands.",
+    "The backdrop is a nearly edge-to-edge field of pure electric yellow with only a narrow outer breathing margin.",
+    "Monumental black display letters dominate the upper half while monumental cobalt-blue letters dominate the lower half.",
+    "Headline letters are ultra-heavy, tightly packed, irregularly compressed, softly warped, and aggressively cropped by the frame.",
+    "The composition is front-facing and poster-flat, with depth created only by the photographic cutout crossing in front of the type.",
+    "The central cutout is sharply isolated with hard clean edges and rich realistic material detail.",
+    "Color behavior is limited to electric yellow, solid black, saturated cobalt blue, and the natural colors of the photographic subject.",
+    "A few tiny black metadata blocks sit near the lower corners or edge, creating a dramatic scale contrast with the giant headline.",
+    "Lighting on the subject is crisp commercial studio light with strong contrast, believable highlights, and no environmental shadow scene.",
+    "The mood is provocative, playful, loud, fashion-forward, and rooted in contemporary pop poster and youth advertising culture."
+  ],
+  "source_content_to_avoid": [
+    "A chicken burger, sandwich, bun, lettuce, fried filling, or any other handheld food stack.",
+    "A bare manicured hand gripping food from above or long cobalt-blue fingernails.",
+    "Orange sauce dripping down a bare wrist or forearm.",
+    "The exact centered burger-and-arm silhouette or the same food-consumption story premise.",
+    "The words DIRTY, BURGER, POSTER, EVENT, the date 28 NOVEMBER 2023, or any close rearrangement of them.",
+    "The Wine People Food logo, circular brand seal, creator mark, watermark, username, QR code, or platform identity.",
+    "The original yellow rectangle proportions and exact placement of every letter and metadata block.",
+    "Any identifiable person, face, brand, restaurant, product packaging, or trademark from the source."
+  ],
+  "visual_deconstruction": {
+    "overall_style_category": "Pop-art advertising poster, photomontage product cutout, monumental expressive typography, and editorial event graphic.",
+    "composition_and_layout": "A tall centered poster field floats inside a dark surround. Giant two-tier words fill almost every available surface. A single cutout subject rises through the middle, masking parts of both tiers while small footer and side metadata stay close to the lower edges.",
+    "subject_placement": "The subject is vertically centered, oversized, and cropped by the lower edge. Its most descriptive feature sits around the optical center, while any limb, strap, stem, or supporting form extends downward to connect it to the frame.",
+    "camera_angle_or_perspective": "Direct frontal product or fashion photography with little environmental perspective. Macro-like scale exaggeration makes the object feel iconic rather than documentary.",
+    "typography_style": "Ultra-black condensed display capitals with hand-cut wobble, uneven internal counters, soft bends, and extreme vertical stretch. Text acts as architecture and can be partly concealed as long as the word remains inferable.",
+    "color_palette_behavior": "Electric yellow controls roughly two thirds of the graphic field; black and cobalt blue form large flat masses; the natural subject adds a narrow band of material color without introducing a broad multicolor palette.",
+    "graphic_elements": "Sparse vertical microtype, a tiny lower-corner wordmark substitute, an outlined circular or rectangular seal, and occasional compact number blocks. No decorative illustration is needed.",
+    "texture_and_finish": "Crisp digital cutout photography over flat ink-like color. Letter edges may feel slightly handmade, but the overall finish remains clean, saturated, and print-ready rather than distressed.",
+    "lighting": "Controlled hard-soft studio lighting emphasizes surface shine and texture on the subject. Background and type remain perfectly flat without modeled light.",
+    "mood_and_cultural_reference": "Irreverent contemporary food and fashion advertising, independent event poster energy, pop editorial design, and oversized street-poster confidence."
+  },
+  "composition": [
+    "Fill the frame with an electric-yellow poster field and keep background scenery absent.",
+    "Set one huge black headline word across the top and one huge cobalt-blue word across the bottom.",
+    "Scale the central photographic cutout to cover roughly 40 to 60 percent of the frame and overlap both words.",
+    "Allow the headline to crop at the left, right, top, or bottom edges while preserving enough letter structure to read it.",
+    "Keep the key subject feature near the optical center and let a secondary linear form extend toward the lower edge.",
+    "Place only two or three tiny metadata elements in the lower corners or along one edge.",
+    "Maintain a poster-flat frontal viewpoint with no room, street, landscape, tabletop, or deep background."
+  ],
+  "typography": [
+    "Use ultra-heavy condensed uppercase display lettering as the dominant graphic mass.",
+    "Warp letter widths and baselines subtly so the type feels hand-cut and elastic rather than typeset perfectly.",
+    "Render the upper word only in solid black and the lower word only in saturated cobalt blue.",
+    "Use one or two short words with four to seven letters each; avoid sentences in the giant type.",
+    "Keep secondary information tiny, narrow, black, and editorial, with optional vertical stacking.",
+    "Permit the photographic subject to hide portions of letters while retaining the overall word rhythm.",
+    "Do not imitate any existing logo, trademark, or the exact letter shapes from the source."
+  ],
+  "color_palette": {
+    "electric_yellow_field": "#FFF500",
+    "solid_black_type": "#000000",
+    "cobalt_blue_type": "#1257F5",
+    "metadata_black": "#050505",
+    "subject_color_rule": "Retain realistic subject materials and skin or fabric tones, but keep them subordinate to the three-color poster system.",
+    "proportion_rule": "Use electric yellow as the dominant field, black as the upper mass, cobalt blue as the lower mass, and natural photographic color only inside the central cutout."
+  },
+  "photographic_direction": {
+    "capture": "High-resolution frontal studio product or fashion photograph with macro clarity and precise cutout edges.",
+    "lighting": "Crisp commercial key light with controlled specular highlights, deep local contrast, and minimal cast shadow.",
+    "isolation": "Remove the original environment completely so the subject reads as a clean photographic sticker over flat typography.",
+    "scale": "Exaggerate the subject until it feels iconic and tactile, with small details such as leather grain, metal reflection, fabric weave, leaf veins, or control surfaces clearly visible.",
+    "depth": "Keep depth shallow and graphic; the only spatial ordering is yellow field, giant type, and central cutout."
+  },
+  "design_rules": [
+    "Preserve the three-layer order: yellow field, two-color megatype, central photoreal cutout.",
+    "Use one subject and one prop at most; the design must remain sparse and iconic.",
+    "Keep letterforms monumental, imperfect, and cropped rather than clean corporate typography.",
+    "Use the same black-over-blue vertical color hierarchy in every application.",
+    "Reserve tiny type and outlined marks for metadata scale contrast, never for decoration-heavy clutter.",
+    "Change the source content completely while retaining the visual grammar and density."
+  ],
+  "do": [
+    "Choose a tactile subject with strong silhouette and recognizable material detail.",
+    "Use hard clean cutout edges and bold overlap between subject and type.",
+    "Keep the electric-yellow, black, and cobalt-blue palette dominant.",
+    "Use short punchy replacement headlines with entirely new wording.",
+    "Keep the composition loud, frontal, sparse, and immediately readable at thumbnail size.",
+    "Use precise but minimal lower-corner metadata."
+  ],
+  "avoid": [
+    "Do not recreate the burger, food grip, blue manicure, dripping sauce, arm pose, original words, date, or brand seal.",
+    "Do not add a realistic room, city, landscape, tabletop, crowd, or detailed environmental background.",
+    "Do not introduce gradients, pastel palettes, rainbow color, chrome type, 3D text, or glossy inflated lettering.",
+    "Do not shrink the headline into ordinary readable copy or surround it with many stickers and labels.",
+    "Do not use thin geometric sans-serif letters, elegant serif typography, handwriting, or script as the main type.",
+    "Do not add film grain, photocopy damage, halftone distress, paper tears, or lo-fi noise.",
+    "Do not include watermarks, usernames, logos, creator IDs, QR codes, or platform marks."
+  ],
+  "prompt_template": "Create a {ASPECT_RATIO} image in the \"electric-yellow-cutout-megatype-poster-style\" visual style. Style fidelity is the highest priority. Preserve these anchors in the finished design: {STYLE_FIDELITY_ANCHORS}. Create entirely new content and explicitly avoid: {SOURCE_CONTENT_TO_AVOID}. Subject: {SUBJECT}. Action: {SUBJECT_ACTION}. Prop or product: {PRODUCT_OR_PROP}. Location: {LOCATION}. Background elements: {BACKGROUND_ELEMENTS}. Main text: {MAIN_TEXT}. Secondary text: {SECONDARY_TEXT}. Accent symbol: {ACCENT_SYMBOL}. Wardrobe or styling: {WARDROBE_STYLE}. Composition: use a nearly edge-to-edge pure electric-yellow poster field; place one enormous black warped ultra-condensed uppercase word across the upper half and one enormous cobalt-blue word across the lower half; crop both against the frame; position a single oversized photoreal cutout on the center axis so it masks portions of both words and occupies roughly half the frame; keep only two or three tiny metadata marks near the lower corners or one edge. Typography: make the headline ultra-heavy, tightly packed, vertically stretched, subtly wobbly, hand-cut, and flat, with irregular counters and no outline; keep supporting copy extremely small and narrow. Color: restrict the graphic system to electric yellow #FFF500, solid black #000000, cobalt blue #1257F5, and realistic colors within the isolated subject. Texture and lighting: render the cutout with crisp high-resolution commercial studio detail, believable material texture, controlled hard-soft light, strong contrast, and precise hard edges; keep the yellow and type perfectly flat. Graphic elements: allow one tiny outlined seal, vertical label, numeral block, or geometric mark, but no extra illustration or decorative clutter. Use the exact supplied replacement headline and supporting copy when legible text is rendered, and never reproduce source wording or identity marks. Avoid: realistic scenery, multiple subjects, dense props, gradients, pastel palettes, rainbow color, 3D or chrome type, glossy inflated letters, serif or script headline, thin corporate typography, halftone, photocopy distress, paper tears, film grain, heavy noise, soft blurry edges, watermarks, usernames, logos, creator IDs, QR codes, platform marks, and copied source content. Important content rule: match the reference visual family first, then change the subject, action, prop, story, scene, and all text.",
+  "negative_prompt": "burger, sandwich, bun, lettuce, fried food, handheld food, hand gripping food, cobalt manicure, dripping sauce, bare forearm food pose, DIRTY, BURGER, POSTER, EVENT, 28 NOVEMBER 2023, original logo, original seal, copied source layout, identifiable brand, watermark, username, creator ID, QR code, platform logo, realistic room, street, landscape, tabletop, crowd, multiple subjects, dense props, gradient, pastel palette, rainbow palette, 3D typography, chrome type, glossy inflated letters, serif headline, script headline, thin corporate type, halftone, photocopy distress, paper tear, film grain, heavy noise, soft edges, blurry cutout",
+  "examples": [
+    {
+      "case_name": "signal-headphones",
+      "values": {
+        "SUBJECT": "a shaved-head music producer in sharp three-quarter profile wearing oversized scarlet studio headphones",
+        "SUBJECT_ACTION": "tilting their head forward with one ear cup pressed close while listening intently",
+        "PRODUCT_OR_PROP": "matte scarlet over-ear headphones with a thick coiled cable",
+        "LOCATION": "a seamless electric-yellow studio poster field",
+        "BACKGROUND_ELEMENTS": "monumental cropped black upper lettering, monumental cropped cobalt lower lettering, and one tiny vertical edition label",
+        "MAIN_TEXT": "LOUD SIGNAL",
+        "SECONDARY_TEXT": "NIGHT SESSION / EDITION 07",
+        "ACCENT_SYMBOL": "a small outlined waveform stamp",
+        "WARDROBE_STYLE": "plain black crewneck with a clean collar and no visible branding"
+      }
+    },
+    {
+      "case_name": "roller-rush",
+      "values": {
+        "SUBJECT": "a single bent lower leg wearing an oversized glossy cobalt roller skate with scarlet wheels",
+        "SUBJECT_ACTION": "kicking diagonally upward as if beginning a fast turn",
+        "PRODUCT_OR_PROP": "one retro four-wheel roller skate with visible leather grain and metal hardware",
+        "LOCATION": "a seamless electric-yellow studio poster field",
+        "BACKGROUND_ELEMENTS": "black upper megatype, cobalt lower megatype, and a tiny stacked date block near the lower left",
+        "MAIN_TEXT": "ROLL RUSH",
+        "SECONDARY_TEXT": "SATURDAY / TRACK 04",
+        "ACCENT_SYMBOL": "a small outlined wheel diagram",
+        "WARDROBE_STYLE": "scarlet ribbed athletic sock and cropped black trouser hem"
+      }
+    },
+    {
+      "case_name": "camera-flash",
+      "values": {
+        "SUBJECT": "a compact silver rangefinder camera suspended at monumental scale from a cobalt woven strap",
+        "SUBJECT_ACTION": "swinging slightly forward with the shutter button catching a sharp highlight",
+        "PRODUCT_OR_PROP": "unbranded brushed-metal rangefinder camera with black leather panels",
+        "LOCATION": "a seamless electric-yellow studio poster field",
+        "BACKGROUND_ELEMENTS": "cropped black upper word, cropped cobalt lower word, and minimal lower-right editorial microtype",
+        "MAIN_TEXT": "CLICK FLASH",
+        "SECONDARY_TEXT": "FIELD NOTES / FRAME 12",
+        "ACCENT_SYMBOL": "a tiny outlined focus-frame stamp",
+        "WARDROBE_STYLE": "no person visible; product styling is clean, tactile, and unbranded"
+      }
+    },
+    {
+      "case_name": "leaf-shift",
+      "values": {
+        "SUBJECT": "a sculptural monstera plant rising from a chunky cobalt ceramic pot",
+        "SUBJECT_ACTION": "leaning dramatically to one side as three large leaves fan across the center",
+        "PRODUCT_OR_PROP": "one cobalt glazed planter with visible ceramic texture and dark soil",
+        "LOCATION": "a seamless electric-yellow studio poster field",
+        "BACKGROUND_ELEMENTS": "giant black upper lettering, giant cobalt lower lettering, and a tiny vertical care-note block",
+        "MAIN_TEXT": "LEAF SHIFT",
+        "SECONDARY_TEXT": "NEW GROWTH / ISSUE 03",
+        "ACCENT_SYMBOL": "a small outlined leaf-vein seal",
+        "WARDROBE_STYLE": "no person visible; botanical subject remains photoreal and sharply isolated"
+      }
+    }
+  ]
+}

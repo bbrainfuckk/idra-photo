@@ -24,6 +24,7 @@ export interface PlanInput {
   startSeq?: number;
   variety?: Variety;
   locks?: VarietyLocks;
+  allowedChanges?: string[];
   /** Already-persisted normalized concepts, used to flag duplicates across extensions. */
   existing?: { seq: number; normalized: string }[];
 }
@@ -58,16 +59,18 @@ const SETTING = ['a different location that still fits the brief', 'an indoor ta
  * Deterministic variety for a variations job the host gave no hint for. It is a prompt
  * suggestion, not a guarantee of visual difference.
  */
-export function autoVariation(seq: number, variety: Variety, locks: VarietyLocks): string {
+export function autoVariation(seq: number, variety: Variety, locks: VarietyLocks, allowed?: string[]): string {
   const i = seq - 1;
   const at = <T>(arr: T[], offset = 0): T => arr[(i + offset) % arr.length]!;
   const parts: string[] = [];
-  if (variety !== 'subtle' && !locks.framing) parts.push(at(FRAMING));
-  if (!locks.framing) parts.push(at(ANGLE));
-  parts.push(`any person: ${at(MOMENT, 2)}`);
-  if (variety !== 'subtle') parts.push(at(BACKGROUND, 1));
-  if (variety === 'bold' && !locks.light) parts.push(at(LIGHT));
-  if (variety === 'bold' && !locks.framing) parts.push(at(SETTING));
+  const may = (axis: string) => allowed === undefined || allowed.includes(axis);
+  if (variety !== 'subtle' && !locks.framing && may('framing')) parts.push(at(FRAMING));
+  if (!locks.framing && may('angle')) parts.push(at(ANGLE));
+  if (may('pose')) parts.push(`any person: ${at(MOMENT, 2)}`);
+  if (variety !== 'subtle' && may('background')) parts.push(at(BACKGROUND, 1));
+  if (variety === 'bold' && !locks.light && may('lighting')) parts.push(at(LIGHT));
+  if (variety === 'bold' && !locks.framing && may('setting')) parts.push(at(SETTING));
+  if (parts.length === 0) parts.push('Keep the locked design unchanged; no automatic visual changes requested');
   return `${AUTO_PREFIX} ${seq}: ${parts.join('; ')}.`;
 }
 
@@ -118,7 +121,7 @@ export function planJobs(input: PlanInput): PlannedJob[] {
     concepts = [];
     for (let i = 0; i < count; i++) {
       const hint = input.concepts[i];
-      concepts.push(hint && hint.trim().length > 0 ? hint.trim() : autoVariation(startSeq + i, variety, locks));
+      concepts.push(hint && hint.trim().length > 0 ? hint.trim() : autoVariation(startSeq + i, variety, locks, input.allowedChanges));
     }
   }
 

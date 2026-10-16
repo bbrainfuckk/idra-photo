@@ -1,0 +1,3557 @@
+# brand-spec — Brand Definition Contract
+#
+# Schema describing the file/folder layout and frontmatter conventions a
+# brand repo MUST (required), SHOULD (recommended), or MAY (optional)
+# provide so it can be ingested by AI agents and downstream tools (e.g.,
+# grāmatr Studio).
+#
+# This file is the source of truth for "what makes a brand definition
+# valid." It was reverse-engineered from the first concrete brand repo
+# that adopted the conventions; values listed under any `_observed`
+# fields are illustrative, not prescriptive. See README.md for usage,
+# scaffolding guidance, and how brands map their content into the
+# abstract slots defined here.
+
+schema_version: 1
+contract_name: gramatr.brand
+contract_version: 1.17.0
+
+# -----------------------------------------------------------------------------
+# Cross-cutting conventions
+# -----------------------------------------------------------------------------
+
+conventions:
+  file_format: markdown        # all content files are .md with optional YAML frontmatter
+  data_format: yaml            # files under data/ are pure YAML
+  frontmatter:
+    syntax: yaml               # delimited by --- ... ---
+    presence: optional         # files MAY omit frontmatter; if present, must parse
+    common_fields:             # fields observed across multiple file types
+      version:
+        type: string
+        notes: "semver or simple decimal (e.g., '1.0', '1.0.0'); used for change tracking"
+      brand:
+        type: string
+        notes: "brand name; redundant with identity.name but useful for standalone files"
+      last_updated:
+        type: string
+        notes: "ISO date 'YYYY-MM-DD'; alias 'updated' is also acceptable"
+      status:
+        type: string
+        enum: [draft, active, canonical, open, archived, sample]
+        notes: |
+          Lifecycle marker. 'open' = known-incomplete spec. 'sample' =
+          template/example file shipped as scaffolding (e.g., contents
+          of templates/empty-brand/); validators MAY skip strict value
+          validation for files marked `status: sample`, so placeholder
+          values like `slug: TODO-kebab-case-slug` or `perspective: TODO`
+          are tolerated. Real brand content MUST NOT use `status: sample`.
+      visibility:
+        type: string
+        enum: [public, customer, internal, sales-enablement]
+        required: false
+        notes: |
+          (v1.2) Optional file-level visibility classification. Default
+          when omitted is `public`. Consuming-tool contract:
+            - `public`           — safe in public-facing generation,
+                                   websites, marketing.
+            - `customer`         — share with customers but not on public
+                                   surfaces (e.g., onboarding decks).
+            - `internal`         — internal use only; never include in
+                                   public/customer-facing generation.
+            - `sales-enablement` — internal sales-only; agents generating
+                                   customer-facing content MUST NOT
+                                   include.
+          Tools that generate public artifacts (Studio public renderers,
+          website builders, AI agents producing marketing copy) MUST
+          filter out anything with `visibility` ≠ `public`. Tools
+          generating internal artifacts MAY include all.
+
+          Backward compatibility: if a v1.1 file uses `audience: internal`
+          (observed historically on `proof/competitive.md`), validators
+          SHOULD treat it as `visibility: internal` and emit a warning
+          recommending migration to the `visibility` field.
+      source_authority:
+        type: object
+        required: false
+        notes: |
+          (v1.2) Optional declaration of this file's authority relative
+          to other sources of the same brand fact. Default when omitted
+          is `status: canonical`.
+        properties:
+          status:
+            type: string
+            enum: [canonical, mirror, historical, fixture-only]
+            required: true
+            notes: |
+              - `canonical`     — this file is the source of truth.
+              - `mirror`        — this file mirrors `upstream`; do not
+                                  edit here, edit upstream. Validators
+                                  MAY compare against upstream.
+              - `historical`    — represents an earlier brand state, kept
+                                  for reference only; ignore for current
+                                  brand decisions.
+              - `fixture-only`  — exists for test/demo purposes and
+                                  intentionally diverges from canonical;
+                                  ignore for brand decisions.
+          upstream:
+            type: string
+            required_when: "status in [mirror, historical]"
+            accepts_aliases: true
+            canonical_name: upstream_ref
+            legacy_names: [upstream]
+            notes: |
+              Path or URL to the upstream/canonical source.
+
+              (v1.7.5) Alias-aware per `conventions.cross_layer_references.backward_compat.field_aliases`.
+              The canonical v1.7 name is `upstream_ref` (singular `*_ref`
+              form). The legacy name `upstream` continues to satisfy
+              `required_when` cleanly; brands MAY use either. Validators
+              MUST treat presence of EITHER name as satisfying the
+              requirement and MAY emit the
+              `legacy-ref-field-migration-recommended` advisory when the
+              legacy form is observed.
+          notes:
+            type: string
+            required_when: "status in [historical, fixture-only]"
+            notes: "free-text — explain why this non-canonical file exists."
+          refresh:
+            type: object
+            required: false
+            notes: |
+              Only meaningful when `status: mirror`. Declares how the
+              mirror is kept current.
+            properties:
+              cadence:
+                type: string
+                enum: [manual, on-deploy, weekly, monthly, on-source-change]
+                required: true
+              last_synced:
+                type: string
+                format: date
+                required: true
+                notes: "YYYY-MM-DD; when the mirror was last reconciled with upstream."
+              sync_method:
+                type: string
+                required: false
+                notes: "free-text — how the mirror is kept current (script, manual copy, build step, etc.)."
+  file_naming:
+    case: kebab-case
+    patterns:
+      messaging_audience: "messaging/for-{audience}.md"
+      messaging_channel: "messaging/channel-{channel}.md"
+      persona: "personas/{audience}-{role}.md"
+      persona_archive: "personas/_archive/{slug}.md"
+      framework_doc: "personas/_framework.md"   # underscore prefix = framework/meta, not a persona
+      data_file: "data/{topic}.yaml"
+      example: "examples/{content-type}-{slug}.md"
+      prompt: "prompts/{content-type}.md"
+      ui_token: "ui-tokens/{layer}.md"
+  reserved_prefixes:
+    underscore: "files/dirs starting with _ are framework, archive, or manifest — not content instances"
+
+  # (v1.3) Canonical baseline for `applies_to` channel slugs on register
+  # files (issue #8 item 2). Brands MAY extend with brand-specific slugs
+  # (e.g., `linkedin-brian-handle`, `linkedin-company-page`,
+  # `pricing-page`). The baseline exists so validators can warn on drift
+  # (`email` vs `marketing-email` vs `marketing-emails`); it does not
+  # error on unknown slugs in v1.3 — full controlled-vocabulary
+  # enforcement is v2 territory.
+  applies_to_baseline_slugs:
+    notes: |
+      Baseline kebab-case channel/context slugs observed across
+      production brands. Use the baseline form when a baseline form
+      exists; declare brand-specific slugs only when the surface is
+      genuinely brand-specific (a named handle, a named landing page).
+    web_and_owned:
+      - website
+      - blog
+      - landing-pages
+      - pricing-page
+      - proof-page
+      - about-page
+      - changelog
+    sales:
+      - sales-decks
+      - one-pagers
+      - sales-conversations
+      - gated-assets
+      - case-studies
+      - white-papers
+    email:
+      - marketing-emails       # canonical form; NOT `email` or `marketing-email`
+      - transactional-emails
+      - lifecycle-emails
+      - newsletter
+    paid:
+      - paid-search
+      - paid-social
+      - display-ads
+    social:
+      - linkedin-company-page
+      - linkedin-personal-handle
+      - twitter
+      - instagram
+      - facebook
+      - tiktok
+      - youtube
+    technical:
+      # (v1.8.0) Expanded to formalize the agent/SDK surface observed in
+      # gramatr-brand/voice/registers/engineering.md and implied by
+      # next90-brand's CLI/messaging channels. The pre-v1.8 entries
+      # (code-comments, agent-prompts, technical-docs, github-issues,
+      # error-messages, cli-output, readmes) remain canonical for their
+      # original meanings — brands MAY use either the broad entry or the
+      # finer-grained refinements listed below.
+      - code-comments
+      - agent-prompts             # broad — see also: agent-system-prompts
+      - agent-system-prompts      # (v1.8.0) system-prompt strings shipped to agent runtimes
+      - technical-docs
+      - architecture-docs         # (v1.8.0) ADRs, system-design docs distinct from end-user technical-docs
+      - github-issues
+      - error-messages            # broad — see also: cli-error-messages, api-responses
+      - cli-output                # broad — see also: cli-help-text, cli-error-messages, status-line
+      - cli-help-text             # (v1.8.0) `--help` / man-page output
+      - cli-error-messages        # (v1.8.0) CLI-surfaced errors specifically
+      - status-line               # (v1.8.0) terminal status-line / prompt-segment text
+      - readmes                   # broad — see also: technical-readmes
+      - technical-readmes         # (v1.8.0) READMEs targeting engineers specifically
+      - eng-standards             # (v1.8.0) internal engineering standards / conventions docs
+      - claude-md                 # (v1.8.0) CLAUDE.md / agent-context project files
+      - mcp-tool-descriptions     # (v1.8.0) MCP tool description strings
+      - intelligence-packet-contract # (v1.8.0) agent intelligence-packet schemas / contract docs
+      - api-responses             # (v1.8.0) HTTP/RPC API response strings (errors, messages, codes)
+      - sdk-output                # (v1.8.0) SDK-surfaced strings (exception messages, log output)
+    long_form:
+      - blog-posts
+      - founder-guest-articles
+      - podcast-intro-outro
+      - webinar-scripts
+
+  # (v1.15.0) Baseline kebab-case register slugs observed across
+  # production brands. Used on `voice/registers/{register-slug}.md`
+  # frontmatter's `register:` field (and matched in the filename).
+  #
+  # Direct parallel to `applies_to_baseline_slugs` above: both are
+  # positive enumerations with warn-on-non-baseline semantics. Unlike
+  # `applies_to_baseline_slugs` (a single axis — channel-type),
+  # registers cluster on three axes simultaneously
+  # (audience_area / byline / channel) because a register is a voice
+  # mode that can be discriminated by any of: WHO the voice addresses
+  # (audience_area), WHO is speaking (byline), or WHERE the voice
+  # appears (channel). The categorization captures this; brands
+  # picking a register slug consult the matching category.
+  #
+  # Scope. v1.15.0 ships with the 4 observed slugs across two brands
+  # (gramatr-brand, lean-media-brand). next90-brand uses single-register
+  # `voice.md` (no `voice/registers/` directory); the baseline is moot
+  # for single-register brands.
+  register_baseline_slugs:
+    notes: |
+      Baseline kebab-case register slugs observed across production
+      brands. Use the baseline form when one exists; declare
+      brand-specific slugs only when the register is genuinely
+      brand-specific (a named individual's byline beyond the
+      founder, a channel-specific register the baseline doesn't
+      cover, an audience-area the baseline doesn't name).
+
+      The baseline does NOT mandate that every brand author every
+      register — a brand publishes whichever registers it needs.
+      Many brands ship single-register (`voice.md` at the brand
+      root, no `voice/registers/` directory); for them this
+      baseline is informational only.
+
+      Validators MAY emit an info-severity advisory when a
+      `register:` field value isn't a baseline slug
+      (`register-slug-baseline` rule, deferred to a future
+      validator release per the spec's established pattern).
+      Brand-specific registers continue to validate cleanly; the
+      advisory just surfaces the deviation so the inconsistency
+      is visible (e.g., a fourth brand introducing `corporate`
+      for what gramatr-brand and lean-media-brand call
+      `marketing` would surface as an advisory).
+    audience_area:
+      # Registers discriminated by WHO the voice addresses.
+      - marketing       # speaking to prospects/buyers — buyer-facing surfaces (website, decks, emails)
+      - engineering     # speaking to engineers/agents/technical operators (CLAUDE.md, SDK output, CLI)
+    byline:
+      # Registers discriminated by WHO is speaking — named-individual
+      # voices distinct from the brand-collective voice.
+      - founder-byline  # the founder's personal voice — first-person; named bylines
+    channel:
+      # Registers discriminated by WHERE the voice appears — when
+      # the platform's conventions reshape the brand voice enough
+      # that a dedicated register makes sense.
+      - social          # social-platform output (LinkedIn company page, public threads)
+
+  # (v1.14.0) Known drift forms for messaging channel slugs — paired with
+  # their canonical kebab-cased hyphenated singular forms. Distinct from
+  # `applies_to_baseline_slugs` above: that block enumerates the *plural*
+  # class-name slugs used inside `applies_to:` arrays on voice registers
+  # (e.g., `one-pagers`, `landing-pages`). This block governs the
+  # *singular* slug used in `messaging/channel-{channel}.md` frontmatter's
+  # `channel:` field and in the filename `channel-{slug}.md`.
+  #
+  # Scope. v1.14.0 ships with a single entry — `onepager → one-pager` —
+  # the only known drift form observed across the three production
+  # brands (next90-brand, gramatr-brand, lean-media-brand). Future drift
+  # forms get added here as discovered. A full positive baseline of
+  # canonical channel slugs (parallel to `applies_to_baseline_slugs`) is
+  # tracked as a separate follow-up RFC item.
+  channel_slug_canonicalizations:
+    notes: |
+      Each entry pairs a known non-canonical drift form with its
+      canonical replacement. Validators MAY emit info-severity
+      advisories when a drift form is observed in either:
+
+      - `frontmatter.channel:` on `messaging/channel-{channel}.md`
+        (e.g., lean-media-brand's pre-v1.14 `channel: onepager`).
+      - The filename itself (`messaging/channel-onepager.md` →
+        canonical `messaging/channel-one-pager.md`).
+
+      Two associated validator rules (deferred to a future validator
+      release per the spec's established pattern):
+
+      - `messaging-channel-slug-canonical` (info/warn) — emits an
+        advisory when `frontmatter.channel:` matches a known drift
+        form. Recommendation in the advisory names the canonical
+        form from this registry.
+      - `messaging-channel-filename-matches-slug` (info/warn) —
+        when `frontmatter.channel:` is set, the file's basename
+        SHOULD equal `channel-{channel}.md` (existing pattern at
+        `layers.messaging.directories[].contents[].pattern`).
+        Combined with the canonical-form check, this catches both
+        of next90-brand's pre-v1.14 cases (filename uses the drift
+        form, frontmatter uses the canonical) and lean-media-brand's
+        case (filename and frontmatter both use the drift form).
+
+      Brands MAY migrate at their own pace; no error severity. The
+      drift forms continue to validate; they just surface as
+      advisories so the inconsistency is visible.
+    canonicalizations:
+      - drift: onepager
+        canonical: one-pager
+        added_in: 1.14.0
+        notes: |
+          Observed in:
+          - lean-media-brand/messaging/channel-onepager.md:2 —
+            `channel: onepager`.
+          - Filenames `channel-onepager.md` in both
+            lean-media-brand and next90-brand.
+          - next90-brand example filenames `onepager-medicare-aep.md`,
+            `onepager-hvac-homeservices.md`,
+            `onepager-dtc-subscription.md` (and the parallel
+            convention applies to `examples/{example_type}-{slug}.md`
+            filenames where `example_type` matches a channel slug).
+
+          The hyphenated singular `one-pager` is the canonical form,
+          matching the form used throughout the spec's prose
+          (`brand.yaml:1545, 2500, 2556`) and the singular reading
+          of the plural baseline slug `one-pagers` (which lives in
+          `applies_to_baseline_slugs.sales` for a different field
+          family — voice register `applies_to:` arrays).
+
+  # (v1.4) Cross-cutting frontmatter convention for attributing the
+  # origin of a methodology, framework, or convention referenced or
+  # operationalized by a layer. First consumer is the journey/KYKC
+  # layer (which uses it twice — once for KYKC the discipline, once
+  # for CognitiveJourney the artifact). The convention is intentionally
+  # generic so future contributed methodologies (voice-register patterns,
+  # channel-guide templates, compliance-gate frameworks, etc.) can be
+  # attributed using the same shape.
+  #
+  # Optional on every layer — never required. When present, the block
+  # MUST be authoritative; brands MUST NOT claim provenance they do not
+  # have. The `references:` array is additive — entries can be added
+  # over time without bumping the spec version.
+  methodology_provenance:
+    notes: |
+      Frontmatter block applicable to any markdown file that documents
+      a named methodology. Co-equal methodologies (e.g., KYKC the
+      discipline and CognitiveJourney the artifact) get separate
+      blocks, not a merged one.
+    fields:
+      name:
+        type: string
+        required: true
+        notes: "human-readable methodology name (e.g., 'Know Yourself, Know Your Customer (KYKC)')"
+      short_name:
+        type: string
+        required: false
+        notes: "stable slug used by cross-references and downstream tools"
+      originator:
+        type: string
+        required: true
+        notes: |
+          Attributed person or organization. Use the person when
+          attribution is to an individual; use the organization when
+          attribution is collective.
+      developed_at:
+        type: string
+        required: false
+        notes: |
+          Context where the methodology was developed (e.g., the
+          agency, lab, or product where it originated). Free-text;
+          may include a parenthetical clarifying the entity type
+          (e.g., 'grāmatr (digital marketing agency)').
+      developed_year:
+        type: [integer, string]
+        required: true
+        notes: |
+          Numeric year of origination, OR a string for date ranges
+          (e.g., 2005, '2005-present', 'circa 2005'). When a precise
+          year is unknown, use the 'circa' form rather than guessing.
+      refined_through:
+        type: string
+        required: false
+        notes: |
+          Free-text description of how the methodology has evolved
+          since origination (e.g., '20 years of agency, adtech, and
+          AI work').
+      continuity_note:
+        type: string
+        required: false
+        notes: |
+          Optional — for cases where brand identity is continuous
+          across decades or where the methodology has been carried
+          across organizational boundaries. Use to disambiguate
+          rebrands from continuous brand identity.
+      references:
+        type: array
+        required: false
+        notes: |
+          Citable artifacts (URLs, drive links, internal docs,
+          conference talks). Empty array is valid. Entries may be
+          plain strings or objects with `title`, `url`, `kind`
+          (`client-deliverable` | `published-writing` | `internal-doc`
+          | `conference-talk` | `other`), and optional `date`
+          (YYYY-MM-DD). Mixed shapes within the same array are
+          tolerated — validators MUST accept both forms.
+      notes:
+        type: string
+        required: false
+        notes: |
+          Free-text additional context — what makes this methodology
+          distinct, why it matters now, what consumers should know.
+
+  # (v1.7) Cross-layer reference syntax convention. Closes RFC #31.
+  #
+  # Cross-layer references have been invented per-layer six times
+  # (`agent-context.priority_layers`, `voice/registers.applies_to`,
+  # `source_authority.upstream`, journey-stage refs, `data-viz/colors.md`
+  # token refs, `image-generation/style.md` and `brand-overlays.md` refs).
+  # v1.7 lifts the pattern into a single canonical convention so future
+  # cross-layer reference needs reuse one shape and validators can offer
+  # one generic resolver instead of N per-layer rules.
+  #
+  # Two co-equal mechanisms (Hybrid B + C from RFC #31):
+  #
+  #   1. Frontmatter NAMING CONVENTION — any frontmatter field whose
+  #      name matches the regex below is treated as a reference and
+  #      resolved by the validator. Singular (`*_ref`) for one value;
+  #      plural (`*_refs`) for arrays. Low ceremony, recommended for
+  #      most cases.
+  #
+  #   2. Optional structured `references:` BLOCK — a top-level
+  #      frontmatter block where each entry carries explicit `kind`
+  #      (requires / recommends / cites) and target metadata. Heavier;
+  #      use when the extra metadata is genuinely needed.
+  #
+  # Inline body-reference syntax (e.g., `{{ ref:name }}`) is NOT
+  # included in v1.7. Frontmatter refs only. URI-scheme pointers
+  # (Option D from RFC #31) are deferred to v2.
+  #
+  # Backward compatibility: existing per-layer reference fields
+  # (`source_authority.upstream`, `agent-context.priority_layers`,
+  # `voice/registers.applies_to`, etc.) keep working unchanged.
+  # Validators emit an info-severity migration advisory; no brand is
+  # forced to migrate. Hard deprecation is deferred to v2.
+  cross_layer_references:
+    notes: |
+      Authoritative shape of cross-layer references in brand-spec.
+      Authors pick the naming convention by default and opt into the
+      structured block only when richer metadata is required.
+
+      (v1.7.4) The spec's own templates and brand.yaml examples now
+      demonstrate this convention end-to-end — `templates/empty-brand`
+      uses `priority_layers_refs:`, the multi-register voice example
+      uses `applies_to_refs:`, and the image-generation refs
+      (`photography_treatment_ref`, `assets_manifest_ref`,
+      `design_tokens_ref`) have been convention-conformant since
+      v1.6.0 and require no migration. Legacy field names continue
+      to validate per `backward_compat` below.
+
+    # 1. Frontmatter naming convention (Option B)
+    field_name_pattern:
+      type: string
+      format: regex
+      value: "^[a-z_]+_refs?$"
+      notes: |
+        Any frontmatter field whose name matches this regex is treated
+        as a cross-layer reference. Singular (`*_ref`) carries a single
+        scalar reference value; plural (`*_refs`) carries an array of
+        reference values. Validators MUST resolve every matching field
+        according to `reference_value_types` below.
+
+        Examples (all valid under the convention):
+          photography_treatment_ref: design/photography-treatment.md
+          assets_manifest_ref: assets/_manifest.md
+          priority_layers_refs: [identity, voice, vocabulary]
+          forbidden_chart_types_refs: [data-viz/chart-types.md#forbidden]
+
+    # 1a. Exempt fields — name matches `field_name_pattern` but values
+    # are NOT cross-layer references; target-resolution does not apply.
+    exempt_fields:
+      notes: |
+        (v1.7.5) The `field_name_pattern` regex `^[a-z_]+_refs?$` is
+        intentionally broad — it captures any frontmatter field whose
+        name ends in `_ref` or `_refs`. A small number of canonical
+        field names match the regex but carry domain-specific slug
+        values governed by a different convention; their targets do
+        NOT resolve as layer/file/token/url and validators MUST skip
+        the `cross-layer-ref-target-resolves` check for these fields.
+
+        This list is the canonical, declarative home for such
+        exemptions. Validator implementations MUST read it and exempt
+        the listed field names from target resolution. Any future
+        `*_refs` field whose values are slugs (rather than file/layer/
+        token/url targets) belongs here, paired with the convention
+        that owns its value-vocabulary.
+
+        Backstory: surfaced by validator v0.3.0 (brand-spec-validator
+        PR #20) on lean-media-brand — naïve target-resolution against
+        `applies_to_refs` produced 9 false errors (channel slugs like
+        `website`, `linkedin-company-page` do not resolve as files or
+        layers). Encoded validator-side as `NON_RESOLVING_REF_FIELDS`
+        until the spec declared the exemption canonically here.
+      fields:
+        - name: applies_to_refs
+          reason: |
+            Values are channel/context slugs (e.g., `website`,
+            `linkedin-company-page`, `marketing-emails`) — not paths,
+            layers, tokens, or URLs. Target-resolution is meaningless
+            for these values.
+          governed_by: applies_to_baseline_slugs
+          governance_notes: |
+            Slug vocabulary is owned by the v1.3
+            `conventions.applies_to_baseline_slugs` convention, which
+            defines the baseline kebab-case slugs and the warn-on-drift
+            validation. Brands MAY extend the baseline with
+            brand-specific slugs; the v1.3 convention governs both the
+            baseline and the drift-warning behavior.
+
+    # 2. Resolvable target types
+    reference_value_types:
+      notes: |
+        A reference value is one of the following resolvable types.
+        The validator infers type from the value's shape unless the
+        structured `references:` block declares it explicitly.
+      types:
+        layer:
+          notes: |
+            A layer name declared in this schema's top-level `layers:`
+            block (e.g., `identity`, `voice`, `journey`). Resolves
+            against `brand.yaml`. Used today by
+            `agent-context.priority_layers`.
+        file:
+          notes: |
+            A path relative to the brand repo root (e.g.,
+            `design/photography-treatment.md`,
+            `assets/_manifest.md`). Validator MUST verify the file
+            exists.
+        token:
+          notes: |
+            A design-token name (conventionally `--`-prefixed and
+            category-first, e.g., `--color-brand-primary`,
+            `--font-heading`, `--space-md`). Resolves against `design-tokens.md`
+            or, when present, files under `ui-tokens/`. Long-term
+            resolution depends on the body-parse subsystem; until it
+            lands, validators SHOULD emit `warn` (not `error`) on
+            unresolvable token references.
+        path_with_fragment:
+          notes: |
+            A file path with a body-section anchor
+            (`path/to/file.md#section-anchor`). Validator MUST verify
+            the file exists; anchor verification depends on the
+            body-parse subsystem and is `warn`-only until it lands.
+        url:
+          notes: |
+            An external URL. Validator MUST verify well-formedness
+            only; reachability is out of scope.
+
+    # 3. Structured `references:` frontmatter block (Option C)
+    structured_references_block:
+      required: false
+      notes: |
+        Optional top-level frontmatter block. Authors use this when a
+        reference needs richer metadata than the naming convention
+        carries — most importantly `kind` (requires / recommends /
+        cites) and structured layer-entries selection. When the block
+        is absent, the naming convention alone is sufficient.
+
+        Each entry under `references:` is keyed by an author-chosen
+        name (the key is local to the file and does not need to be
+        globally unique). The shape of each entry:
+      entry_fields:
+        type:
+          required: true
+          enum: [layer, file, token, path_with_fragment, url, layer-entries]
+          notes: |
+            One of the resolvable target types above. The additional
+            value `layer-entries` is for selecting a subset of files
+            within a layer (e.g., a specific list of journey stages
+            under `journey/stages/`).
+        target:
+          required: true
+          notes: |
+            The actual reference value. Shape depends on `type` —
+            a layer name for `layer`, a path for `file`, a token name
+            for `token`, a `path#anchor` string for
+            `path_with_fragment`, a URL for `url`, a directory path
+            for `layer-entries`.
+        kind:
+          required: true
+          enum: [requires, recommends, cites]
+          notes: |
+            - `requires`   — the consumer of this file MUST also load
+                             the referenced target to function correctly.
+            - `recommends` — the target enriches the consumer's
+                             behavior but is not strictly required.
+            - `cites`      — the reference is informational
+                             attribution; consumers MAY ignore.
+        entries:
+          required: false
+          notes: |
+            Only meaningful when `type: layer-entries`. An array of
+            slugs naming the specific entries within the target layer
+            being referenced (e.g.,
+            `entries: [problem-recognition, option-evaluation]` when
+            `target: journey/stages/`).
+        notes:
+          required: false
+          notes: |
+            Free-text context explaining why this reference exists.
+            Helpful for downstream agents that build a reference graph
+            and want human-readable edge labels.
+
+      example: |
+        references:
+          photography_treatment:
+            type: file
+            target: design/photography-treatment.md
+            kind: cites
+          primary_color:
+            type: token
+            target: --color-brand-primary
+            kind: requires
+          related_journey_stages:
+            type: layer-entries
+            target: journey/stages/
+            entries: [problem-recognition, option-evaluation]
+            kind: requires
+            notes: |
+              The discovery deck variants depend on these stage
+              definitions for stage-aware messaging.
+
+    # 4. Backward compatibility
+    backward_compat:
+      notes: |
+        Legacy per-layer reference fields keep working unchanged in
+        v1.7. Brand authors are NOT forced to migrate. The following
+        legacy fields continue to validate and resolve via their
+        existing per-layer rules; the validator additionally emits an
+        info-severity migration advisory recommending the
+        convention-conformant shape.
+      legacy_field_mapping:
+        notes: |
+          Canonical legacy → convention mapping. Validator's
+          `legacy-ref-field-migration-recommended` rule lists these.
+        mappings:
+          - legacy: "source_authority.upstream"
+            recommended: "upstream_ref"
+            notes: "single file path or URL — `*_ref` (singular) form"
+          - legacy: "agent-context.priority_layers"
+            recommended: "priority_layers_refs"
+            notes: "array of layer names — `*_refs` (plural) form"
+          - legacy: "voice/registers/<slug>.md applies_to"
+            recommended: "applies_to_refs"
+            notes: |
+              array of channel/context slugs — `*_refs` (plural) form;
+              the underlying baseline-slug taxonomy from v1.3 is
+              unchanged.
+          - legacy: "(future) journey/stages frontmatter pointers"
+            recommended: "journey_stage_ref / journey_stages_refs"
+            notes: |
+              singular for one stage, plural for many; v1.4 deferred
+              the syntax — v1.7 settles it.
+          - legacy: "data-viz/colors.md role-to-token table refs"
+            recommended: "color_role_*_ref"
+            notes: |
+              naming-convention form for per-role token assignments;
+              the body-parse subsystem still owns hex-literal
+              detection.
+          - legacy: |
+              image-generation/style.md photography_treatment_ref,
+              image-generation/brand-overlays.md assets_manifest_ref
+            recommended: "photography_treatment_ref / assets_manifest_ref"
+            notes: |
+              already convention-shaped (both end in `_ref`); the
+              advisory does not fire on these — they are recorded
+              here only for completeness so downstream tooling
+              recognizes the shape as canonical.
+      hard_deprecation: |
+        Hard deprecation of legacy field names is deferred to v2 (a
+        major version). v1.7.x and any subsequent minor releases keep
+        legacy fields validating cleanly.
+
+      # (v1.7.5) Declarative alias registry consumed by layer schemas.
+      #
+      # Closes #45. Prior to v1.7.5 the layer schemas under `layers:`
+      # below declared the legacy field names (`priority_layers`,
+      # `applies_to`, `upstream`) as `required: true` literally — which
+      # contradicted the v1.7.0 backward-compat promise that brands MAY
+      # use either canonical or legacy names. The validator
+      # (brand-spec-validator v0.3.0) worked around this per-codebase;
+      # this registry makes the spec self-document the alias-aware
+      # required-field semantics so future validators (or ports to other
+      # languages) read the contract correctly off the spec itself.
+      #
+      # Mechanism: each affected schema entry under `layers:` carries
+      # `accepts_aliases: true` and an inline `legacy_names: [...]`
+      # array. The registry below is the single source of truth those
+      # entries cross-reference; validators MAY load this registry as
+      # data and treat any `accepts_aliases: true` schema entry as
+      # satisfied when EITHER the canonical name OR any registered
+      # legacy name is present.
+      #
+      # Shape mirrors the validator's `FieldAlias` interface
+      # (brand-spec-validator/src/aliases.ts) so the two stay
+      # interpretation-identical.
+      field_aliases:
+        notes: |
+          Registry of canonical ↔ legacy field-name pairs that the
+          v1.7 cross-layer-ref convention introduced. Layer schemas
+          under `layers:` reference this registry via
+          `accepts_aliases: true` plus an inline `legacy_names:`
+          array (the inline array repeats the registry data so each
+          schema entry is self-contained when read in isolation;
+          validators MAY treat the registry as authoritative when
+          the two disagree, but the spec aims to keep them in sync).
+        aliases:
+          - canonical: priority_layers_refs
+            legacy: [priority_layers]
+            context: agent_context.frontmatter
+            notes: |
+              Used by `layers.agent_context.files[agent-context.md].frontmatter`.
+              Plural (`*_refs`) — array of layer names.
+          - canonical: applies_to_refs
+            legacy: [applies_to]
+            context: voice_register.frontmatter
+            notes: |
+              Used by `layers.voice.directories[voice/].contents[registers/{slug}.md].frontmatter`.
+              Plural (`*_refs`) — array of channel/context slugs.
+          - canonical: upstream_ref
+            legacy: [upstream]
+            context: source_authority
+            notes: |
+              Used by `conventions.frontmatter.fields.source_authority.properties.upstream`.
+              Singular (`*_ref`) — one path or URL.
+          - canonical: target_persona_ref
+            legacy: [target_persona]
+            context: examples.frontmatter
+            added_in: 1.13.0
+            notes: |
+              (v1.13.0) Used by
+              `layers.examples.directories[examples/].contents[{content-type}-{slug}.md].frontmatter`.
+              Singular (`*_ref`) — one path to `personas/{audience}-{role}.md`.
+              The legacy `target_persona:` continues to validate as a
+              free-form string (some brand examples target hypothetical
+              or future personas that have no corresponding file yet —
+              e.g., next90-brand examples targeting vertical-specific
+              personas like `marketing-director-hvac` that the brand's
+              persona matrix does not author). Brands migrate to the
+              `_ref` form when their target is an actual persona file.
+
+  # ---------------------------------------------------------------------------
+  # Prompt sub-variant fields (v1.12.0)
+  # ---------------------------------------------------------------------------
+  # Pattern for declaring sub-variant discriminators on
+  # `prompts/{content-type}.md` files when a brand has multiple prompts of
+  # the same `content_type:` that differ in structure or shape. Two patterns
+  # are sanctioned because they encode semantically distinct things and both
+  # appear in production today (next90-brand uses both — `deck_type:` for
+  # deck variants, `format:` for thought-leadership variants).
+  prompt_sub_variant_fields:
+    notes: |
+      Two sub-variant patterns are sanctioned on `prompts/` files:
+
+      1. **content-type-typed** — an additional frontmatter field named
+         `<content_type>_type` where the prefix matches the file's
+         `content_type:` value exactly. Used to discriminate content-type
+         sub-variants (different content structures within the same
+         content_type bucket). Example: a prompt with
+         `content_type: deck` declares `deck_type: conference` (or
+         `deck_type: qbr`, `deck_type: sales-pitch`). Observed in
+         next90-brand/prompts/deck-{conference,qbr,sales}.md.
+
+      2. **format-typed** — the literal field `format:`. Used to
+         discriminate format or length variants (same content type,
+         different shape). Example: a prompt with
+         `content_type: thought-leadership` declares
+         `format: longform`. Observed in
+         next90-brand/prompts/thought-leadership-longform.md.
+
+      Both patterns are optional. A prompt with no sub-variant carries
+      neither field. Brands SHOULD pick one pattern per `content_type`
+      (don't mix `deck_type:` and `format:` on the same file); the spec
+      permits mixing but validators MAY emit an info-severity advisory
+      when both appear on the same file.
+
+      Filename convention. When a sub-variant is declared, the
+      canonical filename uses the composite form
+      `{content_type}-{variant}.md` (e.g., `deck-conference.md`,
+      `thought-leadership-longform.md`). Brands MAY also use the
+      simple `{content_type}.md` form even when a sub-variant is
+      declared, but the composite form is preferred — it makes the
+      sub-variant discoverable from the filename alone.
+
+    field_name_patterns:
+      - semantic: content-type-typed
+        name_pattern: "^[a-z_]+_type$"
+        constraint: |
+          Field-name prefix (everything before `_type`) MUST equal
+          `frontmatter.content_type` exactly. E.g., `deck_type` is
+          valid only on a file with `content_type: deck`. Validators
+          MAY emit an error when the prefix and the content_type
+          disagree (rule:
+          `prompt-sub-variant-field-prefix-matches-content-type`,
+          deferred to a future validator release).
+        notes: |
+          Value is a brand-defined slug naming the sub-variant. No
+          baseline taxonomy in v1.12.0 — brands invent their own
+          variant slugs (`conference`, `qbr`, `sales-pitch`, etc.).
+      - semantic: format-typed
+        name: format
+        constraint: |
+          Literal field name. Value is a brand-defined format/length
+          slug (e.g., `longform`, `shortform`, `social-thread`,
+          `single-card`).
+        notes: |
+          Use when the sub-variant is about shape rather than content
+          classification — i.e., the same content_type rendered at
+          different lengths or shapes.
+
+# -----------------------------------------------------------------------------
+# Layers
+# -----------------------------------------------------------------------------
+# Each layer is required | recommended | optional.
+#   required    — Conforming consumers refuse to ingest without it.
+#   recommended — Consumers ingest but degrade (warns; some downstream
+#                 features unavailable).
+#   optional    — Purely additive.
+
+layers:
+
+  # --- AGENT CONTEXT ----------------------------------------------------
+  agent_context:
+    required: false
+    recommended: true
+    description: |
+      A compressed, AI-agent-facing summary of the brand. Acts as the
+      "brand's CLAUDE.md" — the entry point for context-constrained
+      agents that cannot or should not load every layer up front. Small
+      brands MAY skip this; larger brands benefit from a curated digest
+      that fits in a single prompt window.
+
+      (v1.16) A brand MAY use ONE of two patterns — never both:
+
+      1. Single-file (v1.0, default): an `agent-context.md` file at
+         the brand root.
+
+      2. Folder (v1.16): an `agent-context/` directory containing a
+         canonical entry point (`agent-context/README.md` or
+         `agent-context/_framework.md`) plus optional sub-files for
+         per-audience or per-surface agent digests. Use this when the
+         brand maintains multiple distinct agent-facing digests
+         (e.g., one for customer-facing content agents, one for
+         internal-tooling agents) that would diverge if collapsed.
+
+      Mixing the two patterns within a single brand is invalid (see
+      `agent-context-pattern-exclusive` validation rule).
+    files:
+      - path: agent-context.md
+        required: false
+        recommended: true
+        frontmatter:
+          schema_version:   { type: integer, required: true,  notes: "matches brand-spec schema_version this file targets" }
+          summary:          { type: string,  required: true,  notes: "1-paragraph human description of the brand" }
+          priority_layers:
+            type: array
+            required: true
+            items: { type: string }
+            accepts_aliases: true
+            canonical_name: priority_layers_refs
+            legacy_names: [priority_layers]
+            notes: |
+              Ordered list of layers an agent should load first if
+              context is constrained.
+
+              (v1.7.5) Alias-aware per
+              `conventions.cross_layer_references.backward_compat.field_aliases`.
+              The canonical v1.7 name is `priority_layers_refs` (plural
+              `*_refs` form). The legacy name `priority_layers`
+              continues to satisfy `required: true` cleanly; brands
+              MAY use either. Validators MUST treat presence of EITHER
+              name as satisfying the requirement and MAY emit the
+              `legacy-ref-field-migration-recommended` advisory when
+              the legacy form is observed.
+        body_sections_recommended:
+          - "Voice (one paragraph)"
+          - "Top 5 vocabulary do/don't"
+          - "Persona summary"
+          - "Anything else essential"
+        notes: |
+          Target body size ≈ 2-4K tokens. The goal is "one prompt window
+          gives an agent enough to write on-brand without loading the
+          full repo." When the agent has more budget, it SHOULD load
+          the layers named in `priority_layers` next.
+
+          (v1.16) Required when the brand uses the single-file pattern.
+          MUST NOT exist when the brand uses the folder pattern (in
+          which case the canonical entry point is
+          `agent-context/README.md` or `agent-context/_framework.md`).
+    directories:
+      - path: agent-context/
+        required: false
+        notes: |
+          (v1.16) Agent-context folder pattern. When present,
+          `agent-context.md` at the root MUST NOT exist. The folder
+          MUST contain a canonical entry point — either `README.md` or
+          `_framework.md` — carrying the same required frontmatter
+          fields as the single-file form (`schema_version`, `summary`,
+          `priority_layers`).
+        contents:
+          - path: README.md
+            required: false
+            notes: |
+              Canonical entry point for the folder pattern (alternative
+              to `_framework.md`). When the folder pattern is used,
+              exactly one of `README.md` or `_framework.md` MUST exist.
+              Carries the same required frontmatter as the single-file
+              `agent-context.md`.
+            frontmatter:
+              schema_version: { type: integer, required: true }
+              summary:        { type: string,  required: true }
+              priority_layers:
+                type: array
+                required: true
+                items: { type: string }
+                accepts_aliases: true
+                canonical_name: priority_layers_refs
+                legacy_names: [priority_layers]
+          - path: _framework.md
+            required: false
+            notes: "Alternative to `README.md`; same purpose, same frontmatter contract."
+          - pattern: "{digest-slug}.md"
+            required: false
+            notes: |
+              Optional additional digest files for distinct
+              agent-facing contexts (e.g.,
+              `customer-content-agents.md`, `internal-tooling.md`,
+              `support-agents.md`). Each digest SHOULD declare its
+              intended audience in frontmatter.
+
+  # --- IDENTITY ----------------------------------------------------------
+  identity:
+    required: true
+    description: |
+      Who the brand is. The single most-load-bearing slot in the repo.
+
+      (v1.16) A brand MAY use ONE of two patterns — never both:
+
+      1. Single-file (v1.0, default): an `identity.md` file at the brand
+         root. Use this when one file is sufficient to carry positioning,
+         elevator pitch, mission, founders, "what we are not," and
+         proprietary concepts.
+
+      2. Folder (v1.16): an `identity/` directory containing a canonical
+         entry point (`identity/README.md` or `identity/_framework.md`)
+         that carries the required frontmatter fields, plus optional
+         sub-files (e.g., `identity/positioning.md`,
+         `identity/founders.md`, `identity/proprietary-concepts.md`,
+         `identity/what-we-are-not.md`). Use this when the identity
+         content is too large to read as one file or when distinct
+         sub-concerns benefit from independent edit cadences.
+
+      Mixing the two patterns within a single brand is invalid (see
+      `identity-pattern-exclusive` validation rule).
+    files:
+      - path: identity.md
+        required: false
+        recommended: true
+        notes: |
+          Required when the brand uses the single-file pattern.
+          MUST NOT exist when the brand uses the folder pattern (in
+          which case the canonical entry point is `identity/README.md`
+          or `identity/_framework.md`).
+        frontmatter:
+          slug:        { type: string, required: true,  notes: "kebab-case repo identifier" }
+          name:        { type: string, required: true,  notes: "display name" }
+          legal_name:  { type: string, required: false }
+          tagline:     { type: string, required: true }
+          industry:    { type: string, required: false }
+          website:     { type: string, required: false, format: url }
+          domains:     { type: array,  required: false, items: { type: string } }
+          founded:     { type: integer, required: false }
+          org:         { type: string, required: false, notes: "e.g., GitHub org slug" }
+        body_sections_recommended:
+          - Positioning
+          - "Elevator Pitch"
+          - One-liner
+          - Mission
+          - Founders
+          - "What {Brand} Is Not"
+          - "Proprietary Concepts"
+    directories:
+      - path: identity/
+        required: false
+        notes: |
+          (v1.16) Identity folder pattern. When present, `identity.md`
+          at the root MUST NOT exist. The folder MUST contain a
+          canonical entry point — either `README.md` or `_framework.md`
+          — that carries the same required frontmatter fields as the
+          single-file form (`slug`, `name`, `tagline`).
+        contents:
+          - path: README.md
+            required: false
+            notes: |
+              Canonical entry point for the folder pattern (alternative
+              to `_framework.md`). When the folder pattern is used,
+              exactly one of `README.md` or `_framework.md` MUST exist.
+              Carries the same required frontmatter as the single-file
+              `identity.md` (slug, name, tagline). Body MAY summarize
+              and link to sub-files for the long-form sections.
+            frontmatter:
+              slug:        { type: string, required: true,  notes: "kebab-case repo identifier" }
+              name:        { type: string, required: true,  notes: "display name" }
+              legal_name:  { type: string, required: false }
+              tagline:     { type: string, required: true }
+              industry:    { type: string, required: false }
+              website:     { type: string, required: false, format: url }
+              domains:     { type: array,  required: false, items: { type: string } }
+              founded:     { type: integer, required: false }
+              org:         { type: string, required: false, notes: "e.g., GitHub org slug" }
+          - path: _framework.md
+            required: false
+            notes: "Alternative to `README.md`; same purpose, same frontmatter contract. Exactly one MUST exist when the folder pattern is used."
+          - pattern: "{sub-concern}.md"
+            required: false
+            notes: |
+              Optional sub-files for distinct identity sub-concerns
+              (e.g., `positioning.md`, `founders.md`,
+              `proprietary-concepts.md`, `what-we-are-not.md`). Brands
+              MAY add any kebab-case sub-files; the spec does not
+              enumerate them. Sub-files SHOULD carry minimal
+              frontmatter (`status` recommended) and a clear H1.
+
+  # --- VOICE -------------------------------------------------------------
+  voice:
+    required: true
+    description: |
+      How the brand sounds. Voice attributes, tone rules, what it is NOT.
+
+      (v1.2) A brand MAY use ONE of two patterns — never both:
+
+      1. Single-register (v1.1, default): a `voice.md` file at the brand
+         root. Use this when one voice is canonical for all contexts.
+
+      2. Multi-register (v1.2): a `voice/` directory containing
+         `voice/registers/{register-slug}.md` per register, plus a
+         `voice/README.md` (or `voice/_index.md`) that lists registers and
+         documents when each applies. Use this when a brand has multiple
+         distinct on-brand voices that vary by channel or context (e.g.,
+         corporate marketing voice vs. engineering/agent voice vs. founder
+         byline voice — all on-brand, contextually distinct).
+
+      Mixing the two patterns within a single brand is invalid (see
+      `voice-pattern-exclusive` validation rule).
+    files:
+      - path: voice.md
+        required: false
+        recommended: true
+        notes: |
+          Required when the brand uses the single-register pattern.
+          MUST NOT exist when the brand uses the multi-register pattern.
+        frontmatter:
+          default_tone:   { type: string, required: false, notes: "e.g., 'confident-direct'" }
+          reading_level:  { type: string, required: false, notes: "e.g., 'professional'" }
+          perspective:    { type: string, required: false, enum: [first-person, second-person, third-person] }
+        body_sections_recommended:
+          - "Core Characterization"
+          - "Voice Attributes"
+          - "What the Voice Is NOT"
+          - "Tone Rules"
+          - "Published Voice Examples"
+    directories:
+      - path: voice/
+        required: false
+        notes: |
+          (v1.2) Multi-register voice directory. When present, `voice.md`
+          at the root MUST NOT exist.
+        contents:
+          - path: README.md
+            required: false
+            notes: |
+              Required (as either `README.md` or `_index.md`) when the
+              `voice/` directory exists. Lists the registers and
+              documents when each applies (channel/context coverage,
+              precedence rules when multiple could apply).
+
+              (v1.3) MAY include an optional `precedence:` frontmatter
+              block (issue #8 item 7) — the validator-friendly equivalent
+              of the prose "Precedence when contexts overlap" section
+              both real-world brands document today. When both prose and
+              frontmatter are present, the frontmatter block is the
+              machine-readable canonical form and the prose is
+              human-facing commentary; they MUST agree.
+            frontmatter:
+              precedence:
+                type: object
+                required: false
+                notes: |
+                  (v1.3) Optional cross-register precedence declaration
+                  for surfaces matched by multiple registers'
+                  `applies_to` lists. Either provide `default_order`
+                  (a register-slug array, highest-priority first) for
+                  blanket ordering, or `surface_overrides` (a map from
+                  surface slug to the register slug that wins for that
+                  surface), or both. Validators SHOULD verify each
+                  named register slug resolves to an existing
+                  `voice/registers/<slug>.md`.
+                properties:
+                  default_order:
+                    type: array
+                    required: false
+                    items: { type: string }
+                    notes: "Register slugs in winning order, e.g., [founder-byline, marketing, engineering]."
+                  surface_overrides:
+                    type: object
+                    required: false
+                    notes: |
+                      Map of surface slug → winning register slug, e.g.,
+                      `{ "linkedin-brian-handle": "founder-byline",
+                         "linkedin-company-page": "marketing" }`.
+                      Use this when default_order would resolve the
+                      wrong way for specific named surfaces.
+          - path: _index.md
+            required: false
+            notes: "Alternative to README.md; same purpose. Same v1.3 `precedence:` frontmatter convention applies."
+          - pattern: "registers/{register-slug}.md"
+            required: false
+            min_files: 1
+            notes: |
+              At least one register file MUST exist when the multi-register
+              pattern is used.
+
+              (v1.3) Register files SHOULD declare corpus metadata
+              (`corpus_size`, `corpus_source`, `corpus_pulled`,
+              `confidence`) when the register's rules are derived from
+              an analyzed corpus. Two real-world brands (lean-media-brand,
+              gramatr-brand) added these ad-hoc to per-register
+              frontmatter — v1.3 formalizes them. See
+              `corpus-metadata-recommended` validation rule.
+            frontmatter:
+              register:
+                type: string
+                required: true
+                notes: |
+                  Register slug; matches filename. (v1.15.0) Baseline
+                  register slugs are enumerated in
+                  `conventions.register_baseline_slugs` (categorized by
+                  audience_area / byline / channel). Brands SHOULD use
+                  a baseline slug when one fits; brand-specific
+                  registers continue to validate cleanly. Validators
+                  MAY emit info-severity advisory via the deferred
+                  `register-slug-baseline` rule when the value isn't
+                  in the baseline.
+              applies_to:
+                type: array
+                required: true
+                items: { type: string }
+                accepts_aliases: true
+                canonical_name: applies_to_refs
+                legacy_names: [applies_to]
+                notes: |
+                  Channels/contexts where this register is canonical
+                  (e.g., `[website, blog, marketing-emails]` for
+                  corporate; `[code-comments, agent-prompts, technical-docs]`
+                  for engineering).
+
+                  (v1.3) Slugs are kebab-case strings. A canonical
+                  baseline list is documented in
+                  `conventions.applies_to_baseline_slugs` below; brands
+                  MAY extend with brand-specific slugs (e.g.,
+                  `linkedin-company-page`, `linkedin-brian-handle`).
+                  Validators SHOULD warn — not error — on slugs not in
+                  the baseline list to surface drift like `email` vs
+                  `marketing-email` vs `marketing-emails`. Enforcement
+                  is convention-only in v1.3; richer taxonomy is v2.
+
+                  (v1.7.5) Alias-aware per
+                  `conventions.cross_layer_references.backward_compat.field_aliases`.
+                  The canonical v1.7 name is `applies_to_refs` (plural
+                  `*_refs` form). The legacy name `applies_to`
+                  continues to satisfy `required: true` cleanly; brands
+                  MAY use either. Validators MUST treat presence of
+                  EITHER name as satisfying the requirement and MAY
+                  emit the `legacy-ref-field-migration-recommended`
+                  advisory when the legacy form is observed.
+              default_tone:   { type: string, required: false, notes: "e.g., 'confident-direct'" }
+              reading_level:  { type: string, required: false, notes: "e.g., 'professional'" }
+              perspective:    { type: string, required: false, enum: [first-person, second-person, third-person] }
+              # --- (v1.3) Corpus metadata fields (issue #8 item 1) ----------
+              corpus_size:
+                type: integer
+                required: false
+                notes: |
+                  (v1.3) Number of source samples analyzed to derive
+                  this register's rules (e.g., `11` for an 11-post
+                  LinkedIn corpus). Optional but SHOULD be present when
+                  the register was authored from a corpus.
+              corpus_source:
+                type: string
+                required: false
+                notes: |
+                  (v1.3) Where the samples came from — URL, repo path,
+                  filesystem path, or free-text description (e.g.,
+                  `"linkedin.com/company/<slug>"`,
+                  `"website-repo/src/content/blog/01-12 + LinkedIn handle"`).
+              corpus_pulled:
+                type: string
+                format: date
+                required: false
+                notes: |
+                  (v1.3) ISO date `YYYY-MM-DD` — when the corpus was
+                  analyzed. Decay signal for downstream agents: a 12-
+                  month-old corpus on a fast-moving channel is a weaker
+                  evidence base than one pulled this week.
+              confidence:
+                type: string
+                required: false
+                enum: [high, medium, low]
+                notes: |
+                  (v1.3) Author's confidence in the register's rules
+                  given corpus quality and size. `high` = stable rules
+                  backed by clear corpus signal; `medium` = some rules
+                  inferred from thin corpus; `low` = provisional, do
+                  not over-index.
+              # --- (v1.3) Quoted-voice exemption flag (issue #8 item 4) -----
+              contains_quoted_voices:
+                type: boolean
+                required: false
+                notes: |
+                  (v1.3) When `true`, signals to validators and
+                  drift-detection tooling that the file or generated
+                  content under this register MAY include quoted
+                  third-party voices (e.g., employee Q&A in a Team
+                  Member Spotlight, Hacker News quote in a founder
+                  byline) that should not be evaluated against this
+                  register's voice rules. Default when omitted is
+                  `false`. See also the `> Quoted: <attribution>`
+                  markdown callout convention below for inline use.
+              # --- (v1.3) Platform overlays (issue #8 item 8) --------------
+              platform_overlays:
+                type: object
+                required: false
+                notes: |
+                  (v1.3) Optional platform-specific conventions when a
+                  register applies to multiple platforms with distinct
+                  rendering or convention needs (e.g., a `founder-byline`
+                  register that covers both blog and LinkedIn). Keys are
+                  platform slugs (`linkedin`, `twitter`, `blog`,
+                  `email`); values are free-form objects whose shape is
+                  brand-defined but SHOULD include rendered conventions
+                  (hashtag stacks, emoji budgets, divider conventions,
+                  CTA permissions). Brands MAY also document overlays
+                  as an H2 section (see `body_sections_recommended`
+                  below — `On {Platform}`); the frontmatter form is the
+                  validator-friendly canonical home, the H2 form is the
+                  author-friendly equivalent. Either is acceptable in
+                  v1.3.
+            body_sections_recommended:
+              # (v1.3) Body section guidance now covers register inheritance
+              # (issue #8 items 5 and 9). The "What the Voice Is NOT" section
+              # is the canonical shape for the primary register; for any
+              # register beyond the primary, the cleaner shape is the two
+              # inheritance-aware sections shown below. The
+              # "What does NOT fit this register" section is recommended for
+              # all registers to capture explicit drift-detection
+              # negative-space documentation (outliers, cut posts, surfaces
+              # that look on-register but are not).
+              - "Core Characterization"
+              - "Voice Attributes"
+              - "What the Voice Is NOT"                            # primary register — canonical
+              - "What this register allows that {primary} does not" # secondary registers — additive scope
+              - "What is still forbidden (inherited)"               # secondary registers — inheritance reminder
+              - "On {Platform}"                                     # (v1.3) optional H2 overlay equivalent of platform_overlays frontmatter
+              - "What does NOT fit this register"                   # (v1.3) drift-detection negative-space
+              - "Tone Rules"
+              - "Published Voice Examples"
+            quoted_voice_callout_convention: |
+              (v1.3) Inline quoted-voice convention (issue #8 item 4).
+              Within a register file or generated artifact, a quoted
+              third-party voice MAY be wrapped in a markdown blockquote
+              prefixed with `> Quoted: <attribution>` on its own line
+              before the quoted content. Validators and drift-detection
+              tooling SHOULD skip voice/vocabulary evaluation of the
+              blockquote body and resume on the next non-blockquote
+              line. Example:
+                  > Quoted: Wade Gilmer, employee anniversary spotlight
+                  > "Six years here and the work still surprises me."
+              Use this for short inline quotes; use
+              `contains_quoted_voices: true` frontmatter when an entire
+              file's body is built around quoted voices (e.g., a Q&A
+              spotlight post).
+
+  # --- VOCABULARY --------------------------------------------------------
+  vocabulary:
+    required: true
+    description: |
+      Preferred terms, forbidden terms, glossary. Drives lint at
+      generation time.
+
+      (v1.16) A brand MAY use ONE of two patterns — never both:
+
+      1. Single-file (v1.0, default): a `vocabulary.md` file at the
+         brand root. Use this when preferred + forbidden + glossary
+         fit comfortably in one file.
+
+      2. Folder (v1.16): a `vocabulary/` directory containing a
+         canonical entry point (`vocabulary/README.md` or
+         `vocabulary/_framework.md`) plus optional sub-files such as
+         `vocabulary/preferred.md`, `vocabulary/forbidden.md`,
+         `vocabulary/glossary.md`, or per-register vocabulary deltas
+         (`vocabulary/registers/<register-slug>.md`). Use this when the
+         glossary is long, when per-register vocabulary deltas warrant
+         their own files, or when the three sections have independent
+         edit cadences.
+
+      Mixing the two patterns within a single brand is invalid (see
+      `vocabulary-pattern-exclusive` validation rule).
+    files:
+      - path: vocabulary.md
+        required: false
+        recommended: true
+        notes: |
+          Required when the brand uses the single-file pattern.
+          MUST NOT exist when the brand uses the folder pattern.
+        frontmatter: {}        # observed empty; reserved for future fields
+        body_sections_recommended:
+          - "Preferred Terms"
+          - "Forbidden Terms"
+          - "Glossary"
+    directories:
+      - path: vocabulary/
+        required: false
+        notes: |
+          (v1.16) Vocabulary folder pattern. When present,
+          `vocabulary.md` at the root MUST NOT exist. The folder MUST
+          contain a canonical entry point — either `README.md` or
+          `_framework.md`.
+        contents:
+          - path: README.md
+            required: false
+            notes: |
+              Canonical entry point for the folder pattern (alternative
+              to `_framework.md`). When the folder pattern is used,
+              exactly one of `README.md` or `_framework.md` MUST exist.
+              Body MAY summarize and link to sub-files.
+            frontmatter: {}
+          - path: _framework.md
+            required: false
+            notes: "Alternative to `README.md`; same purpose. Exactly one MUST exist when the folder pattern is used."
+          - pattern: "{sub-concern}.md"
+            required: false
+            notes: |
+              Optional sub-files for vocabulary sub-concerns (e.g.,
+              `preferred.md`, `forbidden.md`, `glossary.md`). Brands
+              MAY add any kebab-case sub-files.
+          - path: registers/
+            required: false
+            notes: |
+              (v1.16) Optional per-register vocabulary deltas. When a
+              brand uses the multi-register voice pattern and a
+              register has its own preferred/forbidden term deltas
+              from the brand baseline, those deltas live in
+              `vocabulary/registers/<register-slug>.md`. Each delta
+              file MUST declare `register: <slug>` in frontmatter
+              matching a `voice/registers/<slug>.md` file.
+            contents:
+              - pattern: "{register-slug}.md"
+                required: false
+                frontmatter:
+                  register:
+                    type: string
+                    required: true
+                    notes: "Register slug; MUST match a `voice/registers/<slug>.md` file."
+
+  # --- DESIGN TOKENS -----------------------------------------------------
+  design:
+    required: true
+    description: |
+      Visual system: colors, typography, modes, logo references. Also
+      the home for design specs that don't fit cleanly in
+      `design-tokens.md` (channel-specific specs, photography
+      treatment, iconography conventions, and — as of v1.11.0 — the
+      brand's overall visual-language manifesto in `visual-system.md`).
+
+      (v1.6.1) Optional `design/iconography.md` extends this layer
+      with iconography conventions: which icon set the brand uses,
+      sizing tokens, color treatment, stroke vs fill, spacing, and
+      one-set exceptions. When the brand has custom icons, the
+      optional `design/icons/` directory holds the source files
+      alongside a `_manifest.md` describing each. The iconography
+      file is recommended-not-required; brands without a UI surface
+      or without icon discipline MAY skip it cleanly.
+
+      (v1.11.0) Optional `design/visual-system.md` is a prose
+      manifesto of the brand's visual language — what its imagery
+      looks like, what surfaces it appears on (OG images, social
+      templates, email headers), what generative-image prompts
+      produce on-brand output, and what falls explicitly off-brand.
+      Distinct from `design-tokens.md` (machine-readable tokens) and
+      `design/photography-treatment.md` (photo direction): the
+      visual-system file is the holistic prose layer that ties the
+      tokens and the photography conventions into a single readable
+      document. Recommended-not-required; brands without a strong
+      visual identity or whose visual decisions are fully captured
+      by tokens alone MAY skip it cleanly. See `design/visual-system.md`
+      declaration in `additional_files` below.
+
+      Decorative-vs-functional distinction. Decorative or gradient
+      "icons" that read as brand imagery (e.g., section-decoration
+      gradient SVGs on a marketing site) belong in
+      `assets/_manifest.md` and are governed by the assets layer.
+      Functional UI icons that participate in the icon system
+      (navigation, actions, status, in-product chrome) belong in
+      `design/iconography.md`. Brands SHOULD document the
+      distinction explicitly when both are present. See validation
+      rule `iconography-decorative-distinction-recommended`.
+    files:
+      - path: design-tokens.md
+        required: false
+        recommended: true
+        notes: |
+          (v1.17) Required when the brand uses the single-file pattern
+          for design tokens. MUST NOT exist when the brand uses the
+          folder pattern (in which case the canonical entry point is
+          `design-tokens/README.md` or `design-tokens/_framework.md`).
+        frontmatter:
+          mode:          { type: string, required: false, notes: "e.g., 'dark-primary' | 'light-primary' | 'mixed'" }
+          design_system: { type: string, required: false, notes: "e.g., the upstream design system the brand extends" }
+        body_sections_recommended:
+          - "Visual Mode"
+          - Colors
+          - Typography
+          - Email
+          - Logos
+    directories:
+      - path: design-tokens/
+        required: false
+        notes: |
+          (v1.17) Design-tokens folder pattern. When present,
+          `design-tokens.md` at the root MUST NOT exist. The folder
+          MUST contain a canonical entry point — either `README.md`
+          or `_framework.md` — carrying the same frontmatter fields
+          as the single-file form (`mode`, `design_system`). Optional
+          sub-files cover the body sections of the single-file form
+          (`colors.md`, `typography.md`, `email.md`, `logos.md`,
+          `visual-mode.md`) with brand-defined kebab-case naming.
+
+          Mutually exclusive with the root `design-tokens.md` form
+          per the `design-tokens-pattern-exclusive` validation rule.
+
+          Sibling to the existing `design/` folder (additional design
+          specs: visual-system, iconography, photography-treatment,
+          etc.) — not nested under it. Symmetry with v1.16's
+          `identity/` / `vocabulary/` / `agent-context/` placement.
+        contents:
+          - path: README.md
+            required: false
+            notes: |
+              Canonical entry point for the folder pattern (alternative
+              to `_framework.md`). Exactly one of `README.md` or
+              `_framework.md` MUST exist when the folder pattern is
+              used. Carries the same frontmatter as the single-file
+              `design-tokens.md` (`mode`, `design_system`).
+            frontmatter:
+              mode:          { type: string, required: false }
+              design_system: { type: string, required: false }
+          - path: _framework.md
+            required: false
+            notes: "Alternative to `README.md`; same purpose, same frontmatter contract."
+          - pattern: "{sub-section}.md"
+            required: false
+            notes: |
+              Optional sub-files for individual token sections — e.g.,
+              `colors.md`, `typography.md`, `email.md`, `logos.md`,
+              `visual-mode.md`. Brands MAY add any kebab-case
+              sub-files; the spec does not enumerate them. Sub-files
+              SHOULD carry minimal frontmatter (`status` recommended)
+              and a clear H1.
+      - path: assets/
+        required: true
+        notes: |
+          (v1.2.1) Format preference convention — recommended, not enforced
+          by the validator. PNG (or other raster) is accepted for any logo
+          file; SVG is preferred for future additions or replacements when
+          vector source becomes available. SVG matters when scaling beyond
+          native resolution (signage, full-bleed slide titles, large-format
+          print), recoloring programmatically, or doing vector ops in
+          design tools. PNG remains the right choice for email (SVG support
+          is patchy in Outlook), social profile/cover images, and any
+          context bounded to native resolution. Brands MUST NOT auto-trace
+          PNG to SVG for typographic wordmarks — tracing produces noisy
+          polygons that fail to match optical kerning. Tracing is
+          appropriate for high-contrast geometric marks only. See
+          `templates/empty-brand/assets/_manifest.md` for the canonical
+          framing brands SHOULD adopt verbatim.
+        contents:
+          - { path: _manifest.md, required: true,  notes: "approved asset registry with usage context; (v1.2.1) MAY include the optional `wordmark:` frontmatter block — see below" }
+          - { glob: "*.svg",      required: false, notes: "logo and brand mark vectors (preferred for future additions)" }
+          - { glob: "*.png|*.jpg", required: false, notes: "raster logo and brand mark exports (accepted; right choice for email, social profile/cover, native-resolution surfaces)" }
+        manifest_frontmatter:
+          wordmark:
+            type: object
+            required: false
+            notes: |
+              (v1.2.1) Optional wordmark metadata block on
+              `assets/_manifest.md`. When present, captures the canonical
+              glyph sequence, typeface, and ASCII fallback for the brand's
+              wordmark so AI agents and downstream tools can render it
+              correctly. When absent (icon-only brands, or brands without
+              a wordmark), nothing changes — this is purely additive.
+
+              Precedence rule: `text` is the canonical form and SHOULD be
+              used wherever the consuming surface can render it.
+              `text_ascii` is the fallback ONLY when the surface cannot
+              render the canonical glyphs (CLI, URLs, npm package names,
+              social handles that reject non-ASCII). Tools MUST NOT
+              substitute `text_ascii` when the canonical works.
+            properties:
+              text:
+                type: string
+                required_when: "wordmark block is present"
+                notes: "canonical glyph sequence as it appears in the logo (e.g., 'grāmatr')"
+              text_ascii:
+                type: string
+                required_when: "`text` contains non-ASCII characters"
+                notes: |
+                  ASCII fallback for contexts that cannot render the
+                  canonical glyphs (CLI, URLs, package names, social
+                  handles where non-ASCII is rejected). When `text` is
+                  pure ASCII, this field MAY be omitted (or set equal to
+                  `text` for consumer-side simplicity).
+              typeface:
+                type: string
+                required: false
+                notes: "font family the wordmark is set in (e.g., 'Outfit')"
+              weight:
+                type: integer
+                required: false
+                notes: "numeric font weight (e.g., 400, 600, 700)"
+              case:
+                type: string
+                required: false
+                enum: [lowercase, uppercase, titlecase, mixed]
+                notes: "case treatment of the canonical wordmark"
+              glyph_notes:
+                type: string
+                required: false
+                notes: |
+                  Human/agent-readable notes on special characters,
+                  diacritics, ligatures, or any non-obvious glyph that
+                  affects rendering or fallback. Particularly important
+                  when `text` contains non-ASCII characters — explain
+                  what carries meaning and when the ASCII fallback
+                  applies. When the brand also documents a two-spelling
+                  rule in `vocabulary.md`, cross-reference it here.
+      - path: fonts/
+        required: false
+        notes: "self-hosted typeface files; license file (e.g., OFL-*.txt) MUST accompany"
+    additional_files:
+      - path: design/iconography.md
+        required: false
+        recommended: true
+        added_in: 1.6.1
+        frontmatter:
+          type:           { type: string,  required: true,  const: iconography }
+          version:        { type: string,  required: false }
+          status:         { type: string,  required: false }
+          last_updated:   { type: string,  required: false, format: date, notes: "YYYY-MM-DD" }
+          confidence:     { type: string,  required: false, enum: [high, medium, low] }
+          icon_set:
+            type: object
+            required: true
+            notes: |
+              The canonical icon set the brand uses. Captures NAME and
+              VERSION so downstream tools (and AI agents) know exactly
+              which library to render against. When the brand uses a
+              custom icon system, set `name: custom` and document the
+              source files under `design/icons/`.
+            properties:
+              name:
+                type: string
+                required: true
+                notes: |
+                  Set name. Common values: `lucide`, `material-symbols`,
+                  `heroicons`, `phosphor`, `tabler`, `feather`, `custom`.
+                  Brands MAY use any value; the field is informational.
+              version:
+                type: string
+                required: false
+                notes: "Set version (e.g., `0.300.0`). Recommended when the upstream library is versioned."
+              variant:
+                type: string
+                required: false
+                notes: "Optional sub-set indicator (e.g., `outlined`, `rounded`, `sharp` for material-symbols)."
+          set_authority:
+            type: string
+            required: false
+            notes: "URL to the canonical source for the icon set (library homepage, registry, or vendor docs)."
+          color_treatment:
+            type: string
+            required: true
+            enum: [monochrome, brand-color, functional, mixed-with-rules]
+            notes: |
+              How icons are colored across the brand.
+              `monochrome` = always one color (typically a neutral).
+              `brand-color` = always a brand primary or accent.
+              `functional` = semantic colors per role (success/warning/
+              danger/info follow design-tokens semantic palette).
+              `mixed-with-rules` = brand uses several treatments;
+              body documents which applies when.
+          stroke_vs_fill:
+            type: string
+            required: false
+            enum: [stroke, fill, mixed]
+            notes: |
+              Whether the brand uses stroke (line) or fill (solid)
+              icons predominantly. `mixed` = brand uses both with
+              documented rules in body.
+          sizing:
+            type: object
+            required: false
+            notes: |
+              Named icon sizes keyed by t-shirt slug (`xs`, `sm`,
+              `md`, `lg`, `xl`, etc.) mapped to design-token names.
+              The sizing tokens themselves MUST be declared in
+              `design-tokens.md` (or, when present, in `ui-tokens/`);
+              this field references them by name. The hex/px value
+              is never redeclared here. See validation rule
+              `iconography-sizing-references-resolve`.
+            properties:
+              xs: { type: string, required: false, notes: "design-token name (e.g., `--icon-size-xs`)" }
+              sm: { type: string, required: false }
+              md: { type: string, required: false }
+              lg: { type: string, required: false }
+              xl: { type: string, required: false }
+          spacing:
+            type: object
+            required: false
+            notes: |
+              Clear-space rules around icons (analogous to wordmark
+              clear-space in `assets/_manifest.md`). Values reference
+              design-tokens by name when possible; numeric pixel
+              values are acceptable when no token applies.
+          exceptions:
+            type: array
+            required: false
+            items:
+              type: object
+              properties:
+                set:       { type: string, required: true,  notes: "exception set name (e.g., `material-symbols`)" }
+                use_case:  { type: string, required: true,  notes: "where the exception applies (e.g., `product-specific actions in app chrome`)" }
+                reason:    { type: string, required: true,  notes: "why the exception is justified" }
+            notes: |
+              Declared exceptions to the one-set rule. Most brands
+              SHOULD use one icon set for consistency; some (e.g.,
+              brands layering a product-specific custom set on top of
+              a general-purpose library) declare exceptions here with
+              a stated reason. The validator does not enforce
+              one-set; the array is documentation-only.
+        body_sections_recommended:
+          - "Icon set choice and rationale"
+          - "Sizing scale"
+          - "Color treatment"
+          - "Stroke vs fill"
+          - "Spacing and clear-space"
+          - "Exceptions (when a second set is allowed)"
+          - "Decorative vs functional (distinction with assets/_manifest.md)"
+          - "How AI agents and downstream tools consume this layer"
+        notes: |
+          (v1.6.1) Iconography conventions for the brand. Recommended
+          for brands with any UI surface (web app, marketing site
+          with iconography, deck templates with icons); MAY be
+          omitted by brands without icon discipline.
+
+          The file documents the FUNCTIONAL/UI icon system. Decorative
+          or gradient icons that read as brand imagery belong in
+          `assets/_manifest.md`. When both are present, this file
+          SHOULD include a "Decorative vs functional" section
+          spelling out which assets fall on which side of the line.
+
+          Sizing tokens are referenced from `design-tokens.md` (or
+          `ui-tokens/` when present), never redeclared. Color
+          tokens are likewise referenced. See validation rules
+          `iconography-sizing-references-resolve` and
+          `iconography-set-resolves`.
+
+      - path: design/visual-system.md
+        required: false
+        recommended: true
+        added_in: 1.11.0
+        frontmatter:
+          type:         { type: string,  required: true,  const: visual-system }
+          version:      { type: string,  required: false }
+          status:       { type: string,  required: false }
+          last_updated: { type: string,  required: false, format: date, notes: "YYYY-MM-DD" }
+          source:
+            type: string
+            required: false
+            notes: |
+              (v1.11.0) Where this visual-system spec was derived
+              from (e.g., "observed from live website OG images
+              2026-05-05", "design system v2 retrospective",
+              "studio review 2026-03"). When the spec needs to be
+              re-derived as the brand's visual language evolves,
+              the source field tells the next author where to look.
+              Brand-defined free-form string; not validator-enforced.
+        body_sections_recommended:
+          - "The visual language (core principles)"
+          - "Surface system (e.g., OG images, social cards, slide covers)"
+          - "Generative image prompts (when AI image generation is used)"
+          - "Channel templates (social, email, etc.)"
+          - "What not to do"
+        notes: |
+          (v1.11.0) Prose manifesto of the brand's visual language.
+          Singular — one file per brand, like `design-tokens.md` and
+          `design/iconography.md`. Recommended path is
+          `design/visual-system.md`; brands MAY place under
+          `assets/visual-system.md` for organizational reasons but
+          `design/` is canonical per the design layer's framing
+          ("home for design specs that don't fit cleanly in
+          design-tokens.md"). Validators MAY emit an info-severity
+          drift advisory when the file is found at the non-canonical
+          `assets/` path; no error.
+
+          Distinct from sibling files:
+
+          - `design-tokens.md` (required) — machine-readable token
+            tables. The visual-system file references tokens; never
+            redeclares hex values or font names. See
+            `data-viz-color-tokens-resolve` for the parallel rule
+            on data-viz.
+
+          - `design/photography-treatment.md` (recommended; not yet
+            schema-declared as of v1.11.0) — narrow scope: photo
+            direction and treatment. The visual-system file is
+            broader: ties photography, typography, surfaces, and
+            channel-specific templates together. A brand MAY have
+            both; the visual-system file SHOULD reference
+            photography-treatment.md via `photography_treatment_ref:`
+            (already declared on `image-generation/style.md` and
+            documented as a baseline cross-layer-ref in v1.6.0).
+
+          - `design/iconography.md` (recommended) — narrow scope:
+            icon system. Iconography is functional UI chrome; the
+            visual-system file is the holistic visual language that
+            sits above it.
+
+          The `source:` frontmatter field captures derivation
+          provenance: when a brand's visual system is extracted from
+          a live website, a retrospective, or a studio review, the
+          source field records that origin so the next maintainer
+          knows what to re-observe when re-deriving. Observed in
+          next90-brand's existing visual-system.md
+          (currently at `assets/visual-system.md`).
+
+    additional_directories:
+      - path: design/icons/
+        required: false
+        added_in: 1.6.1
+        notes: |
+          (v1.6.1) Source files for custom brand icons. Required only
+          when `design/iconography.md` declares `icon_set.name: custom`
+          (or any other non-public set name that requires the brand to
+          ship its own files). Lives alongside `iconography.md` —
+          keeps icon-system docs and source files together. NOT in
+          `assets/icons/`; the assets layer is for brand imagery
+          (logos, decorative graphics, photography), not iconography
+          system files. See validation rule `iconography-set-resolves`.
+        contents:
+          - path: _manifest.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: icon-manifest }
+              version:      { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              icons:
+                type: array
+                required: false
+                notes: |
+                  Per-icon manifest entries. Each entry SHOULD
+                  declare `filename`, `category` (e.g., `navigation`,
+                  `action`, `status`), `intended_use` (1 sentence),
+                  and `alt_text_default` (default accessible label
+                  for downstream tools).
+            notes: "Analogous to `assets/_manifest.md` but scoped to the custom icon set."
+          - { glob: "*.svg",      required: false, notes: "preferred — vector source for icons" }
+          - { glob: "*.png|*.jpg", required: false, notes: "raster fallback when SVG is unavailable" }
+
+  # --- UI TOKENS (three-layer system) ------------------------------------
+  ui_tokens:
+    required: false
+    recommended: true
+    description: |
+      Three-layer token system (primitive → semantic → component) plus
+      mode and motion overlays. Required when the brand drives application
+      UI; optional for marketing-only brands.
+    directories:
+      - path: ui-tokens/
+        contents:
+          - path: primitives.md
+            required: false
+            frontmatter:
+              layer:   { type: string, required: true, const: primitive }
+              version: { type: string, required: false }
+          - path: semantic.md
+            required: false
+            frontmatter:
+              layer:      { type: string, required: true, const: semantic }
+              depends-on:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  List of parent ui-tokens layer files this layer
+                  depends on. Semantic SHOULD reference
+                  `primitives.md`. A layer MAY depend on multiple
+                  parent layers (e.g., a component layer depending on
+                  both `semantic.md` and `motion.md`).
+          - path: component.md
+            required: false
+            frontmatter:
+              layer:      { type: string, required: true, const: component }
+              depends-on:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  List of parent ui-tokens layers. Components SHOULD
+                  depend on `semantic.md` (and MAY also depend on
+                  `motion.md`, `dark-mode.md`, etc.).
+          - path: dark-mode.md
+            required: false
+            frontmatter:
+              layer:      { type: string, required: true, const: dark-mode }
+              depends-on:
+                type: array
+                required: false
+                items: { type: string }
+                notes: "List of parent layers (typically `semantic.md`)."
+          - path: motion.md
+            required: false
+            frontmatter:
+              layer:   { type: string, required: true, const: motion }
+
+  # --- MESSAGING ---------------------------------------------------------
+  messaging:
+    required: true
+    description: |
+      Two parallel families:
+      (a) audience-targeted messaging — one file per audience segment
+      (b) channel guides — one file per delivery channel
+    directories:
+      - path: messaging/
+        contents:
+          - pattern: "for-{audience}.md"
+            required: true
+            min_files: 1
+            frontmatter:
+              audience:        { type: string, required: true,  notes: "audience slug; brand-defined taxonomy" }
+              headline:        { type: string, required: true }
+              description:     { type: string, required: true }
+              pain_point:      { type: string, required: true }
+              desired_outcome: { type: string, required: true }
+            notes: |
+              The `audience` value is brand-defined. A B2B SaaS brand
+              might use enterprise/mid-market/smb; a deal-cycle-focused
+              brand might use champion/buyer/end-user; a CPG brand might
+              use a demographic taxonomy. The pattern is universal; the
+              taxonomy is not.
+          - pattern: "channel-{channel}.md"
+            required: false
+            recommended: true
+            min_files: 1
+            frontmatter:
+              channel:         { type: string, required: true, notes: "channel slug" }
+              brand:           { type: string, required: false }
+              version:         { type: string, required: false }
+              last_updated:    { type: string, required: false }
+              status:          { type: string, required: false }
+              format:          { type: string, required: false, notes: "e.g., 'print/pdf'" }
+              primary_platform: { type: string, required: false, notes: "e.g., 'linkedin' for social" }
+              formats:         { type: array,  required: false, items: { type: string } }
+              data_viz_refs:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  (v1.9.0) Optional list of `data-viz/*` files that
+                  govern charting/data-visualization on this channel.
+                  Each entry is a path relative to brand root (e.g.,
+                  `data-viz/colors.md`, `data-viz/chart-types.md`,
+                  `data-viz/annotations.md`). Resolves under the v1.7
+                  cross-layer-ref convention; validators verify each
+                  entry exists. Formalizes a pattern observed across
+                  3 next90-brand channel guides (deck, social,
+                  landing-page). Brands that only need to reference a
+                  single data-viz file MAY use `data_viz_ref:`
+                  (singular, scalar) instead — both forms validate
+                  under the v1.7 convention.
+            notes: |
+              Channel slugs are brand-defined (e.g., deck, email,
+              landing-page, one-pager, social, webinar, podcast,
+              direct-mail). One file per channel the brand actively
+              publishes through.
+
+              (v1.14.0) Canonical slug form is kebab-cased and
+              hyphenated where multi-word (e.g., `one-pager`,
+              `landing-page`, not `onepager` or `landingpage`). The
+              file's basename SHOULD encode the canonical form
+              (`channel-{channel}.md` per the pattern above) and
+              `frontmatter.channel:` SHOULD use it too. Known drift
+              forms are listed in
+              `conventions.channel_slug_canonicalizations`; brands
+              MAY migrate at their own pace — drift forms continue
+              to validate but surface as info-severity advisories
+              under the deferred validator rules
+              `messaging-channel-slug-canonical` and
+              `messaging-channel-filename-matches-slug`.
+
+  # --- PERSONAS ----------------------------------------------------------
+  personas:
+    required: false
+    recommended: true
+    description: |
+      Detailed audience descriptions. Brands typically organize personas
+      as a matrix of {audience} × {role} — for example, a 3×3 grid of
+      three audience segments crossed with three buying-committee roles.
+      The framework file documents the matrix shape; individual persona
+      files are cells in it.
+    directories:
+      - path: personas/
+        contents:
+          - path: _framework.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:    { type: string, required: true, const: framework }
+              version: { type: string, required: false }
+              audience_taxonomy:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  (v1.10.0) Ordered list of audience slugs this brand's
+                  persona matrix uses. Each slug SHOULD have a
+                  corresponding `messaging/for-{audience}.md` file —
+                  validators MAY emit an info-severity advisory when
+                  an entry does not. Validators MAY also verify that
+                  every individual persona file's
+                  `frontmatter.audience` is a member of this list
+                  (membership check, not coverage check — asymmetric
+                  matrices where some `(audience, role)` cells
+                  intentionally do not exist are valid).
+
+                  Brands MAY use either singular (`advertiser`) or
+                  plural (`advertisers`) slug forms; the spec does not
+                  prescribe. Brands SHOULD pick one convention and
+                  stay consistent within their own files. Observed
+                  in practice: next90-brand uses singular,
+                  gramatr-brand and lean-media-brand use plural.
+              role_taxonomy:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  (v1.10.0) Ordered list of role slugs this brand's
+                  persona matrix uses. Validators MAY verify that
+                  every persona file's `frontmatter.role` is a member
+                  of this list (membership check, not coverage —
+                  declared roles MAY be absent from any file, e.g.
+                  when a brand has named a role as a candidate but
+                  not yet authored its persona file).
+
+                  Role slugs are brand-defined. Examples observed in
+                  practice: `business-leader`, `analyst`, `operator`
+                  (next90); `practitioner`, `lead`, `buyer`,
+                  `champion` (gramatr, draft); `marketing-director`,
+                  `media-planner`, `performance-marketer`, `director`
+                  (lean-media).
+            notes: |
+              Documents the persona matrix and the role archetype
+              definitions.
+
+              (v1.10.0) The optional `audience_taxonomy:` and
+              `role_taxonomy:` arrays declare the brand's matrix axes
+              in machine-readable form. Before v1.10 the matrix was
+              documented only in prose; the new fields let validators
+              cross-check `audience:`/`role:` slugs on individual
+              persona files and let downstream tooling (persona
+              generators, audience-routing UIs) read the taxonomy
+              from a single source of truth.
+
+              Asymmetric matrices are explicitly valid. Real brands
+              have non-uniform shapes (e.g., lean-media-brand
+              declares 2×4 axes but only 4 of 8 cells are filled
+              because the agency-side column intentionally has one
+              role). The taxonomy fields are membership domains, not
+              coverage guarantees.
+          - pattern: "{audience}-{role}.md"
+            required: false
+            recommended: true
+            frontmatter:
+              id:       { type: string, required: true, notes: "matches filename slug" }
+              role:     { type: string, required: true, notes: "role slug from brand's role taxonomy" }
+              audience: { type: string, required: true, notes: "audience slug; SHOULD match a messaging/for-{audience}.md" }
+              label:    { type: string, required: true, notes: "human-readable persona title" }
+          - path: _archive/
+            required: false
+            notes: "deprecated personas; preserved for historical context but not ingested as live"
+
+  # --- JOURNEY (v1.4) ----------------------------------------------------
+  journey:
+    required: false
+    recommended: true
+    description: |
+      (v1.4) Cognitive journey of the brand's prospects, expressed as
+      ordered stages. Sits beside `personas/` (which describe WHO) and
+      describes WHEN/WHERE in their thinking — the prospect's mental
+      state at each stage of the buying or adoption process.
+
+      The layer operationalizes a 20-year-old methodology, **KYKC
+      (Know Yourself, Know Your Customer)**, originated by Brian
+      Handrigan at the grāmatr digital marketing agency circa 2005.
+      KYKC is the discipline; the **CognitiveJourney** is the
+      structured artifact that operationalizes the customer side.
+      Both are co-equal first-class concepts shipped inline as this
+      layer (NOT a separately-referenced contract).
+
+      The 5 canonical stages are
+      `problem-recognition` → `information-seeking` →
+      `option-evaluation` → `decision-validation` → `post-decision`.
+      Brands MAY rename, reorder, add, or omit stages — the canonical
+      list is a default, not a constraint. See `journey-canonical-stage-warn`
+      for the soft signal validators emit when canonical slugs are
+      renamed.
+
+      Why this layer exists: AI search and generation tools work
+      better when fed the prospect's actual mental vocabulary,
+      verbatim questions, and stage-aware content goals. See the
+      "Why this matters for AI search" section in `journey/_framework.md`
+      for the mechanical mapping.
+
+      Most brands benefit from this layer; small or early-stage brands
+      MAY skip it. When omitted, downstream tools that consume the
+      journey (FAQ-schema generators, stage-aware messaging variants,
+      compliance-gate evaluators) degrade gracefully.
+    directories:
+      - path: journey/
+        contents:
+          - path: _framework.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:                    { type: string, required: true, const: framework }
+              version:                 { type: string, required: false }
+              methodology_provenance:  { type: object, required: false, notes: "see conventions.methodology_provenance — recommended on this file (one block for KYKC the discipline, optionally a second for any sibling methodology this brand layers in)" }
+            body_sections_recommended:
+              - "The discipline (KYKC)"
+              - "The artifact (CognitiveJourney)"
+              - "Methodology origins"
+              - "Why this matters for AI search"
+              - "How to use this layer"
+              - "Relationship to other layers"
+            notes: |
+              The framework file documents the discipline and the
+              artifact; the actual stages live in stages.md (overview)
+              and stages/<slug>.md (detail). When a brand attributes
+              the methodology to a contributor, place a
+              `methodology_provenance:` block in this file's
+              frontmatter.
+          - path: stages.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:                    { type: string, required: true, const: stage-overview }
+              version:                 { type: string, required: false }
+              methodology_provenance:  { type: object, required: false, notes: "see conventions.methodology_provenance — when present here, attributes the journey artifact (CognitiveJourney). Co-equal with the discipline-level block on _framework.md." }
+              stages:
+                type: array
+                required: true
+                notes: |
+                  Ordered list of stage records. Each entry MUST be an
+                  object with at least `slug` (kebab-case, stable),
+                  `label` (display string), and `order` (non-negative
+                  integer, unique within the array). Additional
+                  per-stage fields MAY appear here for at-a-glance
+                  reference, but the authoritative per-stage detail
+                  lives in `journey/stages/<slug>.md`.
+            notes: |
+              The at-a-glance stage list. Tabular markdown body is
+              recommended for human readability; the authoritative
+              data is the `stages:` frontmatter array. When a brand
+              wants a flat single-file journey (no per-stage detail
+              files), this file MAY carry the full per-stage
+              frontmatter inline — but per-stage files are recommended
+              once the journey is non-trivial.
+          - path: stages/
+            required: false
+            recommended: true
+            contents:
+              - pattern: "{stage-slug}.md"
+                required: false
+                recommended: true
+                frontmatter:
+                  slug:               { type: string,  required: true,  notes: "kebab-case; matches filename and the slug used in stages.md frontmatter" }
+                  label:              { type: string,  required: true,  notes: "display label" }
+                  order:              { type: integer, required: true,  notes: "non-negative; unique across the journey; rendering order is ascending" }
+                  description:        { type: string,  required: true,  notes: "1-3 sentences on the prospect's mental state at this stage" }
+                  triggers:           { type: array,   required: false, items: { type: string }, notes: "events that move a prospect INTO this stage" }
+                  hurdles:            { type: array,   required: false, items: { type: string }, notes: "what prevents the prospect from advancing FROM this stage" }
+                  mental_vocabulary:  { type: array,   required: false, items: { type: string }, notes: "the prospect's actual words and phrases — distinct from the brand's vocabulary.md preferred terms" }
+                  questions_asked:    { type: array,   required: false, items: { type: string }, notes: "verbatim questions the prospect asks at this stage; downstream tools may emit FAQPage schema from this list" }
+                  content_goal:       { type: string,  required: false, notes: "what content must accomplish at this stage (1-2 sentences)" }
+                notes: |
+                  Per-stage detail file. Body MAY include additional
+                  narrative, evidence pulls from prospect interviews,
+                  or stage-specific notes that don't fit the
+                  frontmatter shape. Authoritative data lives in
+                  frontmatter; body is human-facing context.
+
+  # --- DATA-VIZ (v1.5) ---------------------------------------------------
+  data_viz:
+    required: false
+    recommended: true
+    description: |
+      (v1.5) Charting and data-visualization conventions. A canonical
+      home for the rules brands today repeat across multiple channel
+      guides: which palette role goes to which data role, when each
+      chart type is on-brand vs off-brand, axis/grid behavior,
+      annotation conventions, number-formatting rules, and table
+      styling.
+
+      This layer exists because the audit (#12) found brands documenting
+      the same chart guidance two and three times — once per channel
+      guide that ever shows a chart (deck, social, landing-page) — with
+      drift across the copies. A single canonical layer absorbs the
+      repeated prose and lets channel guides reference it.
+
+      Reference, don't redeclare. Color tokens live in `design-tokens.md`
+      and (when present) `ui-tokens/`; this layer assigns DATA ROLES to
+      those token names (e.g., "categorical-1 = `--color-brand-primary`,
+      categorical-2 = `--color-brand-secondary`"). The hex value is never
+      duplicated here. See validation rule
+      `data-viz-color-tokens-resolve`.
+
+      Per-brand chart-type policy. Brands declare their own allowed and
+      forbidden chart types in `data-viz/chart-types.md`; the spec does
+      not impose a universal list. A B2B measurement brand may forbid
+      pie charts entirely; a consumer brand may live on them. The
+      schema slot is universal; the policy is brand-defined.
+
+      Recommended, not required. Most brands benefit; small or early
+      brands MAY skip the layer entirely. When omitted, downstream
+      tooling that consumes data-viz conventions (chart generators,
+      stat-block renderers, AI agents producing data-driven slides)
+      degrades gracefully — they fall back to design-tokens for color
+      and to per-channel prose for chart guidance.
+
+      Channel-guide migration is opportunistic. Brands with chart
+      guidance duplicated across `messaging/channel-*.md` files SHOULD
+      consolidate into this layer when next revisiting those guides;
+      the channel files then reference `data-viz/` rather than
+      restating its rules. The migration is recommended-not-required —
+      brands move at their own pace.
+    directories:
+      - path: data-viz/
+        contents:
+          - path: _framework.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: framework }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date, notes: "YYYY-MM-DD" }
+              confidence:   { type: string,  required: false, enum: [high, medium, low], notes: "author's confidence in the layer's rules; mirrors the v1.3 register confidence convention" }
+              design_tokens_ref: { type: string, required: false, notes: "(v1.9.0) Optional path to the brand's design-tokens source file (conventionally `design-tokens.md`). Resolves under the v1.7 cross-layer-ref convention. Formalizes the relationship documented in the layer prose above." }
+            body_sections_recommended:
+              - "What this layer covers"
+              - "When to use this layer vs design-tokens"
+              - "Relationship to channel guides"
+              - "How downstream tools consume this layer"
+            notes: |
+              Discipline-level documentation for the layer. The actual
+              rules live in the sibling files (`colors.md`,
+              `chart-types.md`, etc.); this file documents scope,
+              boundaries with adjacent layers, and how AI tooling is
+              expected to consume the layer.
+
+          - path: colors.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: data-viz-colors }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              design_tokens_ref: { type: string, required: false, notes: "(v1.9.0) Optional path to the brand's design-tokens source file. Resolves under the v1.7 cross-layer-ref convention." }
+              role_taxonomy:
+                type: string
+                required: false
+                enum: [categorical, semantic, sequential, diverging, mixed]
+                notes: |
+                  Which color-role family this brand's data viz
+                  primarily uses. `mixed` is valid (most brands use
+                  several families — categorical for series comparison,
+                  sequential for heatmaps, diverging for variance).
+                  Informational; downstream tools may use this as a
+                  hint for default chart configurations.
+            body_sections_recommended:
+              - "Color roles"
+              - "Categorical palette"
+              - "Sequential palette"
+              - "Diverging palette"
+              - "Semantic palette (positive / negative / neutral)"
+              - "Accessibility (contrast, colorblind safety)"
+              - "What never appears in a chart"
+            notes: |
+              Assigns DATA ROLES to design-token names. Example body
+              shape (canonical):
+
+                  | Role             | Token reference                |
+                  |------------------|--------------------------------|
+                  | categorical-1    | `--color-brand-primary`        |
+                  | categorical-2    | `--color-brand-secondary`      |
+                  | sequential-low   | `--color-surface-subtle`       |
+                  | sequential-high  | `--color-brand-primary`        |
+                  | diverging-pos    | `--color-semantic-success`     |
+                  | diverging-neg    | `--color-semantic-error`       |
+                  | neutral-baseline | `--color-gray-60`              |
+
+              The hex value MUST NOT be redeclared here — the token
+              reference is the single source of truth. Validators
+              SHOULD verify each token reference resolves to a token
+              defined in `design-tokens.md` (or a `ui-tokens/` file
+              when present). See `data-viz-color-tokens-resolve`.
+
+              Color-role taxonomy: the four canonical families
+              (categorical, sequential, diverging, semantic) are
+              borrowed from established information-design practice
+              (Tableau, IBM Carbon Charts, Material Design Data Viz,
+              Observable Plot all use the same four). Brands MAY use
+              any subset; brands SHOULD NOT invent novel role names
+              without strong cause.
+
+          - path: chart-types.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: data-viz-chart-types }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              design_tokens_ref: { type: string, required: false, notes: "(v1.9.0) Optional path to the brand's design-tokens source file. Resolves under the v1.7 cross-layer-ref convention." }
+              allowed:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  Kebab-case chart-type slugs the brand permits.
+                  Recommended baseline slugs: `bar`, `column`, `line`,
+                  `area`, `stacked-bar`, `stacked-column`, `scatter`,
+                  `bubble`, `pie`, `donut`, `treemap`, `heatmap`,
+                  `histogram`, `box-plot`, `waterfall`, `sankey`,
+                  `radar`, `gauge`. Brands MAY extend with
+                  brand-specific slugs (e.g., `attribution-flow`).
+              forbidden:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  Chart-type slugs the brand explicitly forbids. When a
+                  per-channel guide references a chart type appearing
+                  here, the validator emits a warning. Common entries:
+                  `pie` (for brands that find pies misleading),
+                  `3d-anything` (universally discouraged), `radar`
+                  (often noisy).
+            body_sections_recommended:
+              - "Allowed chart types and when to use each"
+              - "Forbidden chart types and why"
+              - "Chart-type selection by data shape"
+              - "One-chart-per-surface rule (or exceptions)"
+            notes: |
+              Per-brand chart-type policy. The `allowed` and `forbidden`
+              arrays are the validator-readable canonical form; the
+              body sections explain the reasoning. Brands MAY declare
+              both arrays, only one, or neither (in which case the
+              policy is documented as prose only and validators do not
+              enforce chart-type selection). See
+              `data-viz-chart-type-coverage-warn`.
+
+          - path: axes-and-grid.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: data-viz-axes }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              design_tokens_ref: { type: string, required: false, notes: "(v1.9.0) Optional path to the brand's design-tokens source file. Resolves under the v1.7 cross-layer-ref convention." }
+              origin_policy:
+                type: string
+                required: false
+                enum: [always-zero, free, contextual]
+                notes: |
+                  Y-axis origin behavior. `always-zero` = bar/column
+                  charts MUST start at zero (the truthful default).
+                  `free` = origin floats to data range (acceptable for
+                  line charts on continuous variables). `contextual` =
+                  brand uses both, body documents which applies when.
+            body_sections_recommended:
+              - "Y-axis origin policy (zero vs free)"
+              - "Gridline conventions"
+              - "Tick density and label rotation"
+              - "Axis label typography"
+              - "When to suppress an axis"
+            notes: |
+              Origin behavior is the load-bearing rule here — most
+              chart-truthfulness violations are bar charts with a
+              non-zero baseline. The body SHOULD state the brand's
+              policy and the exceptions explicitly.
+
+          - path: annotations.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:                  { type: string,  required: true,  const: data-viz-annotations }
+              version:               { type: string,  required: false }
+              status:                { type: string,  required: false }
+              last_updated:          { type: string,  required: false, format: date }
+              design_tokens_ref:     { type: string, required: false, notes: "(v1.9.0) Optional path to the brand's design-tokens source file. Resolves under the v1.7 cross-layer-ref convention." }
+              source_citation_required:
+                type: boolean
+                required: false
+                notes: |
+                  When `true`, every annotation containing a numeric
+                  claim MUST cite a source (file path, URL, dataset
+                  reference, or `data/<topic>.yaml#<key>`). When
+                  `false` or absent, source citation is recommended
+                  but not enforced. Validators emit a warning when
+                  brands declare `true` and a downstream artifact
+                  generator omits the citation. See
+                  `data-viz-annotation-source-required`.
+            body_sections_recommended:
+              - "Big-stat (callout number) format"
+              - "Inline annotations (highlighting a value)"
+              - "Source citation conventions"
+              - "Qualifier line conventions (what / where / when)"
+              - "Annotation typography and hierarchy"
+            notes: |
+              "Big-stat" callouts (large numbers with qualifier lines)
+              are the most common annotation pattern across real
+              brands. The body SHOULD document the canonical format
+              (number size, qualifier line copy structure, source
+              placement) so chart generators and slide tools render
+              them consistently. NEXT90's pattern — number, qualifier
+              answering "compared to what / where / when," source
+              bottom-right — is one canonical shape; other brands MAY
+              use others.
+
+          - path: numbers.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: data-viz-numbers }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              design_tokens_ref: { type: string, required: false, notes: "(v1.9.0) Optional path to the brand's design-tokens source file. Resolves under the v1.7 cross-layer-ref convention." }
+              locale:
+                type: string
+                required: false
+                notes: |
+                  BCP-47 locale tag (e.g., `en-US`, `en-GB`, `de-DE`).
+                  Drives default thousands separator and decimal
+                  marker conventions. When absent, brands SHOULD
+                  document the conventions explicitly in body.
+              currency_default:
+                type: string
+                required: false
+                notes: "ISO 4217 currency code (e.g., `USD`, `EUR`). Optional."
+            body_sections_recommended:
+              - "Currency formatting"
+              - "Percentage formatting"
+              - "Large-number abbreviation (K / M / B vs scientific)"
+              - "Precision rules (decimal places by magnitude)"
+              - "Thousands separator and decimal marker"
+              - "Negative-number convention (sign vs parens)"
+              - "Date and time formatting in chart axes"
+            notes: |
+              Number formatting in data viz is stricter than general
+              body copy — a chart axis with inconsistent precision
+              looks broken in a way prose does not. This file is
+              authoritative for chart and data-table number rendering;
+              when it conflicts with general copy conventions in
+              `voice.md` or a channel guide, this file wins for
+              data-viz contexts.
+
+          - path: tables.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: data-viz-tables }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              design_tokens_ref: { type: string, required: false, notes: "(v1.9.0) Optional path to the brand's design-tokens source file. Resolves under the v1.7 cross-layer-ref convention." }
+            body_sections_recommended:
+              - "Header treatment"
+              - "Row striping (or no striping)"
+              - "Column alignment by data type"
+              - "Numeric column conventions (right-align, monospace)"
+              - "Empty-cell convention (em-dash, blank, or zero)"
+              - "Sort indicators"
+              - "Table caption and source"
+            notes: |
+              Tables sit between data-viz and prose layout. This file
+              covers tables AS data-viz artifacts (analytics tables,
+              comparison tables, results tables); general prose tables
+              follow design-tokens typography rules.
+
+  # --- IMAGE GENERATION --------------------------------------------------
+  image_generation:
+    required: false
+    recommended: true
+    description: |
+      (v1.6) Conventions governing how AI image-generation tools
+      (Midjourney, DALL-E, Imagen, Stable Diffusion, Flux, and
+      successors) produce on-brand imagery for the brand. Sibling to
+      the prose `prompts/` layer; the schemas diverge enough — visual
+      generation has style anchors, negative prompts, aspect-ratio
+      defaults, people-depiction rules, and provenance concerns that
+      prose prompts do not — that they live in separate top-level
+      layers. A future `video_generation/` layer would sit beside this
+      one as the natural extension when video generators stabilize.
+
+      Reference, don't redeclare. When a brand has a
+      `design/photography-treatment.md` (or any other documented
+      visual baseline), this layer cites that file as the visual
+      anchor rather than restating it. When color overlays use brand
+      colors, this layer references design tokens by name (never hex
+      literals). When brand-overlay rules require clear-space, this
+      layer cites `assets/_manifest.md` rather than duplicating the
+      values. The job of this layer is image-generation-specific
+      guidance: prompt ergonomics, style anchors, negative prompts,
+      composition defaults, people-depiction rules, and provenance.
+
+      Model-agnostic in v1. The layer prescribes brand intent — what
+      the image should look like, what it must never depict — without
+      branching by generator. Per-model variants
+      (e.g., `image-generation/midjourney.md`) MAY be added in a
+      future patch when real divergence in prompt syntax surfaces;
+      v1.6 does not bake that in.
+
+      Recommended, not required. Brands that generate any imagery via
+      AI tools benefit; brands using only stock photography or
+      commissioned shoots MAY skip the layer entirely. When omitted,
+      downstream tooling that consumes image-generation conventions
+      degrades gracefully — agents fall back to design-tokens for
+      color, photography-treatment (when present) for visual
+      direction, and reasonable defaults for everything else.
+
+      Sensitivity. The `people.md` and `provenance.md` files touch
+      real-world ethics — depiction of humans, AI-generated content
+      labeling, jurisdictional regulation. The schema documents the
+      slots; it deliberately does not impose universal answers.
+      Brands declare their own positions.
+    directories:
+      - path: image-generation/
+        contents:
+          - path: _framework.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: framework }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date, notes: "YYYY-MM-DD" }
+              confidence:   { type: string,  required: false, enum: [high, medium, low] }
+            body_sections_recommended:
+              - "What this layer covers"
+              - "When to use this layer vs commission a human shoot"
+              - "Relationship to design/photography-treatment.md"
+              - "Relationship to assets/_manifest.md and design-tokens.md"
+              - "How downstream tools (and AI agents) consume this layer"
+            notes: |
+              Discipline-level documentation. The actual rules live in
+              the sibling files; this file documents scope, the
+              boundary with photography-treatment (which governs
+              human-shot photography), and the consumption model for
+              AI agents that pick a generator and assemble a prompt.
+
+          - path: style.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: image-generation-style }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              confidence:   { type: string,  required: false, enum: [high, medium, low] }
+              photography_treatment_ref:
+                type: string
+                required: false
+                notes: |
+                  Path to the brand's `design/photography-treatment.md`
+                  (or other documented visual baseline) when one
+                  exists. This file's style guidance SHOULD be
+                  consistent with that reference; conflicts are a
+                  signal one of the two needs an update. See
+                  validation rule
+                  `image-gen-photography-treatment-link-valid`.
+              aspect_ratios:
+                type: object
+                required: false
+                notes: |
+                  Default aspect ratios per channel slug, e.g.
+                  `{ social-square: "1:1", social-story: "9:16",
+                  hero: "16:9", linkedin-post: "1.91:1" }`.
+                  Channel guides MAY override; this is the brand
+                  default an agent picks when the surface is
+                  ambiguous.
+            body_sections_recommended:
+              - "Visual goal in one paragraph"
+              - "Style anchors (reference images, treatments, eras)"
+              - "Composition defaults (framing, depth of field, perspective)"
+              - "Aspect-ratio defaults by channel"
+              - "Lighting and time-of-day conventions"
+              - "When to deviate from defaults"
+            notes: |
+              Style anchors are the most load-bearing field.
+              Concrete reference images (URLs or paths to a moodboard)
+              outperform abstract adjectives ("editorial," "cinematic")
+              by a wide margin in real prompt outcomes. Brands SHOULD
+              cite specific anchors — film stocks, photographers,
+              illustration eras, named treatments — and pair them
+              with reference image URLs whenever possible. The
+              composition section absorbs what the issue sketch
+              treated as a separate `composition.md`; the two split
+              cleanly only at very high coverage and most brands
+              benefit from a unified style file.
+
+          - path: subject-matter.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: image-generation-subjects }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              themes:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  Optional machine-readable list of recurring themes
+                  the brand depicts (e.g., `agriculture`,
+                  `rural-landscape`, `working-equipment`). Free-form
+                  body prose remains the canonical guidance; this
+                  array is a hint for AI agents picking subjects from
+                  a controlled set.
+              forbidden_themes:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  Optional machine-readable list of themes the brand
+                  never depicts (e.g., `urban-tech-stock`,
+                  `server-rooms`, `team-around-laptop`). Validators
+                  MAY warn if generated-image metadata or prompt
+                  history references a forbidden theme.
+            body_sections_recommended:
+              - "What the brand depicts"
+              - "What the brand never depicts"
+              - "Subject treatment by channel (when it varies)"
+              - "Working hypothesis vs canonical (when in flux)"
+            notes: |
+              Subject-matter guidance is part rule, part editorial.
+              Brands SHOULD lead with the canonical themes (what TO
+              depict) and pair them with the negative-space themes
+              (what NEVER to depict). When the brand's positioning
+              and current image library disagree, the file SHOULD say
+              so explicitly — see lean-media-brand's
+              `design/photography-treatment.md` "Working direction"
+              section for the canonical pattern.
+
+          - path: negative-prompts.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: image-generation-negative-prompts }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              universal_negatives:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  Optional list of negative-prompt fragments the
+                  brand always appends (e.g., `warped hands`,
+                  `extra fingers`, `text artifacts`,
+                  `celebrity likeness`, `off-brand color`). AI
+                  agents SHOULD include these in every generation
+                  request unless the brand declares an exception.
+            body_sections_recommended:
+              - "Universal negatives (always appended)"
+              - "Common AI failure modes the brand excludes"
+              - "Style negatives (what we are NOT)"
+              - "Per-channel negatives (when applicable)"
+            notes: |
+              Negative prompts are the inverse frame of subject-matter
+              and style — kept as a separate file because the
+              authoring mode is different (a checklist of failure
+              modes, not narrative guidance) and because AI agents
+              consume the universal-negatives array directly without
+              reading the body.
+
+          - path: people.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: image-generation-people }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              age_range:
+                type: string
+                required: false
+                notes: |
+                  When the brand declares people-depiction rules,
+                  age_range SHOULD be present (e.g., `25-65`,
+                  `working-age adults`). Free-form string; not
+                  enum-constrained because brand needs vary.
+              diversity_intent:
+                type: string
+                required: false
+                notes: |
+                  Brand's stated intent for diversity in generated
+                  imagery. Free-form because a one-line enum cannot
+                  capture brand-specific positions; common patterns
+                  include `reflect-customer-base`,
+                  `reflect-geography-served`, `intentionally-diverse`.
+              forbidden_likenesses:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  Categories of likeness the brand never generates
+                  (e.g., `celebrity`, `politician`,
+                  `competitor-employee`, `named-customer-without-consent`).
+                  Universal-likeness exclusions belong in
+                  negative-prompts.md universal_negatives; this field
+                  captures brand-specific exclusions.
+            body_sections_recommended:
+              - "When the brand depicts people at all"
+              - "Age range and life-stage conventions"
+              - "Diversity intent"
+              - "Attire, setting, and activity conventions"
+              - "Forbidden likenesses (categories and named individuals)"
+              - "Consent and release conventions"
+            notes: |
+              People depiction is the most ethically loaded slot in
+              this layer. The schema documents the fields; brands
+              decide their own positions. When the file is populated,
+              the validation rule
+              `image-gen-people-required-fields-when-present` warns
+              if `age_range`, `diversity_intent`, and
+              `forbidden_likenesses` are all absent (the file exists
+              but says nothing actionable). Brands that decide NOT to
+              generate people imagery SHOULD say so explicitly in the
+              body and MAY omit the structured fields.
+
+          - path: brand-overlays.md
+            required: false
+            recommended: false
+            frontmatter:
+              type:         { type: string,  required: true,  const: image-generation-overlays }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              assets_manifest_ref:
+                type: string
+                required: false
+                notes: |
+                  Path to `assets/_manifest.md` when the brand uses
+                  logo overlays on generated imagery. Clear-space and
+                  minimum-size rules live in the manifest; this file
+                  references them rather than duplicating. See
+                  validation rule
+                  `image-gen-overlay-manifest-link-valid`.
+            body_sections_recommended:
+              - "Logo placement on generated imagery (or never)"
+              - "Watermark conventions"
+              - "Brand color overlays (gradient, tint, post-processing)"
+              - "Attribution text on user-facing imagery"
+              - "References to assets/_manifest.md and design-tokens.md"
+            notes: |
+              Folds two concerns from the original issue sketch
+              (color-treatment.md and brand-overlays.md): both are
+              about post-generation visual treatment that ties the
+              image back to brand assets and tokens. Brands without
+              logo overlays or post-processing on generated imagery
+              MAY omit this file entirely.
+
+          - path: provenance.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string,  required: true,  const: image-generation-provenance }
+              version:      { type: string,  required: false }
+              status:       { type: string,  required: false }
+              last_updated: { type: string,  required: false, format: date }
+              required_when_published:
+                type: array
+                required: false
+                items: { type: string }
+                enum_items: [model, prompt, prompt_hash, generation_date, brand_approval_status, generator_account, seed]
+                notes: |
+                  Provenance fields the brand REQUIRES on any
+                  AI-generated image that ships to a public surface.
+                  v1.6 recommends a minimum of `model`, `prompt` (or
+                  `prompt_hash`), `generation_date`, and
+                  `brand_approval_status`; brands MAY require more
+                  (e.g., `seed` for reproducibility,
+                  `generator_account` for audit). See
+                  `image-gen-provenance-required-when-published`.
+              recommended_when_published:
+                type: array
+                required: false
+                items: { type: string }
+                notes: |
+                  Provenance fields the brand recommends but does not
+                  require (e.g., `seed`, `negative_prompt`,
+                  `post_processing_notes`).
+              labeling_convention:
+                type: string
+                required: false
+                notes: |
+                  Brand convention for user-facing labeling of
+                  AI-generated imagery (e.g., `caption-suffix`,
+                  `corner-badge`, `metadata-only`, `none`). Maps to
+                  jurisdictional labeling regulations the brand
+                  chooses to honor.
+            body_sections_recommended:
+              - "What we capture for every AI-generated image"
+              - "What we require before publishing"
+              - "User-facing labeling convention"
+              - "Approval workflow (who signs off, what's tracked)"
+              - "Retention and audit conventions"
+              - "Jurisdictional considerations (when applicable)"
+            notes: |
+              Provenance fields are guidance about a brand's runtime
+              record-keeping, not a schema for the records themselves
+              — this file declares WHAT the brand captures, not
+              WHERE. Downstream tooling (asset DAMs, generation
+              pipelines, brand-approval queues) is the canonical home
+              for the per-image records.
+
+  # --- PROOF -------------------------------------------------------------
+  proof:
+    required: false
+    recommended: true
+    description: |
+      Evidence library: proof points, competitive positioning, credentials.
+      Distinct from the data/ layer — proof/ is curated narrative; data/
+      is structured machine-readable.
+    directories:
+      - path: proof/
+        contents:
+          - path: proof-points.md
+            required: false
+            recommended: true
+            frontmatter:
+              type:         { type: string, required: false, const: proof-library }
+              version:      { type: string, required: false }
+              last_updated: { type: string, required: true, format: date, notes: "YYYY-MM-DD; proof claims go stale" }
+          - path: competitive.md
+            required: false
+            frontmatter:
+              type:         { type: string, required: false, const: competitive-positioning }
+              visibility:   { type: string, required: false, notes: "(v1.2) typically 'sales-enablement'; see conventions.frontmatter.common_fields.visibility" }
+              audience:     { type: string, required: false, notes: "DEPRECATED in v1.2 — use `visibility` instead. If `audience: internal` is present, validators treat it as `visibility: internal` and warn." }
+              version:      { type: string, required: false }
+              last_updated: { type: string, required: true, format: date, notes: "YYYY-MM-DD; competitive maps decay quickly" }
+
+  # --- DATA --------------------------------------------------------------
+  data:
+    required: false
+    recommended: true
+    description: |
+      Pure YAML files holding machine-readable claims, registries, and
+      structured reference. Content generators pull from here so prose
+      files don't drift from canonical numbers and definitions.
+    directories:
+      - path: data/
+        contents:
+          - glob: "*.yaml"
+            required: false
+            recommended: true
+            notes: |
+              Each file is a self-describing registry, scoped to one
+              topic. Topic slugs are brand-defined (e.g., team/,
+              market/, stats/, frameworks/). The pattern — one topic per
+              file, comment header documenting the schema — is universal.
+            file_header_convention: |
+              Each YAML file SHOULD open with comment lines documenting
+              its purpose, per-entry schema, confidence-level conventions,
+              and last-updated date.
+
+  # --- PRODUCT -----------------------------------------------------------
+  product:
+    required: false
+    recommended: true
+    description: |
+      Mechanical truth about what the product/service is and how it works.
+      One file per product or product-line. Single-product brands will
+      have a single file; multi-product brands SHOULD use one file per
+      product.
+    directories:
+      - path: product/
+        contents:
+          - pattern: "{product-slug}.md"
+            required: false
+            recommended: true
+            min_files: 1
+            frontmatter:
+              title:        { type: string, required: true }
+              version:      { type: string, required: false }
+              source:       { type: string, required: false, notes: "where the canonical claims came from" }
+              last_updated: { type: string, required: true, format: date, notes: "YYYY-MM-DD; product changes frequently — freshness signals trustworthiness" }
+            body_sections_recommended:
+              - "What it is"
+              - "How it works"
+              - "What's included"
+              - "What's NOT included"
+              - "Pricing"           # or "Pricing model"
+              - "Integrations"
+              - "Known limitations"
+            notes: |
+              Body sections are recommended, not required — different
+              products have different shapes (e.g., a service-only
+              brand has no `Integrations`; a free product has no
+              `Pricing`). The list above is the structure that emerged
+              from the first reverse-engineered brand and is a useful
+              default.
+
+  # --- EXAMPLES ----------------------------------------------------------
+  examples:
+    required: false
+    recommended: true
+    description: |
+      Reference outputs that have been human-validated. Used as few-shot
+      anchors by prompt templates and as regression checks when prompts
+      or voice change.
+
+      (v1.13.0) Examples that target a specific named company SHOULD
+      declare `target_company:` (free-form string). Examples that
+      target a specific persona MAY declare `target_persona_ref:`
+      (v1.7 cross-layer-ref to `personas/{audience}-{role}.md`); the
+      legacy free-form `target_persona:` continues to validate for
+      hypothetical or future personas with no corresponding file.
+      See `conventions.cross_layer_references.backward_compat.field_aliases`.
+    directories:
+      - path: examples/
+        contents:
+          - pattern: "{content-type}-{slug}.md"
+            required: false
+            recommended: true
+            frontmatter:
+              example_type:     { type: string, required: true, notes: "e.g., 'one-pager', 'email-sequence'" }
+              variant:          { type: string, required: false, notes: "e.g., 'vertical-specific'" }
+              target_vertical:  { type: string, required: false }
+              target_role:      { type: string, required: false }
+              target_company:
+                type: string
+                required: false
+                added_in: 1.13.0
+                notes: |
+                  (v1.13.0) Free-form string naming the company,
+                  organization, or operator profile this example
+                  targets. Values may be a named real company (e.g.,
+                  `WHOOP`, `Blue Cross Blue Shield Association`) or a
+                  profile description (e.g., `Large independent HVAC
+                  operator (multi-market)`). The spec does not
+                  prescribe a structured shape; brand-defined.
+                  Observed in next90-brand email-sequence examples.
+              target_persona:
+                type: string
+                required: false
+                accepts_aliases: true
+                canonical_name: target_persona_ref
+                legacy_names: [target_persona]
+                notes: |
+                  (v1.13.0) Alias-aware per
+                  `conventions.cross_layer_references.backward_compat.field_aliases`.
+                  The canonical v1.7-conformant name is
+                  `target_persona_ref:` — a singular `*_ref` that
+                  resolves to a file under `personas/{audience}-{role}.md`
+                  via the v1.7 cross-layer-ref convention.
+
+                  The legacy free-form `target_persona:` continues to
+                  validate as a plain string. Brands MAY use either:
+                  the legacy form for hypothetical/future personas
+                  that have no corresponding file (e.g.,
+                  next90-brand's `target_persona: marketing-director-hvac`
+                  describing a vertical-specific persona the
+                  brand's universal audience×role matrix does not
+                  author), or the `_ref` form when the target IS a
+                  real persona file. Validators MUST treat presence
+                  of EITHER name as satisfying the field; the v1.7
+                  `cross-layer-ref-target-resolves` rule applies
+                  only to `target_persona_ref:` (the `_ref` form),
+                  not to the legacy plain string.
+              files_used:       { type: array,  required: false, items: { type: string }, notes: "brand files this example was generated from" }
+              generated:        { type: string, required: false, format: date }
+              status:           { type: string, required: false, notes: "e.g., 'reference — validated by human review'" }
+
+  # --- PROMPTS -----------------------------------------------------------
+  prompts:
+    required: false
+    recommended: true
+    description: |
+      Agent brief templates — one per content type (or per content-type
+      sub-variant). Each prompt names the brand files it expects to be
+      attached and (when validated) the examples that anchor it.
+      Content-type slugs are brand-defined (e.g., one-pager,
+      email-sequence, deck).
+
+      (v1.12.0) Sub-variant disambiguation. Brands with multiple
+      prompts of the same `content_type:` that differ in structure or
+      shape MAY use the sub-variant patterns documented under
+      `conventions.prompt_sub_variant_fields` — either
+      `<content_type>_type:` for content-structure variants or
+      `format:` for shape/length variants. The canonical filename
+      for a sub-typed prompt is the composite
+      `{content_type}-{variant}.md` (e.g., `deck-conference.md`).
+    directories:
+      - path: prompts/
+        contents:
+          - pattern: "{content-type}.md"
+            required: false
+            recommended: true
+            notes: |
+              (v1.12.0) When a sub-variant is declared in frontmatter
+              (`<content_type>_type:` or `format:`), the canonical
+              filename uses the composite form
+              `{content_type}-{variant}.md`. The simple
+              `{content_type}.md` pattern documented here covers both
+              shapes — the variant slug appears as a hyphenated
+              extension of the content-type slug in the filename.
+              See `conventions.prompt_sub_variant_fields`.
+            frontmatter:
+              prompt_type:  { type: string, required: true, const: agent-brief-template }
+              content_type: { type: string, required: true, notes: "matches the prompt's content-type slug" }
+              version:      { type: string, required: false }
+              validated:    { type: boolean, required: false, notes: "true when at least one example exists and passed human review" }
+              examples:     { type: array,  required: false, items: { type: string }, notes: "paths to examples/ files that anchor this prompt" }
+              format:
+                type: string
+                required: false
+                notes: |
+                  (v1.12.0) Optional format/length sub-variant
+                  discriminator. Used when the prompt is a shape
+                  variant of its content_type (e.g.,
+                  `content_type: thought-leadership` + `format: longform`).
+                  See `conventions.prompt_sub_variant_fields` for the
+                  full pattern definition including the alternative
+                  `<content_type>_type:` shape and filename convention.
+                  Brand-defined free-form slug.
+
+  # --- DESIGN SPECS ------------------------------------------------------
+  design_specs:
+    required: false
+    description: |
+      Open design questions and channel-specific asset specs that don't
+      fit cleanly in design-tokens.md (which is canonical) or in a channel
+      guide (which is copy-focused).
+    directories:
+      - path: design/
+        contents:
+          - glob: "*.md"
+            required: false
+            frontmatter:
+              type:         { type: string, required: false, notes: "e.g., 'design-spec'" }
+              status:       { type: string, required: false, notes: "'open' = work-in-progress; 'closed' = resolved" }
+              area:         { type: string, required: false, notes: "e.g., 'social', 'email'" }
+              last_updated: { type: string, required: true, format: date, notes: "YYYY-MM-DD; open design questions go stale and need re-review" }
+
+  # --- META --------------------------------------------------------------
+  meta:
+    required: false
+    description: "Repo-level meta files. Not ingested as brand content."
+    files:
+      - path: README.md
+        required: true
+        notes: "human-facing repo overview; SHOULD link to brand-spec"
+      - path: HANDOFF.md
+        required: false
+        notes: "session handoff for human/agent collaborators"
+
+# -----------------------------------------------------------------------------
+# Validation rules (cross-layer)
+# -----------------------------------------------------------------------------
+
+validation:
+  - id: identity-required
+    rule: "identity.md MUST exist with frontmatter.slug and frontmatter.name"
+  - id: voice-required
+    rule: |
+      The brand MUST provide a voice layer using exactly ONE of two
+      patterns:
+        (a) single-register: `voice.md` at the brand root, OR
+        (b) multi-register (v1.2): a `voice/` directory containing at
+            least one `voice/registers/{register-slug}.md` and a
+            `voice/README.md` (or `voice/_index.md`).
+  - id: voice-pattern-exclusive
+    rule: |
+      (v1.2) If `voice/` directory exists, `voice.md` at the brand root
+      MUST NOT exist (and vice versa). Mixing patterns within a single
+      brand is invalid.
+  - id: voice-multi-register-index
+    rule: |
+      (v1.2) When the multi-register pattern is used, `voice/README.md`
+      OR `voice/_index.md` MUST exist (exactly one). At least one file
+      under `voice/registers/` MUST exist, and each MUST have
+      frontmatter.register and frontmatter.applies_to populated.
+  - id: source-authority-upstream-required
+    rule: |
+      (v1.2) If a file's `source_authority.status` is `mirror` or
+      `historical`, `source_authority.upstream` MUST be present. When
+      `upstream` is a path, the file MUST exist; when it is a URL, it
+      MUST be well-formed.
+  - id: source-authority-notes-required
+    rule: |
+      (v1.2) If a file's `source_authority.status` is `historical` or
+      `fixture-only`, `source_authority.notes` MUST be present and
+      non-empty.
+  - id: source-authority-mirror-freshness-warn
+    severity: warn
+    rule: |
+      (v1.2) If `source_authority.status: mirror` and
+      `source_authority.refresh.last_synced` is older than the cadence
+      implies (weekly cadence + last_synced > 14 days; monthly + > 60
+      days; on-deploy/on-source-change/manual = no automatic warning),
+      validators SHOULD warn that the mirror may be stale.
+  - id: visibility-default-public
+    rule: |
+      (v1.2) If `visibility` is omitted, the file is treated as
+      `visibility: public`. Tools generating public-facing artifacts
+      MUST filter out files where `visibility` ≠ `public`.
+  - id: visibility-audience-internal-backcompat
+    severity: warn
+    rule: |
+      (v1.2) If a file uses the v1.1 `audience: internal` field on
+      `proof/competitive.md`, validators SHOULD treat it as
+      `visibility: internal` and warn, recommending migration to the
+      new `visibility` field.
+  - id: vocabulary-required
+    rule: "vocabulary.md MUST exist (frontmatter MAY be empty)"
+  - id: design-tokens-required
+    rule: "design-tokens.md MUST exist; assets/ directory MUST exist with _manifest.md"
+  - id: messaging-audience-min
+    rule: "At least one messaging/for-{audience}.md MUST exist"
+  - id: persona-audience-coverage
+    rule: |
+      For every persona file with frontmatter.audience = X, a
+      messaging/for-X.md SHOULD exist. (Warning, not error.)
+  - id: prompt-example-when-validated
+    rule: |
+      Any prompts/{x}.md with frontmatter.validated = true MUST list at
+      least one path under examples in frontmatter.examples, and each
+      listed example file MUST exist.
+  - id: ui-tokens-layer-order
+    rule: |
+      If ui-tokens/semantic.md exists, ui-tokens/primitives.md MUST exist.
+      If ui-tokens/component.md exists, ui-tokens/semantic.md MUST exist.
+  - id: frontmatter-parses
+    rule: "Every frontmatter block (between --- markers) MUST be valid YAML."
+  - id: data-files-yaml
+    rule: "Every file under data/ MUST be valid YAML."
+  - id: agent-context-priority-layers-resolve
+    rule: |
+      If agent-context.md exists, every entry in
+      frontmatter.priority_layers MUST name a layer declared in this
+      schema's `layers:` block.
+  - id: proof-freshness-warn
+    severity: warn
+    rule: |
+      Validators SHOULD warn (not error) if any file under proof/ has
+      frontmatter.last_updated older than 180 days. Proof claims decay;
+      a stale proof library is a liability in sales conversations.
+  - id: design-specs-freshness-warn
+    severity: warn
+    rule: |
+      Validators SHOULD warn if any file under design/ has
+      frontmatter.last_updated older than 90 days. Open design questions
+      that haven't been revisited in a quarter are likely abandoned.
+  - id: sample-status-tolerates-placeholders
+    rule: |
+      Files with frontmatter.status = sample are template scaffolding,
+      not real brand content. Validators MAY skip strict value
+      validation (e.g., placeholder slugs, TODO strings, enum-violating
+      values) for these files. A real brand repo SHOULD NOT contain any
+      file with status = sample once it is live.
+  - id: ui-tokens-depends-on-resolves
+    rule: |
+      Every entry in a ui-tokens file's frontmatter.depends-on array
+      MUST name a sibling file under ui-tokens/ that exists.
+
+  # ---------------------------------------------------------------------
+  # (v1.3) New validation rules — issue #8 closure
+  # ---------------------------------------------------------------------
+
+  - id: corpus-metadata-recommended
+    severity: warn
+    rule: |
+      (v1.3, issue #8 item 1) Register files under `voice/registers/`
+      that derive their rules from an analyzed corpus SHOULD declare
+      `corpus_size`, `corpus_source`, `corpus_pulled`, and `confidence`
+      in frontmatter. Validators SHOULD warn when a register file is
+      missing `corpus_pulled` or `confidence` (the two highest-signal
+      fields). Not an error — registers authored top-down (no corpus
+      yet) MAY omit. When `confidence: low` is declared, downstream
+      generators SHOULD treat the register's rules as provisional.
+
+  - id: corpus-pulled-freshness-warn
+    severity: warn
+    rule: |
+      (v1.3, issue #8 item 1) When a register file declares
+      `corpus_pulled`, validators SHOULD warn if the date is older
+      than 365 days. Voice corpora decay; a year-old social-channel
+      corpus on a fast-moving platform is a weak evidence base.
+
+  - id: applies-to-baseline-warn
+    severity: warn
+    rule: |
+      (v1.3, issue #8 item 2) Each entry in a register file's
+      `applies_to` array SHOULD either match a slug in
+      `conventions.applies_to_baseline_slugs` or be a kebab-case
+      brand-specific slug (containing a brand-named surface, e.g.,
+      `linkedin-brian-handle`). Validators SHOULD warn on slugs that
+      look like baseline drift (e.g., `email`, `marketing-email`
+      where `marketing-emails` is the canonical baseline form).
+      Enforcement is convention-only in v1.3; full controlled-
+      vocabulary enforcement is v2.
+
+  - id: register-inheritance-cannot-subtract
+    severity: error
+    rule: |
+      (v1.3, issue #8 items 3 and 6) Registers ADD permissions; they
+      MUST NOT subtract brand-wide constraints. Specifically: any
+      term listed under the "Forbidden Terms" section of
+      `vocabulary.md` MUST NOT appear as an explicitly-allowed term
+      in any register file (e.g., a register MUST NOT contain text
+      such as `"revolutionary" is allowed in this register` when
+      `revolutionary` is on the brand-wide forbidden list).
+      Validators detect this by scanning each register file for
+      forbidden terms occurring inside an "allowed" / "permitted" /
+      "what this register allows" body section. Forbidden terms
+      occurring inside a `> Quoted: <attribution>` callout, inside a
+      "Published Voice Examples" quote block, or inside a "What does
+      NOT fit this register" section are ignored (those contexts are
+      illustrative, not register-permissive).
+
+  - id: register-inheritance-doc-recommended
+    severity: warn
+    rule: |
+      (v1.3, issue #8 item 5) Any register file beyond the primary
+      SHOULD include both a "What this register allows that
+      {primary} does not" section and a "What is still forbidden
+      (inherited)" section so the inheritance contract is explicit.
+      The primary register is whichever register is listed first in
+      `voice/README.md` precedence (or the first `applies_to:
+      [website, ...]` register when no precedence is declared).
+      Warning only; brands MAY use other section shapes.
+
+  - id: quoted-voice-callout-skipped
+    severity: info
+    rule: |
+      (v1.3, issue #8 item 4) Validators MUST skip vocabulary and
+      voice-rule evaluation of any markdown blockquote whose first
+      line matches `> Quoted: <attribution>` (case-insensitive on
+      "Quoted"). The skip terminates at the first non-blockquote
+      line. When a register file declares
+      `contains_quoted_voices: true` in frontmatter, validators MAY
+      relax voice/vocabulary enforcement on the entire file body
+      (the file author has signaled the file is a quote-construction
+      surface).
+
+  - id: precedence-references-resolve
+    severity: error
+    rule: |
+      (v1.3, issue #8 item 7) Every register slug listed in
+      `voice/README.md` (or `voice/_index.md`) frontmatter
+      `precedence.default_order` or as a value in
+      `precedence.surface_overrides` MUST resolve to an existing
+      file at `voice/registers/<slug>.md`.
+
+  - id: platform-overlay-keys-recommended
+    severity: warn
+    rule: |
+      (v1.3, issue #8 item 8) When a register file declares
+      `platform_overlays:` in frontmatter, the keys SHOULD be
+      kebab-case platform slugs (`linkedin`, `twitter`, `blog`,
+      `email`, etc.). Each value MAY be a free-form object — v1.3
+      does not constrain shape — but SHOULD include at least one of
+      `hashtag_convention`, `emoji_budget`, `divider_convention`, or
+      `cta_permission` so downstream tools know which platform
+      overlay knob is being adjusted. Equivalent H2 sections
+      (`On LinkedIn`, `On {Platform}`) in body copy are an
+      acceptable alternative when frontmatter is absent.
+
+  - id: drift-detection-section-recommended
+    severity: info
+    rule: |
+      (v1.3, issue #8 item 9) Register files SHOULD include a "What
+      does NOT fit this register" body section that documents
+      outliers, cut posts, and surfaces that look on-register but
+      are not. Drift-detection tooling reads this section to flag
+      generated content that resembles the negative-space
+      examples. Informational only — brands MAY omit.
+
+  # ---------------------------------------------------------------------
+  # (v1.4) New validation rules — journey/KYKC layer
+  # ---------------------------------------------------------------------
+
+  - id: journey-stages-monotonic-order
+    severity: error
+    rule: |
+      (v1.4) Within a single journey, every stage MUST declare a
+      non-negative integer `order` value, and every `order` value
+      MUST be unique across the stage set (declared in
+      `journey/stages.md` frontmatter and/or per-stage files under
+      `journey/stages/`). Rendering order is `order` ascending.
+      Validators MUST error on duplicate or negative `order` values
+      and on stages missing `order` entirely.
+
+  - id: journey-stage-slug-resolves
+    severity: warn
+    rule: |
+      (v1.4) When a file outside the journey layer references a
+      stage slug (e.g., a future `messaging/for-{audience}-at-{stage}.md`
+      filename, or a `journey_stage:` frontmatter pointer), the slug
+      MUST resolve to either an entry in `journey/stages.md`
+      frontmatter `stages[].slug` or an existing
+      `journey/stages/<slug>.md` file. Severity is `warn` in v1.4
+      because cross-layer reference syntax has not been finalized;
+      the rule will tighten to `error` when journey-stage messaging
+      variants land in a future minor.
+
+  - id: journey-canonical-stage-warn
+    severity: warn
+    rule: |
+      (v1.4) The 5 canonical KYKC stage slugs are
+      `problem-recognition`, `information-seeking`,
+      `option-evaluation`, `decision-validation`, `post-decision`.
+      Brands MAY rename, reorder, add, or omit stages — the
+      canonical list is a default, not a constraint. When a brand
+      renames a canonical slug (declares a stage whose `label`
+      semantically matches a canonical stage but whose `slug`
+      diverges), validators SHOULD warn that downstream tools may
+      not recognize the rename without an alias map. This is a
+      soft signal, not an error; brands have legitimate reasons to
+      customize stage taxonomies.
+
+  - id: methodology-provenance-required-when-present
+    severity: error
+    rule: |
+      (v1.4) When a `methodology_provenance:` block appears in any
+      file's frontmatter, the sub-fields `name`, `originator`, and
+      `developed_year` MUST be present and non-empty. All other
+      sub-fields (`short_name`, `developed_at`, `refined_through`,
+      `continuity_note`, `references`, `notes`) are optional. The
+      `references:` array MAY be empty or absent.
+
+  - id: methodology-provenance-recommended-on-framework
+    severity: info
+    rule: |
+      (v1.4) Framework files that document a named methodology
+      (currently: `journey/_framework.md` and `journey/stages.md`)
+      SHOULD declare a `methodology_provenance:` block when the
+      methodology has a credible originator. Informational only —
+      brands MAY omit if the methodology is in-house or unattributed.
+
+  # ---------------------------------------------------------------------
+  # (v1.5) New validation rules — data-viz layer
+  # ---------------------------------------------------------------------
+
+  - id: data-viz-color-tokens-resolve
+    severity: error
+    rule: |
+      (v1.5) Every design-token reference in `data-viz/colors.md`
+      (token names enclosed in backticks within the role-mapping
+      table or body, conventionally prefixed with `--`) MUST resolve
+      to a token defined in `design-tokens.md` or, when present, in
+      a file under `ui-tokens/`. The data-viz layer assigns ROLES to
+      existing tokens; it MUST NOT redeclare hex values. Validators
+      that detect a hex literal (e.g., `#1a2b3c`) inside the role
+      table SHOULD warn that the value belongs in the design-tokens
+      layer instead.
+
+  - id: data-viz-chart-type-coverage-warn
+    severity: warn
+    rule: |
+      (v1.5) When `data-viz/chart-types.md` declares a `forbidden:`
+      array in frontmatter, validators SHOULD warn if any
+      `messaging/channel-*.md`, `prompts/*.md`, or `examples/*.md`
+      file references a forbidden chart type by slug (e.g., the
+      string `pie chart` when `pie` is on the forbidden list).
+      Detection is substring-match on the kebab-case slug; brands
+      MAY suppress with an explicit "exception:" inline annotation.
+      Convention-only warning in v1.5; richer enforcement is v2.
+
+  - id: data-viz-annotation-source-required
+    severity: warn
+    rule: |
+      (v1.5) When `data-viz/annotations.md` declares
+      `source_citation_required: true` in frontmatter, downstream
+      content generators (chart producers, slide generators) MUST
+      attach a source citation to every annotation that contains a
+      numeric claim. Validators of generated artifacts SHOULD warn
+      when an annotation contains a number but no citation.
+      Brand-spec validators (which validate the brand repo, not
+      generated artifacts) treat this as informational against the
+      brand repo itself.
+
+  - id: data-viz-no-hex-redeclaration
+    severity: warn
+    rule: |
+      (v1.5) Files under `data-viz/` SHOULD NOT contain hex color
+      literals (e.g., `#1a2b3c`, `rgb(...)`, `hsl(...)`). The
+      data-viz layer's job is role assignment to existing
+      design-token names — hex values belong in `design-tokens.md`
+      or `ui-tokens/`. Validators SHOULD warn when a hex literal
+      appears in any `data-viz/*.md` body. Hex literals inside
+      blockquote `> Quoted:` callouts or `examples/` reference
+      output are exempt.
+
+  - id: data-viz-framework-presence
+    severity: info
+    rule: |
+      (v1.5) When any file under `data-viz/` exists,
+      `data-viz/_framework.md` SHOULD also exist so the layer's
+      scope and consumption model are documented. Informational —
+      a brand that ships only `data-viz/colors.md` for downstream
+      tooling consumption MAY omit the framework file.
+
+  # ---------------------------------------------------------------------
+  # (v1.6) New validation rules — image-generation layer
+  # ---------------------------------------------------------------------
+
+  - id: image-gen-photography-treatment-link-valid
+    severity: warn
+    rule: |
+      (v1.6) When `image-generation/style.md` declares a
+      `photography_treatment_ref:` frontmatter path, the referenced
+      file MUST exist (typically `design/photography-treatment.md`).
+      When a brand has a photography-treatment file but
+      `image-generation/style.md` does NOT reference it, validators
+      SHOULD warn — the two files SHOULD be cross-linked so the
+      visual baseline stays consistent across human-shot and
+      AI-generated imagery.
+
+  - id: image-gen-overlay-manifest-link-valid
+    severity: warn
+    rule: |
+      (v1.6) When `image-generation/brand-overlays.md` declares an
+      `assets_manifest_ref:` frontmatter path, the referenced file
+      MUST exist (typically `assets/_manifest.md`). The intent is
+      reference, not duplication: clear-space rules and minimum-size
+      rules are authoritative in the assets manifest, and the
+      overlays file SHOULD cite them rather than restate them.
+
+  - id: image-gen-design-token-references-resolve
+    severity: error
+    rule: |
+      (v1.6) When `image-generation/brand-overlays.md` references
+      design-token names (token names enclosed in backticks,
+      conventionally prefixed with `--`), each token MUST resolve to
+      a token defined in `design-tokens.md` or, when present, in a
+      file under `ui-tokens/`. The image-generation layer assigns
+      USAGE to existing tokens (e.g., "overlay gradient uses
+      `--color-brand-primary` to `--color-brand-secondary`"); it MUST NOT
+      redeclare hex values. Mirrors the v1.5
+      `data-viz-color-tokens-resolve` rule.
+
+  - id: image-gen-people-required-fields-when-present
+    severity: warn
+    rule: |
+      (v1.6) When `image-generation/people.md` exists, it SHOULD
+      declare at least one of `age_range`, `diversity_intent`, or
+      `forbidden_likenesses` in frontmatter, OR explicitly state in
+      the body that the brand does not generate imagery containing
+      people. A populated people.md file with no actionable guidance
+      is a known liability: AI agents fall back to model defaults,
+      which may not reflect brand intent.
+
+  - id: image-gen-provenance-required-when-published
+    severity: info
+    rule: |
+      (v1.6) When `image-generation/provenance.md` declares a
+      `required_when_published:` frontmatter array, downstream asset
+      pipelines and brand-approval queues SHOULD enforce that every
+      AI-generated image reaching a public surface carries those
+      fields. Brand-spec validators (which validate the brand repo,
+      not generated artifacts) treat this as informational against
+      the brand repo itself; pipeline-level enforcement is the
+      consumer's responsibility. Recommended minimum field set per
+      v1.6: `model`, `prompt` (or `prompt_hash`), `generation_date`,
+      `brand_approval_status`.
+
+  - id: image-gen-framework-recommended
+    severity: info
+    rule: |
+      (v1.6) When any file under `image-generation/` exists,
+      `image-generation/_framework.md` SHOULD also exist so the
+      layer's scope and consumption model are documented.
+      Informational — a brand that ships only
+      `image-generation/negative-prompts.md` for runtime consumption
+      MAY omit the framework file.
+
+  - id: iconography-set-resolves
+    severity: info
+    rule: |
+      (v1.6.1) When `design/iconography.md` declares
+      `icon_set.name: custom` (or any value indicating a
+      brand-provided set), the `design/icons/` directory SHOULD
+      exist with at least one icon file and a `_manifest.md`
+      describing the set. When `icon_set.name` references a
+      well-known public library (e.g., `lucide`, `material-symbols`,
+      `heroicons`), no local files are required — the library is
+      the source of truth and downstream tools fetch it from the
+      upstream registry. Informational — brands MAY ship a
+      `_manifest.md` listing of the public-library icons they
+      actually use without shipping source files.
+
+  - id: iconography-sizing-references-resolve
+    severity: warn
+    rule: |
+      (v1.6.1) When `design/iconography.md` declares a `sizing:`
+      frontmatter block, every value MUST be a token name that
+      resolves to a token defined in `design-tokens.md` or, when
+      present, in a file under `ui-tokens/`. The iconography file
+      assigns icon sizes to existing tokens; it MUST NOT redeclare
+      px or rem values. Mirrors the v1.5
+      `data-viz-color-tokens-resolve` rule and the v1.6
+      `image-gen-design-token-references-resolve` rule.
+
+  - id: iconography-decorative-distinction-recommended
+    severity: info
+    rule: |
+      (v1.6.1) When a brand has both functional iconography
+      (`design/iconography.md`) AND decorative or gradient icons
+      documented in `assets/_manifest.md`, the iconography file
+      SHOULD include a "Decorative vs functional" body section
+      that explicitly draws the line. The distinction prevents
+      downstream tools (and AI agents) from treating decorative
+      gradient SVGs as members of the icon system, and from
+      treating functional UI icons as brand imagery.
+      Informational — brands with only one of the two surfaces
+      MAY omit the section.
+
+  # ---------------------------------------------------------------------
+  # (v1.7) New validation rules — cross-layer reference convention
+  # ---------------------------------------------------------------------
+
+  - id: cross-layer-ref-target-resolves
+    severity: error
+    rule: |
+      (v1.7) Every frontmatter field whose name matches the regex
+      `^[a-z_]+_refs?$` (defined under
+      `conventions.cross_layer_references.field_name_pattern`) is
+      treated as a cross-layer reference and MUST resolve to an
+      existing target according to its inferred type:
+        - `layer`              — name MUST appear in this schema's
+                                 top-level `layers:` block.
+        - `file`               — path MUST exist relative to the
+                                 brand repo root.
+        - `path_with_fragment` — file portion MUST exist; anchor
+                                 verification is `warn`-only until
+                                 the body-parse subsystem lands.
+        - `url`                — MUST be well-formed; reachability
+                                 is out of scope.
+        - `token`              — token name SHOULD resolve to a
+                                 token defined in `design-tokens.md`
+                                 or `ui-tokens/`. Severity drops to
+                                 `warn` (not `error`) for token
+                                 references until the body-parse
+                                 subsystem lands; once it does, this
+                                 rule tightens for tokens too.
+      Singular `*_ref` carries one scalar value; plural `*_refs`
+      carries an array — each array entry MUST resolve. The rule is
+      generic; it replaces the per-layer resolver pattern that has
+      been re-invented six times.
+
+  - id: structured-references-kind-valid
+    severity: error
+    rule: |
+      (v1.7) When a file declares the optional `references:`
+      frontmatter block (defined under
+      `conventions.cross_layer_references.structured_references_block`),
+      every entry MUST declare `type`, `target`, and `kind`. The
+      `kind` value MUST be one of `requires`, `recommends`, or
+      `cites`. The `type` value MUST be one of `layer`, `file`,
+      `token`, `path_with_fragment`, `url`, or `layer-entries`. The
+      `entries` field is meaningful only when `type: layer-entries`;
+      validators MAY warn when `entries` appears with any other
+      `type`. The `notes` field is free-text and unconstrained.
+
+  - id: legacy-ref-field-migration-recommended
+    severity: info
+    rule: |
+      (v1.7) When a legacy per-layer reference field is present, the
+      validator SHOULD emit an info-severity advisory recommending
+      migration to the `*_ref` / `*_refs` naming convention or to a
+      `references:` block entry. Legacy fields keep validating; the
+      advisory is informational and never blocks. Legacy → recommended
+      mapping (mirrors
+      `conventions.cross_layer_references.backward_compat.legacy_field_mapping`):
+        - `source_authority.upstream`
+            → `upstream_ref` (singular)
+        - `agent-context.md` `priority_layers`
+            → `priority_layers_refs` (plural)
+        - `voice/registers/<slug>.md` `applies_to`
+            → `applies_to_refs` (plural)
+        - future `journey/stages` frontmatter pointers
+            → `journey_stage_ref` (singular) or `journey_stages_refs`
+              (plural)
+        - `data-viz/colors.md` role-to-token table refs
+            → `color_role_*_ref` (singular per role)
+      Brands MAY ignore the advisory indefinitely; hard deprecation is
+      deferred to v2.

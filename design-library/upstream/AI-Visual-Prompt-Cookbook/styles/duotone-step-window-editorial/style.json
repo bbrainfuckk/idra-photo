@@ -1,0 +1,140 @@
+{
+  "style_version": "1.0",
+  "style_name": "Duotone Step Window Editorial",
+  "style_slug": "duotone-step-window-editorial",
+  "style_summary": "Oversized regular-weight grotesk typography, emphatic event numerals and a continuous grainy action photograph selectively re-inked through hard-edged stepped color windows.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Essential identity and open design choices",
+    "SOURCE_CONTENT_TO_AVOID": "Source brands, event and identity excluded",
+    "SUBJECT": "Fictional adult subject in a photographic action and environment",
+    "MAIN_TEXT": "Complete event title",
+    "DATE_NUMBERS": "Large event numeral sequence",
+    "DATE_LABEL": "Month and year",
+    "FOOTER": "Short event information",
+    "PALETTE": "Base ink and contrasting window ink",
+    "DESIGN_DIRECTION": "Case-specific window and movement relationship",
+    "PORTRAIT_DIRECTION": "Vertical layout intent",
+    "LANDSCAPE_DIRECTION": "Horizontal layout intent",
+    "SUBJECT_ACTION": "a continuous mid-action movement running across the stepped windows",
+    "PRODUCT_OR_PROP": "no separate product; the stepped color windows act as the framing device",
+    "LOCATION": "a flat editorial poster field laid over one continuous grainy action photograph",
+    "BACKGROUND_ELEMENTS": "hard-edged stepped color windows re-inking parts of the photograph, plus the event numerals",
+    "SECONDARY_TEXT": "the date label and the footer line",
+    "ACCENT_SYMBOL": "the emphatic oversized event numerals",
+    "WARDROBE_STYLE": "plain contemporary clothing that stays readable through the duotone re-inking"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] An oversized regular-to-medium weight neo-grotesk headline and emphatic date numerals build an asymmetric, tightly set editorial hierarchy; no heavy condensed display, serif, outline or hand-lettered headline.",
+    "[CORE] One continuous action photograph crosses hard rectangular or stepped masks: outside the light window it is black-on-saturated-base duotone, inside it is contrasting spot-ink-on-neutral-white. Image geometry remains aligned through every boundary.",
+    "[CORE] Flat vivid color fields, white windows and restrained photographic print grain create a sharp graphic/photographic contrast; no natural-color portrait inset or photorealistic paper mockup.",
+    "[FLEX] Design the stepped window to answer the action: its scale, position, contour and number of turns can change; the reference's exact silhouette and cyclist diagonal are not fixed.",
+    "[FLEX] Choose a vivid base and a contrasting spot ink for each theme, keeping black text and light-window contrast strong. Blue and red are a valid example, not a compulsory universal palette.",
+    "[FLEX] Recompose headline line breaks, date stack and photo crop for each ratio; all required wording remains readable while purposeful photographic edge cropping is allowed.",
+    "[FLEX] Use sparse factual-looking event metadata, rules or open space as needed; do not replicate source sponsors, venues, footer density or brand signage."
+  ],
+  "source_content_to_avoid": [
+    "Les Six Jours de Saint Quentin en Yvelines event identity and original title",
+    "Original July/August 2017 dates, addresses, telephone numbers and social handles",
+    "Cyclist identity, cycling kit sponsors and Tissot advertising signs",
+    "Exact original stepped-window outline, title line breaks and photographic crop"
+  ],
+  "visual_deconstruction": {
+    "observation": "Reference uses enormous tightly led black sans text at top, a tilted cyclist photo recolored across a stepped white/red window against cyan/black, large date numbers on left and footer on cyan. Low-resolution softness is visible but is not a requirement to simulate compression.",
+    "transfer": "Color masks reveal a continuous photo in different inks; hierarchy combines broad title, action and numeral system. Spatial boundaries and colors should serve new content."
+  },
+  "composition": {
+    "portrait": "An asymmetric tall editorial field; large heading and date system balance a continuous action photo. Window geometry comes from the case intent.",
+    "landscape": "Redistribute headline, photo window and date into a broad reading path; preserve photograph continuity rather than fitting the portrait page within wide margins."
+  },
+  "typography": {
+    "headline": "Oversized regular-weight neo-grotesk, tight tracking and compact leading; sentence case is encouraged, complete words, no ornamental lettering.",
+    "dates": "Large clean sans numerals functioning as a second graphic anchor.",
+    "metadata": "Few small clear compact sans lines, optically aligned, no invented sponsor marks."
+  },
+  "color_palette": {
+    "base": "A vivid saturated field with black printing, contrasted against neutral white and one secondary spot ink.",
+    "variation": "Case-specific ink pair; no beige paper, washed-out pastel palette or full-color skin."
+  },
+  "image_treatment": {
+    "photograph": "Dynamic editorial photograph, believable anatomy and activity, limited-tonal duotone reproduction; same aligned photo crosses the color-mask boundaries.",
+    "texture": "Fine photographic halftone or ink grain, subtle intentional photographic softness. Keep flat color and type largely clean; no globally distressed scratches, yellowing or simulated JPEG damage."
+  },
+  "design_rules": [
+    "Keep the image spatially continuous across stepped masks; change its ink, not the pose or scale at the seam.",
+    "Let the title and date form strong editorial structure without hiding the key action.",
+    "Use one dominant hard-edged window composition tailored to the case, avoiding random rectangles.",
+    "Preserve limited-color photographic tonality and clear text in each ratio."
+  ],
+  "do": [
+    "Use mask boundaries as compositional responses to motion or process.",
+    "Retain photographic print grain at a fine scale while keeping vivid flat ink fields.",
+    "Explore different image/text relationships across themes and ratios."
+  ],
+  "avoid": [
+    "Disconnected photo insets or duplicated subjects inside and outside the mask.",
+    "Serif, distressed heavy block or handwritten main typography.",
+    "Natural-color skin, gradient glows, 3D graphic frames, antique paper and random decorative clutter."
+  ],
+  "negative_prompt": "No source event, sponsor, watermark, source portrait or cycling scene; no natural-color inset, repeated person, disconnected anatomy, transparent canvas, generic scrapbook boxes, serif lettering, pastel wash, grunge scratches or unreadable required title.",
+  "prompt_template": "Design a finished full-bleed contemporary cultural-event poster at {ASPECT_RATIO}. Use giant tightly set regular-weight neo-grotesk typography, one dynamic continuous duotone photograph, saturated flat ink fields and a hard-edged stepped white window. Rules: {STYLE_FIDELITY_ANCHORS}. Subject photograph: {SUBJECT}. Required complete large title: \"{MAIN_TEXT}\". Required large date numerals: \"{DATE_NUMBERS}\". Date label: \"{DATE_LABEL}\". Small clear footer: \"{FOOTER}\". These are fictional event samples. Palette: {PALETTE}. Design intention: {DESIGN_DIRECTION}. For 9:16, consider: {PORTRAIT_DIRECTION}. For 16:9 instead: {LANDSCAPE_DIRECTION}. Choose the final composition intelligently, using open space and typography rather than adding decorative clutter. IMPORTANT: the action photo is ONE geometrically continuous image. Across the stepped window seam, the same body/object contour stays aligned. Inside the neutral-white window, render photo shadows and grain ONLY in the contrasting spot ink; outside, render the same photo in black on the saturated base ink. Subject and relevant environmental details visibly traverse at least one color boundary. The masks are flat graphic color separations, not separate printed photos pasted on top. Headline and numerals are clean regular-to-medium sans, large and readable, no serif or condensed heavy lettering. Fine ink grain belongs chiefly to the photo; flat fields remain vivid. Opaque full rectangular canvas. Exclude {SOURCE_CONTENT_TO_AVOID}. No sponsor lettering, extra filler copy, full-color skin, gradients, 3D shadows, border mockup, beige aging or all-over distress.",
+  "examples": [
+    {
+      "case_name": "city-stride",
+      "values": {
+        "SUBJECT": "A fictional adult woman sprinting on an urban athletics track, side-on low-angle photo, rear leg extending back and forward knee lifted, dynamic but natural anatomy, simple unbranded running kit; sparse lane lines visible",
+        "MAIN_TEXT": "City in motion",
+        "DATE_NUMBERS": "14 15 16",
+        "DATE_LABEL": "NOV / 2026",
+        "FOOTER": "URBAN TRACK MEET / OPEN SESSIONS",
+        "PALETTE": "Electric cyan base with black outside-window photography; hot vermilion red photographic ink on neutral-white window",
+        "DESIGN_DIRECTION": "The white stepped field opens ahead of the runner like successive strides. The sprinting body crosses its risers while the date numerals become a pacing sequence. Preserve photographic leg motion; do not draw literal stairs.",
+        "PORTRAIT_DIRECTION": "Title occupies a broad compact upper zone; body cuts across an ascending off-center window through the middle, dates form a lower vertical beat.",
+        "LANDSCAPE_DIRECTION": "Runner stretches across the full middle width through a long stepped corridor; title anchors one upper side and large date numerals pace the opposite lower edge."
+      }
+    },
+    {
+      "case_name": "pulse-room",
+      "values": {
+        "SUBJECT": "A fictional adult male percussionist photographed mid-strike at a compact drum kit, one raised drumstick and another hand at a drum, cymbal arcs and drum rims visible; unbranded plain dark shirt, believable hands",
+        "MAIN_TEXT": "Sound in the making",
+        "DATE_NUMBERS": "06 07 08",
+        "DATE_LABEL": "DEC / 2026",
+        "FOOTER": "PERCUSSION WEEKEND / LIVE ROOMS",
+        "PALETTE": "Acid lemon yellow base with black photography outside; vivid deep violet photo ink on a white window",
+        "DESIGN_DIRECTION": "A stepped white cut frames the raised stick, cymbal and striking hand as one continuous rhythmic route. Window turns and date spacing suggest syncopation, not a regular contact-sheet grid.",
+        "PORTRAIT_DIRECTION": "A deep white notch reaches upward toward the raised stick, then widens around the cymbal and lower hand; asymmetric title wrapping and a side numeral beat.",
+        "LANDSCAPE_DIRECTION": "Percussionist and kit occupy one broad side; a low wide stepped window follows the drum/cymbal axis while a deep vertical notch catches the raised stick, with title counterbalancing on the other side."
+      }
+    },
+    {
+      "case_name": "hot-form",
+      "values": {
+        "SUBJECT": "A fictional adult glassblower in a workshop, three-quarter side view, holding a single long blowpipe near the mouth while shaping a small bulb at the far end, heat-resistant clothing and simple safety eyewear; a sparse furnace opening and workbench visible",
+        "MAIN_TEXT": "Matter in motion",
+        "DATE_NUMBERS": "21 22",
+        "DATE_LABEL": "NOV / 2026",
+        "FOOTER": "GLASS STUDIO DAYS / PROCESS LIVE",
+        "PALETTE": "Vivid turquoise base with black outside-window photography; bright burnt-orange ink for the white-window photo",
+        "DESIGN_DIRECTION": "The stepped white window runs along the blowpipe and widens at the glass bulb, visually changing from narrow tool axis to expanded form. Show process rather than a static artisan portrait; one continuous tube across the mask.",
+        "PORTRAIT_DIRECTION": "Blowpipe traverses a diagonal photographic action within an orthogonal stepped window; narrow channel connects the artisan to a larger white pocket around the bulb. Title and date stack balance opposing ends.",
+        "LANDSCAPE_DIRECTION": "The tool axis sweeps widely across the horizontal field, white channel enlarges toward one side around the bulb, with the title above and date numerals offset below."
+      }
+    },
+    {
+      "case_name": "blue-arc",
+      "values": {
+        "SUBJECT": "A fictional adult female platform diver in an athletic swimsuit captured in an elegant extended dive above a pool, both arms reaching forward, legs together and straight, sparse pool tile and water texture beneath; one believable uninterrupted body",
+        "MAIN_TEXT": "Bodies in blue",
+        "DATE_NUMBERS": "03 04 05",
+        "DATE_LABEL": "OCT / 2026",
+        "FOOTER": "AQUATIC MOTION / OPEN PRACTICE",
+        "PALETTE": "Saturated cobalt-blue base with black outside-window photography; vivid coral pink-red photographic ink inside the white window",
+        "DESIGN_DIRECTION": "The white mask is an off-center descending stepped shaft echoing the dive trajectory, narrowing toward the water. The extended body passes through the upper corner while pool detail continues across the lower ink boundary. Avoid the runner's horizontal corridor.",
+        "PORTRAIT_DIRECTION": "A tall white stepped shaft descends toward pool texture; diagonal extended diver spans its opening, title sits on an offset blue shoulder and dates descend along the outer edge.",
+        "LANDSCAPE_DIRECTION": "An extended diving body sweeps across a low white shelf that drops through a deep step toward pool texture on one side; generous cobalt area carries multi-line headline and a separated numeral group."
+      }
+    }
+  ],
+  "category": "Editorial + Minimal"
+}

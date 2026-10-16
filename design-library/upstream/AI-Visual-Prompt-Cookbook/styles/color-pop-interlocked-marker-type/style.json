@@ -1,0 +1,132 @@
+{
+  "style_version": "1.1",
+  "style_name": "Color Pop Interlocked Marker Type",
+  "style_slug": "color-pop-interlocked-marker-type",
+  "style_summary": "Dense playful hand-drawn megatype: irregular interlocking colored letters, bold black contours, sparse doodles and neutral paper.",
+  "category": "Type Posters",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Prioritized style rules",
+    "SOURCE_CONTENT_TO_AVOID": "Source content exclusions",
+    "WORD_ONE": "First word of main heading",
+    "WORD_TWO": "Second word of main heading",
+    "INVITATION": "Small hollow-outline uppercase invitation",
+    "FOOTER": "Small casual handwritten sentence",
+    "BADGE": "Small hand-written oval badge",
+    "PALETTE": "Theme-driven vivid letter colors",
+    "DOODLES": "Small unfilled black line motifs",
+    "SUBJECT": "the interlocked hand-drawn two-word headline itself; the letters are the illustration, no separate figure",
+    "SUBJECT_ACTION": "oversized letters pressing into each other and stretching across the two tiers",
+    "PRODUCT_OR_PROP": "no product; the small hand-written oval badge acts as the only prop-like element",
+    "LOCATION": "a flat neutral warm-paper poster field with no scene",
+    "BACKGROUND_ELEMENTS": "sparse unfilled black line doodles scattered in the margins",
+    "MAIN_TEXT": "the two-word headline built from WORD_ONE and WORD_TWO",
+    "SECONDARY_TEXT": "the hollow-outline invitation line and the casual handwritten footer",
+    "ACCENT_SYMBOL": "the small hand-written oval badge",
+    "WARDROBE_STYLE": "not applicable; express theme through letter colors and doodle motifs instead of clothing"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] Giant individually hand-drawn uppercase letters form a dense interlocking two-word mass, with exaggerated unequal widths, stretched stems, irregular baselines and slight overlaps.",
+    "[CORE] Every major letter has a thick imperfect black marker contour and one vivid flat color; counters remain open and words readable.",
+    "[CORE] Very light cool gray paper (#e4e7e5 approximate) surrounds the lettering, with delicate evenly distributed paper grain; the identical paper color fills all letter counters and hollow text. No bright pure white or yellow aging.",
+    "[CORE] Small loose black contour doodles sit around the letter mass; typography is the subject, never a backdrop to a large character.",
+    "[CORE] Main filled lettering is followed by a smaller hollow-outline uppercase invitation and a casual handwritten footer.",
+    "[CORE] Flat marker-and-print rendering, with sparse local dry-ink scuffs inside selected colored letters and mostly clean neutral paper.",
+    "[FLEX] Select four to six high-purity colors per theme and reorder them across letters; retain warm/cool alternation and strong neighboring color separation.",
+    "[FLEX] Doodles change by theme but remain a few small unfilled marks, not stickers or detailed illustrations.",
+    "[FLEX] Portrait uses a rising two-tier letter mass; landscape uses a broad staggered letter mass with footer below, independently drawing each letter to fit."
+  ],
+  "source_content_to_avoid": [
+    "BUNNIES CLUB name and exact letter layout",
+    "2023 oval and source recruitment sentences",
+    "Source rabbit mascot and its distinctive face",
+    "Creator watermark, username and Chinese source tag"
+  ],
+  "visual_deconstruction": {
+    "dominance": "Letters occupy most of the upper and middle poster, stretching into neighboring rows.",
+    "rhythm": "Alternating tall/narrow and wide/bulging glyphs, diagonal terminals, squeezed negative spaces; doodles are secondary."
+  },
+  "composition": {
+    "portrait": "Upper three quarters contain two interpenetrating tiers; lower zone holds outline invitation and handwritten footer.",
+    "landscape": "Broad low two-tier letter mass fills upper 75 percent; letters spread and interlock sideways with extended terminals, compact footer below; no miniature portrait centered in a wide canvas."
+  },
+  "typography": {
+    "main": "Individually drawn tall irregular block capitals, thick slightly wobbly black outline, uneven counters and different widths. No conventional font layout.",
+    "secondary": "Hollow-outline quirky capitals for invitation, loose handwritten footer, small oval scribbled badge."
+  },
+  "color_palette": {
+    "base": "Very light cool gray paper, approximate #e4e7e5; black contour and four to six pure bright color fills.",
+    "variation": "Different color assignment by theme, maintaining a lively warm/cool clash."
+  },
+  "image_treatment": {
+    "texture": "Delicate fine neutral paper grain across very light cool-gray background and all uninked counters; subtle tonal variation, no coarse fibers, spots, gradients or vignette. Preserve existing local dry-ink marks and color strokes inside lettering. No yellow aging, shadows or gloss."
+  },
+  "design_rules": [
+    "Keep both main words complete and readable.",
+    "Draw uneven glyph anatomy and interlock neighboring rows.",
+    "Keep doodles small and unfilled.",
+    "Differentiate solid main text, hollow invitation and handwritten footer."
+  ],
+  "do": [
+    "Let letters dominate.",
+    "Keep vivid chromatic contrast and neutral paper.",
+    "Retain sparse localized scuffs visible in the reference."
+  ],
+  "avoid": [
+    "Rigid grid or identical font glyphs.",
+    "Rounded inflatable 3D lettering or drop shadows.",
+    "Aged yellow paper and globally distressed texture."
+  ],
+  "negative_prompt": "No watermark, source brand, rabbit, photographs, 3D extrusion, shadows, uniform typesetting, pastel wash, beige paper, confetti flood, missing letters or duplicated words.",
+  "prompt_template": "Create a finished hand-drawn typography poster in {ASPECT_RATIO}. The entire main headline reads exactly \"{WORD_ONE} {WORD_TWO}\" once, two words with no omissions or duplicates. This is a graphic poster whose giant letters themselves are the illustration. Rules: {STYLE_FIDELITY_ANCHORS}. CORE overrides bounded FLEX. Draw every capital separately with thick organic black marker outlines, uneven narrow/tall or wide/bulging anatomy, oblique terminals and open counters. Exaggerate size differences. Letters press into each other and cross the boundary between the two tiers: stretch selected stems down and lift neighboring letters up, producing a tightly interlocked playful silhouette, NOT two neatly typeset rows. Keep every letter identifiable. Flat single-color fills using {PALETTE}. Very light cool gray paper background, approximately #e4e7e5, with matching paper inside every letter counter and hollow invitation. Tiny outlined oval badge above type reads \"{BADGE}\". Sparse surrounding doodles: {DOODLES}. Under the dominant letter mass, exact smaller hollow-outline hand-lettered invitation \"{INVITATION}\"; beneath that, exact casual black handwritten footer \"{FOOTER}\". Portrait: two dense tall interacting word tiers fill upper three quarters, footer underneath. Landscape: redraw a wide sprawling staggered two-tier mass filling most width and upper three quarters, smaller footer beneath; no portrait image pasted onto wide background. Subtle fine neutral grain, sparse dry-ink rub patches inside only a few colored glyphs, lightly irregular marker contour. Opaque light cool-gray paper with delicate fine even paper grain, no pure-white backdrop, aging tint, coarse fibers or global grunge. No shadows or dimensional materials. Exclude {SOURCE_CONTENT_TO_AVOID}. Generate as a 4K ultra-high-resolution raster image. Preserve the specified reference-style texture, edge character and intentional softness at their described scale, intensity and locations. Avoid artifacts that are absent from the intended style; do not automatically denoise, sharpen, polish or distress the image.",
+  "examples": [
+    {
+      "case_name": "grow-club",
+      "values": {
+        "WORD_ONE": "GROW",
+        "WORD_TWO": "CLUB",
+        "INVITATION": "GROW TOGETHER!",
+        "FOOTER": "Plant a little joy.",
+        "BADGE": "2026",
+        "PALETTE": "lemon yellow, leaf green, sky blue, hot pink and tangerine; start G green, R pink, O yellow, W blue; distribute remaining colors freely",
+        "DOODLES": "a tiny sprout, watering droplet, sun squiggle and two motion curls"
+      }
+    },
+    {
+      "case_name": "noise-lab",
+      "values": {
+        "WORD_ONE": "NOISE",
+        "WORD_TWO": "LAB",
+        "INVITATION": "MAKE SOME NOISE!",
+        "FOOTER": "Find your own rhythm.",
+        "BADGE": "VOL. 01",
+        "PALETTE": "electric blue, hot coral red, lemon yellow, vivid violet and mint green; vary adjacent letters rather than repeating a rainbow order",
+        "DOODLES": "a tiny outlined speaker, two musical notes, one lightning squiggle and two vibration arcs"
+      }
+    },
+    {
+      "case_name": "move-crew",
+      "values": {
+        "WORD_ONE": "MOVE",
+        "WORD_TWO": "CREW",
+        "INVITATION": "TAKE THE LONG WAY!",
+        "FOOTER": "Good days on wheels.",
+        "BADGE": "2026",
+        "PALETTE": "orange, bright cyan, lime green, raspberry pink and primary red; cyan M, orange O, pink V, lime E; alternate colors in CREW",
+        "DOODLES": "a tiny line-drawn wheel, a looping route arrow, one burst outline and two speed curls"
+      }
+    },
+    {
+      "case_name": "play-day",
+      "values": {
+        "WORD_ONE": "PLAY",
+        "WORD_TWO": "DAY",
+        "INVITATION": "EVERYONE CAN PLAY!",
+        "FOOTER": "Make room for fun.",
+        "BADGE": "VOL. 02",
+        "PALETTE": "hot pink, sunny yellow, sky blue, fresh green and bright orange; P pink, L blue, A yellow, Y green with new ordering in DAY",
+        "DOODLES": "a tiny outlined kite, a wonky spiral, two bouncing arcs and a small four-point sparkle"
+      }
+    }
+  ]
+}

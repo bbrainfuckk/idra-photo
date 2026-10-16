@@ -1,0 +1,125 @@
+{
+  "style_name": "Red Monochrome Editorial Grid",
+  "style_slug": "red-monochrome-editorial-grid",
+  "style_version": "custom-16x9-9x16-1.0",
+  "style_summary": "A confrontational editorial-poster system built from monumental condensed typography, red-and-black duotone photography, rigid off-white gutters, and paper-like ink grain. The design treats photographic crops and type blocks as equal grid modules rather than placing a single hero image behind type.",
+  "category": "Editorial + Minimal",
+  "environment_variables": {
+    "SUBJECT": "main subject",
+    "SUBJECT_ACTION": "main action",
+    "PRODUCT_OR_PROP": "object, product, or prop",
+    "LOCATION": "environment or setting",
+    "BACKGROUND_ELEMENTS": "secondary scene details",
+    "MAIN_TEXT": "main headline or graphic text",
+    "SECONDARY_TEXT": "supporting text",
+    "ACCENT_SYMBOL": "decorative symbol",
+    "WARDROBE_STYLE": "styling direction",
+    "STYLE_FIDELITY_ANCHORS": "top-level style constants injected at render time",
+    "SOURCE_CONTENT_TO_AVOID": "top-level content exclusions injected at render time",
+    "ASPECT_RATIO": "16:9 or 9:16 injected at render time"
+  },
+  "style_fidelity_anchors": [
+    "Use a rigid modular poster grid separated by thick, imperfect off-white paper gutters that stay visible as structural lines.",
+    "Treat the photo crops, black type fields, and red graphic fields as adjacent modules with hard rectangular boundaries.",
+    "Use only ink-black, saturated signal red, and rough off-white paper, with no extra hue or smooth color gradient.",
+    "Render photography as coarse high-contrast red-and-black duotone, with pronounced screenprint dots, xerox grain, and ink speckle.",
+    "Crop subjects aggressively into fragments such as forehead, profile, shoulder, torso, object, or silhouette; do not make a conventionally centered beauty portrait.",
+    "Set the main headline in extremely heavy condensed uppercase sans-serif, close to black, enlarged until it presses against module edges or crops slightly.",
+    "Let one or two giant word blocks create the visual base, while a smaller red insert panel provides a sharp secondary narrative fragment.",
+    "Leave the off-white gutter system mostly unprinted so it acts as breathing room around the black and red modules.",
+    "Use a small black pictogram, scan-like mark, or simplified silhouette as an occasional counterpoint to the huge type.",
+    "The mood is blunt, restless, handmade, politically charged, and print-driven rather than glossy, cinematic, or clean corporate."
+  ],
+  "source_content_to_avoid": [
+    "The reference person's recognizable face, exact close-up eyes, hand-over-mouth gesture, and any identity or likeness associated with the source.",
+    "The exact phrase, word order, and lettering treatment of the reference headline.",
+    "The reference's particular split-eye panel, hand-to-face crop, and bottom-line arrangement as a single repeated composition.",
+    "Any source brand, artist credit, logo, watermark, social handle, QR code, or signature.",
+    "The source's story premise of self-conflict, confrontation with a mirror self, or an emotional face-and-hand confession scene.",
+    "Any copied clothing, facial hair, eyewear, color grading detail, or individual visual identity from the source.",
+    "Exact pixel positions, letter shapes, illustration details, or secondary figure from the reference."
+  ],
+  "visual_deconstruction": "The reference organizes visual pressure through a hard modular grid. Cream paper gutters do not merely frame the poster; they divide the image into competing blocks of type and duotone photography. The headline is not overlaid on an image—it becomes a physical black mass occupying whole grid cells. The red photographic fields are radically cropped and held at the same graphic weight as the letters. A small red insert works like a visual footnote inside the typographic rhythm. High-frequency print grain turns flat red into an active surface and keeps the stripped palette tactile.",
+  "composition": "Build a grid of three to six large modules with thick off-white gutters. In 16:9, use a wide upper image strip, one tall side block, a central type mass, a small red insert, and a heavy lower or side word block. In 9:16, stack a tall black type module, a cropped red photo module, a narrow pale gutter, and a large black title base, keeping the typography dominant. Do not copy the reference layout exactly: vary which module owns the top, side, and base. Use hard crop boundaries so an image fragment terminates at the gutter rather than fading into the page.",
+  "typography": "Use super-heavy condensed uppercase sans-serif lettering, almost black with a dry printed texture. The main headline should be one or two invented short words, arranged as a massive block that touches or deliberately clips against its module edges. Supporting text, when used, is minimal, small, and aligned to a gutter or grid edge. Avoid script, elegant serif, thin geometric fonts, 3D type, or polished digital lettering.",
+  "color_palette": "Approximately 55% ink-black type and dark photo information, 30% saturated signal red duotone imagery, and 15% warm off-white paper gutters. The red is dense, slightly uneven, and flecked with black. The paper is subtly fibrous and dirty-white, never bright white.",
+  "image_treatment": "Use high-contrast editorial photography translated into rough red-and-black duotone screenprint. Keep anatomy and props recognizable beneath the grain, but let halftone dots, ink dropout, copied-paper texture, and irregular black specks create a tactile poster surface. Avoid photographic full color, smooth gradients, glossy retouching, or clean vector flatness.",
+  "design_rules": [
+    "Make the modular grid and off-white gutters visible before adding decorative detail.",
+    "Give typography and photography equal visual mass; no small caption-style headline.",
+    "Use cropped subject fragments that are contextually new, not the reference face, eyes, hand gesture, or conflict premise.",
+    "Keep the palette strictly black, signal red, and warm off-white.",
+    "Use only a sparse amount of supporting text and a single small symbolic insert.",
+    "Adapt the grid for the requested ratio rather than stretching a portrait composition into landscape or vice versa."
+  ],
+  "do": [
+    "Use uneven ink grain and high-contrast duotone image fragments.",
+    "Let heavyweight text fill its module and press against the grid boundaries.",
+    "Use hard-edged crops, thick paper gutters, and direct visual tension."
+  ],
+  "avoid": [
+    "Do not reuse the source face, eyes, hand-to-face gesture, phrase, self-conflict concept, or exact layout.",
+    "Do not introduce extra colors, glossy full-color photography, soft shadows, or sleek corporate gradients.",
+    "Do not add busy microcopy, many icons, delicate typography, watermarks, or illegible accidental text."
+  ],
+  "prompt_template": "Create a finished {ASPECT_RATIO} editorial poster in the literal Red Monochrome Editorial Grid visual system. Subject: {SUBJECT}. Action: {SUBJECT_ACTION}. Prop/product: {PRODUCT_OR_PROP}. Location: {LOCATION}. Background: {BACKGROUND_ELEMENTS}. Main text: {MAIN_TEXT}. Secondary text: {SECONDARY_TEXT}. Accent symbol: {ACCENT_SYMBOL}. Wardrobe/styling: {WARDROBE_STYLE}. Preserve these observable style anchors: {STYLE_FIDELITY_ANCHORS}. Do not recreate these source-specific elements: {SOURCE_CONTENT_TO_AVOID}. Construct three to six hard rectangular modules separated by thick warm off-white paper gutters. Give giant condensed black uppercase typography and coarse red-black duotone photo fragments equal weight. Use print grain, halftone dots, ink dropout, xerox speckle, and lightly fibrous paper. Restrict the palette to ink-black, saturated signal red, and warm off-white. Crop subjects aggressively but keep the new subject, narrative, and module arrangement distinct from the reference. Maintain legible short headline text and a sparse, direct editorial hierarchy. Avoid glossy color, blue or green, gradients, source likeness, source phrase, source hand-to-face gesture, source eye crop, watermark, logo, QR code, extra ornate decoration, distorted anatomy, or unreadable type.",
+  "negative_prompt": "No copied person, copied eyes, copied hand-to-face gesture, copied phrase, copied self-conflict premise, copied grid positions, logo, watermark, QR code, brand name, full-color photography, blue, green, purple, gradient, glossy product lighting, sleek UI, serif or script lettering, thin type, 3D text, crowded microcopy, extra panels, distorted anatomy, or illegible text.",
+  "examples": [
+    {
+      "case_name": "transit-cartographer",
+      "values": {
+        "SUBJECT": "an anonymous urban cartographer with a close-cropped profile and wind-tossed hair",
+        "SUBJECT_ACTION": "pinning a folded transit map to a light table",
+        "PRODUCT_OR_PROP": "a folded monochrome city-route map with a brass drawing compass",
+        "LOCATION": "a late shift in a municipal map archive",
+        "BACKGROUND_ELEMENTS": "faint gridlines, a desk lamp silhouette, stacked paper plans",
+        "MAIN_TEXT": "TRACE\nLINE",
+        "SECONDARY_TEXT": "MAPPING THE NIGHT NETWORK",
+        "ACCENT_SYMBOL": "SMALL ROUTE MARKER",
+        "WARDROBE_STYLE": "black canvas work shirt with rolled sleeves"
+      }
+    },
+    {
+      "case_name": "river-restorer",
+      "values": {
+        "SUBJECT": "a river-restoration technician in profile with a determined expression",
+        "SUBJECT_ACTION": "measuring a water sample against a marked vial",
+        "PRODUCT_OR_PROP": "a clear sampling vial and battered field notebook",
+        "LOCATION": "an industrial riverside at first light",
+        "BACKGROUND_ELEMENTS": "sluice gates, distant reeds, angular pipe shadows",
+        "MAIN_TEXT": "FLOW\nBACK",
+        "SECONDARY_TEXT": "FIELD NOTES FROM THE RIVER EDGE",
+        "ACCENT_SYMBOL": "WATER LEVEL TICK",
+        "WARDROBE_STYLE": "dark utility jacket with a plain red knit collar"
+      }
+    },
+    {
+      "case_name": "bookbinder",
+      "values": {
+        "SUBJECT": "a young bookbinder with ink-stained forearms and an intent downward gaze",
+        "SUBJECT_ACTION": "pressing a hand-sewn spine into a mechanical book press",
+        "PRODUCT_OR_PROP": "a thick unmarked hand-bound volume and cast-iron press",
+        "LOCATION": "a narrow basement bindery",
+        "BACKGROUND_ELEMENTS": "paper stacks, thread spools, a clipped work light",
+        "MAIN_TEXT": "BIND\nHARD",
+        "SECONDARY_TEXT": "MADE TO SURVIVE THE SHELF",
+        "ACCENT_SYMBOL": "STITCH MARK",
+        "WARDROBE_STYLE": "charcoal apron over a plain long-sleeve shirt"
+      }
+    },
+    {
+      "case_name": "signal-mechanic",
+      "values": {
+        "SUBJECT": "a railway signal mechanic with a side-lit silhouette and cropped torso",
+        "SUBJECT_ACTION": "testing a heavy relay switch with one insulated hand",
+        "PRODUCT_OR_PROP": "an anonymous relay unit with a single indicator lamp",
+        "LOCATION": "a nighttime rail control room",
+        "BACKGROUND_ELEMENTS": "dark cable runs, numbered but unreadable dials, one red signal glow",
+        "MAIN_TEXT": "HOLD\nFAST",
+        "SECONDARY_TEXT": "KEEP THE LINE ALIVE",
+        "ACCENT_SYMBOL": "SINGLE PULSE BAR",
+        "WARDROBE_STYLE": "dark rugged overshirt with rolled cuff"
+      }
+    }
+  ]
+}

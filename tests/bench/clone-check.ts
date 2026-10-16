@@ -8,6 +8,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { REPO_ROOT } from '../helpers.js';
+import { FakeHost } from '../../src/sim/fakeHost.js';
 
 const tmp = fs.realpathSync.native(fs.mkdtempSync(path.join(os.tmpdir(), 'idra-clone-')));
 const clone = path.join(tmp, 'idra photo clone');
@@ -34,14 +35,24 @@ const install = launch(['install-codex', '--workspace', ws]);
 report['install'] = { code: install.code, out: install.out.split('\n').slice(-6) };
 const cfg = fs.existsSync(path.join(codexHome, 'config.toml')) ? fs.readFileSync(path.join(codexHome, 'config.toml'), 'utf8') : '';
 report['config_mentions_launcher'] = cfg.includes(path.basename(launcher));
+report['codex_skill_present'] = fs.existsSync(path.join(codexHome, 'skills', 'idra-photo', 'SKILL.md'));
+const claudeProject = path.join(tmp, 'claude-project');
+const claude = launch(['install-claude', '--project', claudeProject, '--workspace', path.join(tmp, 'claude-images')]);
+report['claude_install'] = { code: claude.code };
+report['claude_skill_present'] = fs.existsSync(path.join(claudeProject, '.claude', 'skills', 'idra-photo', 'SKILL.md'));
 const doctor = launch(['doctor'], { IDRA_WORKSPACE: ws });
 report['doctor'] = { code: doctor.code, lines: doctor.out.split('\n').map((l) => l.slice(0, 110)) };
 const sim = launch(['simulate', '--workspace', path.join(tmp, 'sim'), '--count', '3']);
 report['simulate'] = { code: sim.code, tail: sim.out.split('\n').slice(-4) };
 const un = launch(['uninstall-codex']);
 report['uninstall'] = { code: un.code, out: un.out };
+const host = await FakeHost.connect({ cliPath: path.join(clone, 'idra-photo.mjs'), workspace: path.join(tmp, 'library') });
+const library = await host.call('idra_design_library', {});
+await host.close();
+const librarySources = (library.data['sources'] as unknown[] | undefined)?.length ?? 0;
+report['design_library_sources'] = librarySources;
 console.log(JSON.stringify(report, null, 2));
-const ok = !report['clone_has_node_modules'] && report['clone_has_bundle'] && install.code === 0 && report['config_mentions_launcher'] && doctor.code === 0 && sim.code === 0 && un.code === 0;
+const ok = !report['clone_has_node_modules'] && report['clone_has_bundle'] && install.code === 0 && report['config_mentions_launcher'] && report['codex_skill_present'] && claude.code === 0 && report['claude_skill_present'] && doctor.code === 0 && sim.code === 0 && un.code === 0 && librarySources === 6;
 try {
   fs.rmSync(tmp, { recursive: true, force: true });
 } catch {

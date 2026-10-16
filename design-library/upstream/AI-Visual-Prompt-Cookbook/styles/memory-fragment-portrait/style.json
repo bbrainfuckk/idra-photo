@@ -1,0 +1,128 @@
+{
+  "style_version": "1.0.0",
+  "style_name": "Memory Fragment Portrait",
+  "style_slug": "memory-fragment-portrait",
+  "style_summary": "A coarse-halftone black-and-white portrait tiled by a regular white grid; selected cells become faded life photographs, blank paper, and one fluorescent-pink key memory. From afar it is a face; up close it is a relationship.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Joined prioritized CORE and FLEX style rules",
+    "SOURCE_CONTENT_TO_AVOID": "Original identities and text to replace",
+    "SUBJECT": "One invented adult portrait",
+    "MEMORY_FRAGMENTS": "Concrete life-scene replacements including the pink anchor",
+    "MAIN_TEXT": "Exact title",
+    "SECONDARY_TEXT": "One short exact supporting sentence",
+    "DESIGN_DIRECTION": "Narrative use of gaps, title and ratio-specific arrangement",
+    "SUBJECT_ACTION": "How the face is interrupted by memory cells, blanks and title",
+    "PRODUCT_OR_PROP": "Concrete memory objects inside replacement cells",
+    "LOCATION": "Warm off-white printed paper with a regular white grid",
+    "BACKGROUND_ELEMENTS": "Blank paper cells, gutters and xerographic wear",
+    "ACCENT_SYMBOL": "Single fluorescent pink-and-black memory tile",
+    "WARDROBE_STYLE": "Portrait clothing and hair visible in the remaining face tiles"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] At a glance the dominant picture is ONE coherent recognizable human face, divided into aligned rectangular photo tiles by narrow off-white gutters. The facial tiles are crops of one continuous portrait, not different portraits or randomly rearranged features.",
+    "[CORE] Replace a small minority of face-grid cells with discrete photographs of shared everyday memories. These memory photographs occupy whole cells inside the facial mosaic, never as a separate moodboard beside the face and never as translucent double exposure.",
+    "[CORE] Leave selected grid cells completely empty as warm off-white paper. These absences interrupt the portrait meaningfully while enough eye, nose and mouth information remains to recognize a face.",
+    "[CORE] Dominant facial tiles use harsh black-and-white coarse newspaper halftone dots and slightly broken xerographic ink. Memory inserts use muted faded analog color, with exactly one small fluorescent pink-and-black memory tile as an emotional anchor.",
+    "[CORE] Use tactile off-white printed paper, visibly structured halftone and restrained wear; strong black grotesk lettering shares the grid and occupies a missing or merged-cell space instead of floating as an unrelated caption.",
+    "[FLEX] Choose grid density, portrait angle, missing-cell placement and title scale to express the particular relationship. Preserve contiguous facial landmarks and clear reading order.",
+    "[FLEX] Recompose portrait as a tall interrupted face and landscape as a broader off-center facial field with a title entering an intentional gap; neither crop nor simply shrink the portrait version.",
+    "[FLEX] Memory fragments, their chromatic warmth and the direction of the missing area can change by story. Keep only a few specific fragments, with one pink anchor and generous blank paper."
+  ],
+  "source_content_to_avoid": [
+    "The four women at the restaurant and the exact dining scene in the first reference",
+    "The identifiable woman, biography and HER wording in the second reference",
+    "FORK, source tagline, names, film credits and the hanging fork symbol",
+    "Repeated pink eye illustrations copied from the first reference",
+    "Creator usernames, platform marks, logos or watermarks"
+  ],
+  "visual_deconstruction": {
+    "reference_one": "Warm grainy ensemble scene divided by uniform white grid; pink black-eye cells interrupt image; off-white paper and unconventional large black title.",
+    "reference_two": "Single face recognizable from fragmented halftone rectangles, blank cells dissolve the portrait; heavy black sans-serif letter blocks and worn paper.",
+    "synthesis": "One face holds several shared lived moments. Grid provides continuity, selective photograph replacements tell the story, absent cells imply forgetting, one pink cell identifies an emotionally persistent detail."
+  },
+  "composition": {
+    "hierarchy": "Face is first read; memory inserts reward a closer look; title is integrated into negative grid space. Approximately two-thirds or more of active image cells remain portrait anatomy.",
+    "portrait": "Tall face field with gaps near cheek or lower contour, visible facial landmarks, a title spanning aligned missing-cell space.",
+    "landscape": "Wider grid with face off-center, contiguous facial landmarks and a title sharing a merged-cell gap; same memories reorganized rather than letterboxed."
+  },
+  "typography": {
+    "main": "Heavy black uppercase grotesk, short deliberate line breaks; optional one subtly displaced letter while full wording stays intact.",
+    "secondary": "Small plain narrow sans-serif, one exact sentence, no filler credits.",
+    "integration": "Title aligns to tile edges and inhabits a deliberate void. No text printed across essential eyes or mouth."
+  },
+  "color_palette": {
+    "ground": "Warm off-white paper #EEECE3",
+    "ink": "Dense near-black",
+    "memory": "Muted olive, amber, dusty blue and faded film tones governed by case",
+    "accent": "A single fluorescent pink #FF459F memory cell, under eight percent of total canvas"
+  },
+  "image_treatment": {
+    "portrait": "Coarse clearly visible organized halftone dots on all face tiles; small-scale broken ink edges and subtle paper grain. No smooth digital grayscale substitute.",
+    "memories": "Faded analog color photography with fine film grain, distinct objects and scenes; the one pink anchor is duotone pink-black.",
+    "ground": "Off-white paper with very faint fibers and sparse imperfections; no heavy tears, tape, coffee stains or indiscriminate grunge."
+  },
+  "design_rules": [
+    "Preserve eye-nose-mouth alignment so the face reads at thumbnail size.",
+    "Use the memory photographs as replacement cells within the facial mosaic.",
+    "Keep exactly one pink anchor cell and a few meaningful blank cells.",
+    "Show exact title and supporting sentence once, with no added dates, names or credits.",
+    "Keep gutters consistent, empty cells intentional and photograph subjects recognizable."
+  ],
+  "do": [
+    "Give each memory tile a concrete relational clue.",
+    "Let absence and typography share the same grid.",
+    "Maintain a visible distinction between coarse portrait dots and softer color memories."
+  ],
+  "avoid": [
+    "No generic scrapbook of many separate portraits.",
+    "No arbitrary eye duplication or conflicting facial geometry.",
+    "No decorative pink eyes, multiple pink blocks or neon palette.",
+    "No glossy 3D, ribbons, handwritten anatomical lettering or source poster copy."
+  ],
+  "prompt_template": "Create one finished art-house editorial poster, aspect ratio {ASPECT_RATIO}, expressing a person remembered through shared experiences. Priorities:\n{STYLE_FIDELITY_ANCHORS}\nSingle invented portrait: {SUBJECT}\nMemory replacement cells: {MEMORY_FRAGMENTS}\nExact main title: \"{MAIN_TEXT}\".\nExact small supporting sentence: \"{SECONDARY_TEXT}\".\nSpecific narrative and ratio direction: {DESIGN_DIRECTION}\nSource exclusions: {SOURCE_CONTENT_TO_AVOID}\nUse coarse structured black newspaper halftone on the face, softer grainy faded color on the everyday memories, one pink-black duotone memory cell, warm off-white paper and narrow consistent gutters. The portrait must read as one face from afar, the memories become legible up close. Integrate the title into an intentional blank or merged-cell region. Do not generate a presentation mockup or a sheet of multiple posters. No extra text.",
+  "negative_prompt": "No source identities or names, no FORK or HER, no credits or watermarks, no duplicated eyes, no random tiles from unrelated faces, no full color main face, no smooth grayscale replacing halftone, no collage stuck beside a complete portrait, no translucent double exposure, no more than one pink tile, no illegible title, no simulated tape or excessive damage.",
+  "examples": [
+    {
+      "case_name": "table-for-two",
+      "values": {
+        "SUBJECT": "An invented woman around thirty, dark shoulder-length hair, front-facing quiet gaze and a slight almost-smile; face close-up, no hands on face.",
+        "MEMORY_FRAGMENTS": "Three memory cells: a faded amber kitchen table with two mismatched ceramic cups side by side; a muted green window with rain streaks and a small plant; one pink-black duotone cell showing two hands gently touching across a table, cropped cleanly at wrists with plausible fingers.",
+        "MAIN_TEXT": "WHAT YOU REMEMBER OF ME",
+        "SECONDARY_TEXT": "We kept the small things.",
+        "DESIGN_DIRECTION": "Warm intimacy rather than melodrama. Place two cups near the lower cheek region and rain-window near a temple; the pink touching-hands cell is near the opposite cheek. Preserve both eye contours, nose and enough mouth. An empty cell beside the smile suggests something unsaid. Portrait: close face fills upper and middle grid, title steps into a merged-cell opening along lower-right face contour. Landscape: face occupies left-center, a wider blank gap at right of the cheek holds the title; three memories stay within the face-grid field."
+      }
+    },
+    {
+      "case_name": "last-train-home",
+      "values": {
+        "SUBJECT": "An invented man in his late twenties, short wavy hair, three-quarter face turned slightly left, thoughtful gaze; strong recognizable brow and nose silhouette.",
+        "MEMORY_FRAGMENTS": "Three memory cells: muted blue train window with a tiny passing platform light; faded amber empty adjacent train seat; one pink-black duotone cell of two hands holding opposite ends of an unprinted train ticket, no numbers or letters.",
+        "MAIN_TEXT": "THE WAY HOME",
+        "SECONDARY_TEXT": "Some journeys stayed with us.",
+        "DESIGN_DIRECTION": "Separation is expressed by a stepped diagonal sequence of two missing cells from temple toward outer jaw, never erasing both eyes or the nose. Train-window horizon aligns with an existing grid seam. Portrait: tall off-center face, diagonal blanks lead downward toward title embedded at jaw level. Landscape: broaden the face-grid laterally with the train-window memory as a horizontal tile, title in a missing lower-left region; keep one coherent face and the pink ticket as a small anchor inside the mosaic."
+      }
+    },
+    {
+      "case_name": "summer-kitchen",
+      "values": {
+        "SUBJECT": "An invented older woman in her sixties, short silver curls, smiling with gently lined eyes, frontal portrait turned slightly toward light; natural expressive face.",
+        "MEMORY_FRAGMENTS": "Three memory cells: faded warm photo of a flour-dusted wooden kitchen board and rolling pin; muted olive open kitchen window with a thin curtain; one pink-black duotone cell of a small adult hand resting inside an older adult hand, five-finger anatomy recognizable.",
+        "MAIN_TEXT": "BEFORE WE GREW UP",
+        "SECONDARY_TEXT": "The room still remembers.",
+        "DESIGN_DIRECTION": "Generational memory and domestic warmth. The lower face remains smiling; avoid sentimental decorative icons. Let missing outer-hair cells dissolve the portrait outward, while central eye-nose-mouth area stays intact. The flour-board replaces an outer jaw cell and curtain replaces upper hair cell; pink hands near side cheek. Portrait: a central face with porous edges, title occupies blank cells at lower-left and crosses toward center. Landscape: face and peripheral memory cells spread broadly, title nested in the open left-edge grid; retain a warm smile as focal point."
+      }
+    },
+    {
+      "case_name": "after-the-music",
+      "values": {
+        "SUBJECT": "An invented androgynous adult around twenty-five with short dark hair and a small hoop earring, near-frontal pensive face, clearly visible eyes and closed lips.",
+        "MEMORY_FRAGMENTS": "Three memory cells: faded brown record player with a vinyl record and tonearm; muted blue late-night empty room with two chairs facing each other; one pink-black duotone cell showing a shared pair of wired earbuds resting together on a table, clearly two earpieces connected to thin wires.",
+        "MAIN_TEXT": "WHEN THE MUSIC STOPPED",
+        "SECONDARY_TEXT": "I still know your favorite song.",
+        "DESIGN_DIRECTION": "Absence as a quiet pause. Keep the mouth tile intact and place an empty adjoining cell beside it, letting title inhabit the pause rather than censoring lips. Vinyl record replaces a temple cell, empty chairs occupy outer cheek, pink earbuds a small lower face-edge cell. Portrait: asymmetrical portrait with title broken across two adjacent blank grid zones near lower half. Landscape: face occupies right-center, horizontal silence of blank cells opens leftward for the title; memory tiles stay embedded in the portrait field."
+      }
+    }
+  ],
+  "category": "Zine + Collage"
+}

@@ -16,10 +16,12 @@ const HELP = `idra-photo ${VERSION}: your AI generates, Idra manages the batch.
 
 Commands
   install-codex [--workspace <dir>] [--name idra_photo]   Connect Idra to Codex (restart Codex after).
+  install-claude [--project <dir>] [--workspace <dir>]    Add the skill + MCP to a Claude Code project.
+  uninstall-claude [--project <dir>]                     Remove that project's Idra MCP entry.
   uninstall-codex [--name idra_photo]                     Disconnect it. Your images are kept.
   doctor [--workspace <dir>]                              Check that everything is ready.
   status [--workspace <dir>] [--batch <id>]               Show batches or one batch.
-  serve [--workspace <dir>] [--allow-import <dir>]...     The MCP server Codex runs (stdio).
+  serve [--workspace <dir>] [--allow-import <dir>]...     The local MCP server (stdio).
   manifest --batch <id> [--workspace <dir>]               Rewrite outputs/<batch>/manifest.json.
   simulate [--workspace <dir>] [--count N]                SIMULATION: fake host + fixture images.
                                                           It never calls a real image model.
@@ -36,7 +38,9 @@ function opts(args: string[]) {
     allowPositionals: true,
     options: {
       workspace: { type: 'string' },
+      project: { type: 'string' },
       'allow-import': { type: 'string', multiple: true },
+      'standard-imports': { type: 'boolean' },
       simulation: { type: 'boolean' },
       'stale-claim-minutes': { type: 'string' },
       batch: { type: 'string' },
@@ -59,8 +63,9 @@ function workspaceFrom(v: { workspace?: string | undefined }, allowDefault: bool
   return path.resolve(w);
 }
 
-function importsFrom(v: { 'allow-import'?: string[] | undefined }): string[] {
+function importsFrom(v: { 'allow-import'?: string[] | undefined; 'standard-imports'?: boolean }): string[] {
   if (v['allow-import']?.length) return v['allow-import'];
+  if (v['standard-imports']) return defaultImportDirs();
   return (process.env['IDRA_ALLOW_IMPORTS'] ?? '').split(LIST_SEP).filter(Boolean);
 }
 
@@ -78,7 +83,7 @@ export async function main(argv: string[]): Promise<number> {
   switch (cmd) {
     case 'serve': {
       const ctx = openWorkspace({
-        root: workspaceFrom(v, false),
+        root: workspaceFrom(v, true),
         allowImports: importsFrom(v),
         simulation: v.simulation === true,
         staleClaimMinutes: v['stale-claim-minutes'] ? Number(v['stale-claim-minutes']) : 20,
@@ -125,6 +130,10 @@ export async function main(argv: string[]): Promise<number> {
       return installCodex(v);
     case 'uninstall-codex':
       return uninstallCodex(v);
+    case 'install-claude':
+      return installClaude(v);
+    case 'uninstall-claude':
+      return uninstallClaude(v);
     default:
       process.stderr.write(`unknown command: ${cmd}\n${HELP}`);
       return 2;
@@ -172,7 +181,7 @@ async function doctor(workspace: string, allowImports: string[]): Promise<number
   }
   const codex = findCodex();
   lines.push(['codex', 'info', codex ? `client found: ${codex}` : 'Codex CLI not found (install-codex edits ~/.codex/config.toml directly)']);
-  lines.push(['native image generation', 'info', 'not checkable from Idra: the host owns image_gen. Run the 3-image smoke test in docs/testing.md.']);
+  lines.push(['image generation', 'info', 'host-provided: Codex can use image_gen; Claude needs a connected image tool. Run the smoke test in docs/testing.md.']);
   for (const [k, s, d] of lines) process.stdout.write(`${s.padEnd(4)}  ${k.padEnd(24)} ${d}\n`);
   return lines.some((l) => l[1] === 'fail') ? 1 : 0;
 }
@@ -305,6 +314,56 @@ function writeConfigWithBackup(file: string, next: string): string | null {
   return backup;
 }
 
+function installSkill(destination: string): void {
+  let dir = path.dirname(CLI_PATH);
+  let source: string | undefined;
+  for (let i = 0; i < 4; i++, dir = path.dirname(dir)) {
+    const candidate = path.join(dir, 'skills', 'idra-photo');
+    if (fs.existsSync(path.join(candidate, 'SKILL.md'))) { source = candidate; break; }
+  }
+  if (!source) throw new Error('skills/idra-photo is missing; install from the complete clone or package');
+  for (const relative of ['SKILL.md', 'agents/openai.yaml']) {
+    const content = fs.readFileSync(path.join(source, relative), 'utf8');
+    const file = path.join(destination, relative);
+    if (!fs.existsSync(file) || fs.readFileSync(file, 'utf8') !== content) writeConfigWithBackup(file, content);
+  }
+}
+
+function installClaude(v: ReturnType<typeof opts>): number {
+  const project = path.resolve(v.project ?? process.cwd());
+  const workspace = path.resolve(v.workspace ?? defaultWorkspace());
+  const name = v.name ?? 'idra_photo';
+  if (!/^[A-Za-z0-9_-]{1,40}$/.test(name)) throw new Error('invalid server name');
+  const config = path.join(project, '.mcp.json');
+  const current = fs.existsSync(config) ? JSON.parse(fs.readFileSync(config, 'utf8')) as Record<string, unknown> : {};
+  if (!current || typeof current !== 'object' || Array.isArray(current)) throw new Error('.mcp.json must contain an object');
+  if (current['mcpServers'] !== undefined && (!current['mcpServers'] || typeof current['mcpServers'] !== 'object' || Array.isArray(current['mcpServers']))) throw new Error('mcpServers must be an object');
+  const imports = [project, ...(v['allow-import']?.map((d) => path.resolve(d)) ?? defaultImportDirs())];
+  const next = JSON.stringify({ ...current, mcpServers: {
+    ...(current['mcpServers'] as object ?? {}),
+    [name]: { type: 'stdio', command: process.execPath, args: [CLI_PATH, 'serve'], env: { IDRA_WORKSPACE: workspace, IDRA_ALLOW_IMPORTS: imports.join(LIST_SEP) } },
+  } }, null, 2) + '\n';
+  if (v['dry-run']) { process.stdout.write(`Would install the skill in ${project}/.claude/skills/idra-photo and this MCP config in ${config}:\n${next}`); return 0; }
+  installSkill(path.join(project, '.claude', 'skills', 'idra-photo'));
+  if (!fs.existsSync(config) || fs.readFileSync(config, 'utf8') !== next) writeConfigWithBackup(config, next);
+  fs.mkdirSync(path.join(workspace, 'references'), { recursive: true });
+  process.stdout.write(`Installed Idra Photo skill + MCP. Open Claude Code in ${project}, approve this local MCP when prompted, then ask: "Use Idra Photo: make 3 skincare photos."\nClaude needs a connected image-generation tool to produce photos; Idra can prepare the brief without one.\n`);
+  return 0;
+}
+
+function uninstallClaude(v: ReturnType<typeof opts>): number {
+  const file = path.join(path.resolve(v.project ?? process.cwd()), '.mcp.json');
+  if (!fs.existsSync(file)) return 0;
+  const current = JSON.parse(fs.readFileSync(file, 'utf8')) as { mcpServers?: Record<string, unknown> };
+  const name = v.name ?? 'idra_photo';
+  if (current.mcpServers && Object.hasOwn(current.mcpServers, name)) {
+    delete current.mcpServers[name];
+    writeConfigWithBackup(file, JSON.stringify(current, null, 2) + '\n');
+  }
+  process.stdout.write('Removed the Idra MCP entry. Saved images and skill files are retained.\n');
+  return 0;
+}
+
 function installCodex(v: ReturnType<typeof opts>): number {
   const name = v.name ?? 'idra_photo';
   if (!/^[A-Za-z0-9_-]{1,40}$/.test(name)) throw new Error('--name may only contain letters, digits, _ and -');
@@ -339,6 +398,7 @@ function installCodex(v: ReturnType<typeof opts>): number {
     const backup = writeConfigWithBackup(file, `${kept ? `${kept}\n\n` : ''}${block}`);
     how = `wrote ${file}${backup ? ` (backup: ${path.basename(backup)})` : ''}`;
   }
+  installSkill(path.join(path.dirname(codexConfigPath()), 'skills', 'idra-photo'));
   process.stdout.write(
     `\nDone: ${how}.\nRestart Codex, drag in a photo, and say:\n  "Use Idra Photo: make 10 photos in the exact same style as this image. <your prompt>"\nTo remove it later: idra-photo uninstall-codex (your images stay).\n`,
   );

@@ -114,7 +114,7 @@ test('upgrading a schema-1 database keeps existing references as batch-wide', ()
     .run(now);
   raw.close();
   const ctx = open(ws);
-  assert.equal(ctx.db.schemaVersion(), 2);
+  assert.equal(ctx.db.schemaVersion(), 3);
   const refs = ctx.repo.listReferences('b_old');
   assert.equal(refs.length, 1);
   assert.equal(refs[0]!.job_id, null);

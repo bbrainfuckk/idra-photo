@@ -1,0 +1,120 @@
+{
+  "style_version": "1.0.0",
+  "style_name": "Sensory Footwear Lab",
+  "style_slug": "sensory-footwear-lab",
+  "style_summary": "Minimal future-sport product concepts pair tactile podded outsoles with quiet athletic gestures, modular editorial panels, ice-cool architecture and signal-coral accents.",
+  "environment_variables": {
+    "ASPECT_RATIO": "9:16 or 16:9",
+    "STYLE_FIDELITY_ANCHORS": "Prioritized visual system",
+    "SOURCE_CONTENT_TO_AVOID": "Reference content to replace",
+    "SUBJECT": "Athlete, gesture and tactile footwear",
+    "SCENE": "Modular environment, palette and light",
+    "MAIN_TEXT": "Exact short concept title",
+    "DESIGN_DIRECTION": "Concept-led composition and ratio adaptation",
+    "SUBJECT_ACTION": "Quiet athletic gesture that tests the tactile outsole",
+    "PRODUCT_OR_PROP": "Conceptual performance shoe with repeated rounded pods",
+    "LOCATION": "Ice-cool modular architecture from the scene",
+    "BACKGROUND_ELEMENTS": "Editorial panels, gutters and generous negative space",
+    "SECONDARY_TEXT": "Small restrained technical labels",
+    "ACCENT_SYMBOL": "Signal-coral or magenta-red outsole accent",
+    "WARDROBE_STYLE": "Quiet athletic clothing that keeps the shoe dominant"
+  },
+  "style_fidelity_anchors": [
+    "[CORE] Present a conceptual performance shoe with a distinctive outsole made from repeated rounded tactile pods; the pod structure is the key product signature, while all branding remains blank.",
+    "[CORE] Combine oversized product macro views with a human athletic gesture or still pose, suggesting a conversation between foot sensation and movement.",
+    "[CORE] Use clean modular editorial panels or sharply separated light and dark image fields, with disciplined gutters, generous negative space and small restrained technical labels.",
+    "[CORE] Limit color to cool ice white, blue-gray and deep graphite, punctuated by a strong signal-coral or magenta-red outsole accent and occasional warm pod tips.",
+    "[CORE] Render product and people as polished, believable campaign photography with smooth studio gradients, precise material highlights and a restrained futuristic sports-lab mood.",
+    "[FLEX] Let each concept choose between airborne action, quiet stance, macro material study and seated recovery; connect the moments with repeated pod geometry, contact marks or fine sensory paths.",
+    "[FLEX] Recompose modular panels independently for portrait and landscape, shifting scale, panel count and dark/light balance without losing the tactile shoe as a visual anchor."
+  ],
+  "source_content_to_avoid": [
+    "Nike name, swoosh, Mind product name, logo, trademark and original copy",
+    "Exact reference collage arrangement and the same airborne female pose",
+    "The exact bright red shoe outsole design from the source image",
+    "Original model, cable-like hair trail and dark locker scene copied literally"
+  ],
+  "visual_deconstruction": {
+    "source": "A modular concept board alternates a coral podded outsole macro, airborne athlete with a close red sole, quiet side-profile study with a fine flowing line, dark locker-room seated figure and underside sole view.",
+    "hierarchy": "Tactile outsole and athletic body alternate between product scale and human scale; coral-red contact pods punctuate cool, precise environments."
+  },
+  "composition": {
+    "principle": "An editorial concept board with a few asymmetrical image panels: one tactile outsole/product macro and one human movement or rest moment, separated by precise gutters and quiet cool-toned space.",
+    "adaptation": "Portrait can stack macro, figure and technical detail vertically; landscape can distribute product and person across a wider panel rhythm. Each case changes focal scale and panel balance to express its idea."
+  },
+  "typography": {
+    "form": "Small neutral grotesk labels, compact uppercase concept title and occasional concise technical annotation; never a giant headline.",
+    "hierarchy": "Visual panels dominate. Keep text sparse, aligned to panel edges and secondary to product and gesture."
+  },
+  "color_palette": {
+    "frame": "Ice white, cool pale blue-gray and deep graphite or navy, with signal coral outsole and occasional warm peach pod tips.",
+    "photo": "Natural skin and restrained wardrobe colors; smooth studio gradient transitions rather than loud multicolor effects."
+  },
+  "photographic_direction": {
+    "camera": "Alternating extreme outsole macro, low wide-angle athletic action and calm side-profile or seated portrait; realistic proportions and refined campaign lighting.",
+    "texture": "Clean high-end digital product photography. Smooth gradients, crisp pod geometry and subtle knit, rubber and matte-composite texture; no print grain, distress or heavy blur.",
+    "light": "Soft directional studio light with precise glossy highlights on rubber and quiet cool ambient fill in architecture."
+  },
+  "design_rules": [
+    "Repeat rounded outsole pods as the main product motif, with no visible brand marks.",
+    "Balance at least one product-scale view with one human-scale gesture or pose in each campaign board.",
+    "Use coral only to emphasize outsole, contact or pressure points; keep surrounding palette cool and restrained.",
+    "Keep panel divisions clean and purposeful, with small quiet technical labeling only.",
+    "Give each case a different sensory metaphor and composition, not only a changed title or shoe color."
+  ],
+  "do": [
+    "Make the tactile sole architecture read clearly, especially in close-up panels.",
+    "Use the relationship between a body gesture and the sole's contact surface to express the case idea.",
+    "Mix intimate product detail with calm architectural space."
+  ],
+  "avoid": [
+    "Copied logos, slogans, signature brand shapes or visible product names.",
+    "Crowded technical diagrams or noisy interface decoration.",
+    "A generic shoe catalog grid without a human or sensory idea."
+  ],
+  "negative_prompt": "No Nike, swoosh, Reebok, brand marks, legible tiny fake copy, watermark, copied source model or exact collage, oversized decorative typography, cluttered HUD, glowing sci-fi circuits, extreme neon, malformed feet or fingers, extra shoes, distorted pod geometry, low-resolution product textures.",
+  "prompt_template": "Create a premium future-sport footwear concept board in {ASPECT_RATIO}.\n{STYLE_FIDELITY_ANCHORS}\nAthlete and gesture: {SUBJECT}\nSetting, modules and palette: {SCENE}\nExact short title: {MAIN_TEXT}. Render only this title once in small clean uppercase grotesk; any secondary labeling must remain tiny and sparse.\nConcept direction: {DESIGN_DIRECTION}\nBuild a refined modular editorial composition from two to four clean image panels with consistent gutters: include one highly legible close product/outsole view and one human-scale athletic or quiet moment. Make the podded sole and body gesture tell one sensory story. Cool ice-blue and graphite architecture, signal-coral outsole details, realistic skin, rubber and knit, polished studio campaign photography. No branding or copied source layout. Exclude: {SOURCE_CONTENT_TO_AVOID}.",
+  "examples": [
+    {
+      "case_name": "find-balance",
+      "values": {
+        "SUBJECT": "An adult athlete holds a quiet one-leg balance pose on a low matte plinth; a second panel shows the same foot landing softly, the rounded tactile sole pods visibly aligned beneath it.",
+        "SCENE": "Ice-blue studio fading to pale gray with one deep graphite panel; white technical knit shoe with signal-coral podded outsole and subtle peach pod tips.",
+        "MAIN_TEXT": "FIND BALANCE",
+        "DESIGN_DIRECTION": "Balance is a shift of pressure, not a jump. Let the foot's contact points move from heel to forefoot across a small sequence of modular panels; keep the athlete calm and centered, outsole macro large enough to read.",
+        "PRODUCT_OR_PROP": "White technical knit shoe with a signal-coral podded outsole and subtle peach pod tips"
+      }
+    },
+    {
+      "case_name": "feel-the-rhythm",
+      "values": {
+        "SUBJECT": "An adult woman athlete caught in a compact upward leap, one bent leg bringing the podded outsole close to camera; a second narrow panel studies the outsole pods in a rhythmic repeated row.",
+        "SCENE": "Dark graphite movement studio split by a pale blue-gray vertical field, white outfit and vivid coral-red outsole with warm peach pod tips.",
+        "MAIN_TEXT": "FEEL THE RHYTHM",
+        "DESIGN_DIRECTION": "Turn the repeated sole pods into a visual beat: alternate close outsole circles with the suspended athlete. Use a rising diagonal panel cadence and restrained coral echoes, while the figure stays graceful and anatomically clear.",
+        "PRODUCT_OR_PROP": "White athletic shoe with a vivid coral-red podded outsole and warm peach pod tips"
+      }
+    },
+    {
+      "case_name": "leave-a-trace",
+      "values": {
+        "SUBJECT": "An adult male runner in side profile walks slowly across a pale studio floor; each step leaves a neat sequence of rounded contact impressions that mirror the pod pattern, with a macro view of one sole nearby.",
+        "SCENE": "Quiet cool-white gallery with blue-gray floor and a distant deep navy wall, pale gray apparel, coral contact impressions and a clean white shoe.",
+        "MAIN_TEXT": "LEAVE A TRACE",
+        "DESIGN_DIRECTION": "Memory becomes a trail of pressure marks. Use an elongated side-profile panel with the contact imprints receding into space, balanced by one precise podded-sole macro. A fine sensory line may connect shoe and foot without becoming a diagram.",
+        "PRODUCT_OR_PROP": "Clean white shoe whose rounded pods leave coral contact impressions on the floor"
+      }
+    },
+    {
+      "case_name": "quiet-feedback",
+      "values": {
+        "SUBJECT": "An adult athlete sits resting on a simple bench in a dark equipment room, hands relaxed on knees; a separate close panel shows fingertips gently pressing one rounded outsole pod and the pod compressing slightly.",
+        "SCENE": "Deep navy modular locker-room architecture opening into one pale ice-blue product-light panel; white apparel and a coral shoe sole.",
+        "MAIN_TEXT": "QUIET FEEDBACK",
+        "DESIGN_DIRECTION": "Make feedback intimate and tactile rather than explosive. Contrast a small still seated figure with an oversized macro of a pod responding to a fingertip; quiet red accents and generous dark negative space carry the mood.",
+        "PRODUCT_OR_PROP": "White concept shoe with a coral sole, one rounded pod compressing under a fingertip"
+      }
+    }
+  ],
+  "category": "Product + Campaign"
+}

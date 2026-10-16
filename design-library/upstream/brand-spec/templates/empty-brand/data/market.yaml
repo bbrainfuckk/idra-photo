@@ -1,0 +1,45 @@
+# market.yaml — sample data file
+#
+# THIS IS A SAMPLE. Replace with your brand's real market data or
+# delete. Demonstrates structured market/category claims that downstream
+# generators (decks, one-pagers) pull from instead of re-typing numbers.
+#
+# Schema:
+#   category        — string, the category slug as the brand defines it
+#   tam_usd         — total addressable market in USD
+#   sam_usd         — serviceable addressable market in USD
+#   som_usd         — serviceable obtainable market (3-year target)
+#   growth_rate_pct — annual category growth rate, percent
+#   sources         — list of {label, url, retrieved}
+#   confidence      — high | medium | low
+#
+# Numbers are placeholders. Replace with sourced figures before citing
+# externally.
+#
+# last_updated: 2026-01-01
+# status: sample
+
+category: example-category
+category_definition: |
+  Software that helps {audience} accomplish {core job}. Adjacent to
+  {adjacent category} but distinguished by {key differentiator}.
+
+market_size:
+  tam_usd: 12_000_000_000
+  sam_usd: 3_400_000_000
+  som_usd: 180_000_000
+  growth_rate_pct: 14
+  confidence: medium
+
+sources:
+  - label: "Example Analyst Group, 2025 Category Report"
+    url: "https://example.com/report"
+    retrieved: "2025-11-12"
+  - label: "Internal market sizing model v3"
+    url: "internal://docs/market-model"
+    retrieved: "2025-12-01"
+
+notes: |
+  Refresh annually or when a major analyst report drops. Flag any
+  number sourced from a model (vs. published research) with
+  confidence: medium or lower.

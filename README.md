@@ -4,11 +4,29 @@
 
 Drag a photo into Codex, type one prompt, say how many images you want. Codex makes every image with its own built-in image tool. Idra hands Codex one job at a time, saves each finished image into a numbered folder, and remembers where the batch stopped so you can pick it up later.
 
-- No image API key, no extra image service, no web dashboard.
+**New: a portable skill + MCP for Codex and Claude Code.** Start with “Use Idra Photo: make 2 skincare photos.” The skill expands the short request into a design brief, explains its assumptions, and checks both the requested content and visual consistency. Claude needs a connected image-generation tool; Idra does not give Claude a built-in photo model. See [Claude setup](docs/claude.md) and [real results with rejected attempts](docs/results/README.md).
+
+## Real generated examples
+
+**Product photos** — “Make 2 square skincare product photos.”
+
+| Front view | Matching angle variation |
+|---|---|
+| ![Matte skincare bottle on a cream background, front view](docs/results/product/1.png) | ![Matching skincare bottle with a changed pump angle](docs/results/product/2.png) |
+
+**UI concepts** — “Make a matching dashboard and settings screen, square.”
+
+| Dashboard | Matching settings screen |
+|---|---|
+| ![Blue and white analytics dashboard](docs/results/ui/1.png) | ![Matching blue and white account settings screen](docs/results/ui/2.png) |
+
+These are real generated examples reviewed through the queue by a manual Codex host. They demonstrate the short-brief and correction workflow; they are not an autonomous Claude image benchmark.
+
+- Idra itself needs no image API key or extra image service. Claude's connected generator may have its own setup and costs.
 - Everything Idra stores stays on your computer.
 - Idra itself never generates images and never makes network requests. Codex still uses its own image service and your own Codex plan.
 
-> Status: v0.1. Tested end to end in the Codex desktop app on Windows with real image generation: a 3-image same-style batch and a 4-character counterpart batch, each finished in one Codex turn. The macOS/Linux launcher passes the automated tests on GitHub but has not been tried with Codex on a real Mac yet. Evidence: [Compatibility](docs/compatibility.md).
+> Status: v0.2.1 adds a short-prompt skill, Claude Code setup, and image inspection to the strict consistency workflow. Automated tests cover acceptance and recovery; [real product/UI examples](docs/results/README.md) show four accepted images and two rejected attempts. Claude Code connected to the MCP and discovered the skill; model-backed Claude generation remains untested. Evidence: [Compatibility](docs/compatibility.md).
 
 ## Easiest: ask Codex to install it
 
@@ -42,6 +60,14 @@ After the restart I will use it by dragging in a photo and saying:
 3. Restart Codex.
 
 That is all. No `npm install`: the server ships prebuilt as one file, `idra-photo.mjs`.
+
+The Codex installer also installs `skills/idra-photo` into your configured Codex skill folder. For Claude Code, from this checkout run `node idra-photo.mjs install-claude --project "/absolute/path/to/your/design-folder"`; then open Claude Code in that folder. It installs the portable skill and adds the local MCP while keeping other server entries. [Full Claude instructions](docs/claude.md).
+
+Claude Code also supports installing the bundled plugin:
+
+```text
+/plugin install idra-photo --marketplace bbrainfuckk/idra-photo
+```
 
 What the installer does:
 
@@ -90,6 +116,14 @@ More things you can say:
 | "Use these exact prompts: ..." | Explicit mode: your prompts, unchanged. |
 
 ### Keeping things the same
+
+For a matching campaign, image series, or UI concept set, ask:
+
+> Use Idra Photo with strict consistency. Make 6 product images using this reference. Keep the cream-and-charcoal palette, soft left window light, matte texture, and typography fixed. Only change the product angle and props. Review every image and correct drift before accepting it. 4:5.
+
+Idra saves a named design contract and repeats its rules in every prompt. It requires a visual review of every rule against the actual generated file. The first reviewed image becomes an additional style reference. Missing reviews block acceptance; failed reviews reject the file and use the bounded retry budget. Recovery and “make more” retain the same contract. See [Strict consistency](docs/consistency.md), [examples](examples/consistency), and the [consolidated design library](design-library).
+
+Existing batches without a consistency contract retain the original behavior:
 
 Codex passes these as rules on every image. They are prompt requirements, not pixel locks. Check the results yourself.
 
