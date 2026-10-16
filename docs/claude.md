@@ -4,7 +4,7 @@ Idra Photo has two parts: a **skill** that turns a short request into a useful d
 
 ## Claude Code: one project setup command
 
-Install Node.js 22.13 or newer and clone this repository into a permanent folder. While the update is in its pull request, use `git clone --branch feat/strict-design-consistency https://github.com/bbrainfuckk/idra-photo.git`. Then run from the checkout:
+Install Node.js 22.13 or newer and clone this repository into a permanent folder with `git clone https://github.com/bbrainfuckk/idra-photo.git`. Then run from the checkout:
 
 ```text
 node idra-photo.mjs install-claude --project "/absolute/path/to/your/design-folder"
@@ -28,13 +28,13 @@ Use `--dry-run` to preview installation. `uninstall-claude --project <folder>` r
 
 ## Claude Code plugin
 
-The repository also bundles `.claude-plugin/plugin.json`, a marketplace manifest, the same `skills/idra-photo/`, and an inline local MCP definition. With a current Claude Code release, after this update reaches the repository's default branch:
+The repository also bundles `.claude-plugin/plugin.json`, a marketplace manifest, the same `skills/idra-photo/`, and an inline local MCP definition. With a current Claude Code release, install it with:
 
 ```text
 /plugin install idra-photo --marketplace bbrainfuckk/idra-photo
 ```
 
-For the current feature branch, clone it and use the project installer above, or load the local checkout with `claude --plugin-dir /absolute/path/to/idra-photo`. The plugin needs `node` on PATH. Its workspace defaults to `~/Idra Photo` unless `IDRA_WORKSPACE` is set. It explicitly enables the same standard import folders as the Codex installer: existing Downloads/Desktop/Pictures/temp and Codex generated-image folders. Use the project installer to authorize the chosen project directory too.
+For a local checkout, use the project installer above, or load it with `claude --plugin-dir /absolute/path/to/idra-photo`. The plugin needs `node` on PATH. Its workspace defaults to `~/Idra Photo` unless `IDRA_WORKSPACE` is set. It explicitly enables the same standard import folders as the Codex installer: existing Downloads/Desktop/Pictures/temp and Codex generated-image folders. Use the project installer to authorize the chosen project directory too.
 
 ## Claude Desktop and claude.ai
 

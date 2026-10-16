@@ -28,8 +28,6 @@ These are real generated examples reviewed through the queue by a manual Codex h
 
 > Status: v0.2.1 adds a short-prompt skill, Claude Code setup, and image inspection to the strict consistency workflow. Automated tests cover acceptance and recovery; [real product/UI examples](docs/results/README.md) show four accepted images and two rejected attempts. Claude Code connected to the MCP and discovered the skill; model-backed Claude generation remains untested. Evidence: [Compatibility](docs/compatibility.md).
 
-This update is currently on `feat/strict-design-consistency`. To try it before the pull request is merged, clone with `git clone --branch feat/strict-design-consistency https://github.com/bbrainfuckk/idra-photo.git`, then use the setup below. A default-branch clone will receive the update after merge.
-
 ## Easiest: ask Codex to install it
 
 Paste this into Codex (the desktop app or CLI). Codex downloads Idra, connects it, and checks it.
@@ -65,7 +63,7 @@ That is all. No `npm install`: the server ships prebuilt as one file, `idra-phot
 
 The Codex installer also installs `skills/idra-photo` into your configured Codex skill folder. For Claude Code, from this checkout run `node idra-photo.mjs install-claude --project "/absolute/path/to/your/design-folder"`; then open Claude Code in that folder. It installs the portable skill and adds the local MCP while keeping other server entries. [Full Claude instructions](docs/claude.md).
 
-When this update is published on the default branch, Claude Code also supports installing the bundled plugin:
+Claude Code also supports installing the bundled plugin:
 
 ```text
 /plugin install idra-photo --marketplace bbrainfuckk/idra-photo
